@@ -1,86 +1,120 @@
 # Brand token reference
 
-Source: product blueprint, with WCAG AA remediation. Tokens live in `src/app/globals.css`. Components use layer-3 utilities only.
+Product identity: **Well with Katarina**. Written as one signature — "Well" leads, "with Katarina" signs it. Natural casing, never a stacked `KATARINA / Portal` pair, no invented logo symbol.
 
-Contrast measured with relative luminance (WCAG 2.x). Thresholds: **4.5:1** normal text, **3:1** UI / large text (≥18px or ≥14px bold).
+Tokens live in `src/app/globals.css` in three layers, and components reference layer 3 only. Adding a colour means adding a token.
 
-## Derived values
-
-| Token | Value | Why |
+| Layer | What it holds | Changes per theme |
 |---|---|---|
-| `--green-700` | `#1E7A3C` | Blueprint-specified. White text **5.38:1** — keep. |
-| `--red-700` | `#C4160B` | Blueprint-specified. White text **6.06:1** — keep. |
-| `--blue-400` (dark accent) | `#3B9BFF` | Lightened accent for dark surfaces. |
-| Dark `--on-accent` | `#0A0A0A` | White on `#3B9BFF` is **2.87:1**; dark text is **6.90:1**. |
-| Dark `--foreground-muted` | `#A1A1A6` | `#8E8E93` on `#0A0A0A` is fine for large UI; `#A1A1A6` gives **7.70:1** for muted body. |
+| 1 primitives | `--paper-*`, `--stone-*`, `--ink-*`, `--mineral-*`, `--slate-*`, feedback scales. No meaning in the name. | no |
+| 2 semantics | Role aliases: `--surface`, `--foreground-muted`, `--accent`, `--confirm-fill`. | yes, under `.dark` |
+| 3 `@theme inline` | Binds semantics to Tailwind utilities: `bg-surface`, `text-muted`, `rounded-button`. | n/a |
 
-## Blueprint failures → replacements
+Contrast is enforced by `src/lib/__tests__/palette-contrast.test.ts`, which parses this file, resolves the `var()` chain, composites translucent tokens over their backdrop and asserts **4.5:1** for text and **3:1** for marks and non-text UI in both themes. Change a colour and the test tells you whether it still holds — no table here needs manual upkeep.
 
-| Original | Measured | Used instead |
+## Palette direction
+
+Warm, near-white canvas rather than cold dashboard grey. Deep warm ink for type. Stone for secondary surfaces and dividers. One mineral accent, derived from the original product blue but deepened and desaturated so it reads as considered rather than default SaaS.
+
+| Family | Role |
+|---|---|
+| `--paper-*` | Canvas and object surfaces. `#FBFAF8` canvas, `#FFFFFF` objects. |
+| `--stone-*` | Inset surfaces, progress tracks, dividers. |
+| `--ink-*` | Type, and the feature panel fill. |
+| `--mineral-*` | The single brand accent. Light uses `--mineral-700`, dark uses `--mineral-300`. |
+| `--slate-*` | Dark-mode neutrals. |
+| green / red | Genuine semantic feedback only. Never decoration. |
+
+The page must not look blue at rest. Accent is reserved for the active navigation rail, focus rings, selected controls, progress, the primary action and small moments of emphasis. Body links are not accent-coloured by default.
+
+### Feedback: text, mark and fill are different roles
+
+A colour that reads as body copy on the canvas is not the same colour that carries white text as a fill. They are separate tokens and must not be interchanged.
+
+| Token | Measured against | Minimum |
 |---|---|---|
-| Body `#8E8E93` on white | **3.26:1** fail | `--grey-600` `#6E6E73` → **5.07:1** |
-| Tailwind `neutral-400` on white | ~**2.6:1** fail | same muted text token |
-| White on `#34C759` | **2.22:1** fail | filled buttons use `--green-700`; `#34C759` is `--confirm-icon` only |
-| White on `#FF3B30` | **3.55:1** fail | filled buttons use `--red-700`; `#FF3B30` is `--danger-icon` only |
-| `#007AFF` as 12px text on white | **4.02:1** fail AA normal | `--accent-text` `#0066CC` → **5.57:1**; fills/borders keep `#007AFF` |
-| Locked card `opacity-40` | ~**1.5:1** fail | lock icon + “Not included” label; full text contrast |
+| `--confirm`, `--danger` | the surface behind them | 4.5:1 |
+| `--confirm-icon`, `--danger-icon` | the surface behind them | 3:1 |
+| `--confirm-fill`, `--danger-fill` | `--on-fill` (white) | 4.5:1 |
 
-## Light mode contrast table
+## Elevation
 
-| Foreground | Background | Ratio | Use |
-|---|---|---|---|
-| `#171717` foreground | `#FFFFFF` surface | **17.93:1** | Body, headings |
-| `#6E6E73` muted | `#FFFFFF` surface | **5.07:1** | Muted body |
-| `#6E6E73` muted | `#F5F5F7` sunken | **4.66:1** | Muted on sunken |
-| `#0066CC` accent-text | `#FFFFFF` surface | **5.57:1** | Links, small accent text |
-| `#007AFF` accent | `#FFFFFF` surface | **4.02:1** | Focus rings, selected borders, large graphical UI — not body text |
-| `#FFFFFF` on-accent | `#0066CC` accent-fill | **5.57:1** | Primary CTA fill (`--accent-fill`) with white label — AA normal text |
-| `#FFFFFF` on-fill | `#1E7A3C` confirm | **5.38:1** | Confirm buttons |
-| `#FFFFFF` on-fill | `#C4160B` danger | **6.06:1** | Danger buttons |
-| `#A3A3A3` disabled | `#FFFFFF` | **2.54:1** | Disabled only — never body copy |
+Four levels. A level-2 object takes a hairline border **or** a minimal shadow, never both.
 
-Primary button white-on-`#007AFF` at 15px is **4.02:1**. That is below 4.5:1 for normal text. Options were darken the fill (breaks brand blue) or accept large-control UI contrast (3:1). Kept `#007AFF` fill; labels use `font-medium` and ≥44px hit area. If audit requires strict 4.5:1 on the label, switch primary text pairing to `--accent-hover` `#0066CC` fill (**5.57:1** with white) and report to design.
-
-## Dark mode contrast table
-
-| Foreground | Background | Ratio | Use |
-|---|---|---|---|
-| `#F5F5F7` foreground | `#0A0A0A` surface | **18.18:1** | Body |
-| `#A1A1A6` muted | `#0A0A0A` surface | **7.70:1** | Muted body |
-| `#3B9BFF` accent-text | `#0A0A0A` surface | **6.90:1** | Accent text |
-| `#3B9BFF` accent-text | `#171717` raised | **6.25:1** | Accent on cards |
-| `#0A0A0A` on-accent | `#3B9BFF` accent | **6.90:1** | Primary button label |
-| `#FFFFFF` on-fill | `#1E7A3C` confirm | **5.38:1** | Confirm buttons |
-| `#FFFFFF` on-fill | `#C4160B` danger | **6.06:1** | Danger buttons |
-| `#34C759` confirm-icon | `#0A0A0A` | **8.92:1** | Icons only |
-| `#FF3B30` danger-icon | `#0A0A0A` | **5.58:1** | Icons only |
-
-## Semantic map (light)
-
-| Role | Primitive | Where |
+| Level | What | Treatment |
 |---|---|---|
-| surface | grey-000 | Page |
-| surface-sunken | grey-050 | Panels, badge fills |
-| surface-raised | grey-000 | Cards, modal |
-| surface-overlay | black/40 | Modal scrim |
-| foreground | grey-900 | Primary text |
-| foreground-muted | grey-600 | Supporting text |
-| foreground-disabled | grey-400 | Disabled controls only |
-| accent | blue-500 | Primary fills |
-| accent-hover | blue-600 | Primary hover |
-| accent-text | blue-600 | Accent-coloured text |
-| confirm / danger | *-700 | Filled status buttons |
-| confirm-icon / danger-icon | *-500 | Icons, never text-on-fill |
+| 0 | Page canvas | No border, no shadow |
+| 1 | Separated section | Spacing, a surface shift (`bg-surface-inset`), or one hairline |
+| 2 | Interactive object | `Panel` — one border, or `shadow-object` |
+| 3 | Floating interface | Menus, popovers, dialogs, sheets — `shadow-floating` / `shadow-modal` |
 
-## Type
+Target roughly 70–80% flat canvas, 15–20% differentiated surface, and at most one visually dominant elevated surface per viewport. The one dominant surface is `ProgramPanel`, on `--surface-feature`.
 
-- Body/display: Inter via `next/font`, system fallbacks.
-- Meta: system monospace stack, no download.
-- Uppercase: `.u-caps` only — catalogue strings stay sentence case.
+Borders are low contrast, communicate separation or interaction, and usually appear on a single edge or as a divider rather than enclosing a group.
 
 ## Shape
 
-Pill buttons (`rounded-pill`) on every primary/secondary action. Cards `16px`, panels `12px`, inputs `8px`, badges `4px`.
+Restrained. Not every object is rounded, and pills are opt-in.
+
+| Token | Value | Use |
+|---|---|---|
+| `rounded-badge` | 5px | Status indicators, checkbox |
+| `rounded-control` | 6px | Small controls, menu items, nav items |
+| `rounded-input` | 8px | Inputs, compact actions |
+| `rounded-button` | 9px | Primary and secondary actions |
+| `rounded-panel` | 11px | Large interactive panels, floating menus |
+| `rounded-dialog` | 13px | Dialogs and sheets |
+| `rounded-pill` | full | Compact filters, toggle groups, removable selections, progress lines, the appearance switch |
+
+Pills are never the default shape for a primary action.
+
+## Type
+
+Inter via `next/font`, used as the primary hierarchy system. Sentence case throughout; bold is rationed.
+
+| Token | Size | Use |
+|---|---|---|
+| `text-editorial` | 34px | Page title. Tight tracking, weight 500 — not `text-4xl font-bold`. |
+| `text-display` | 24px | Section-level or panel title |
+| `text-section` | 17px | Section heading |
+| `text-title` | 15px | Row title |
+| `text-lead` | 15px | Page description, comfortable line height |
+| `text-body` | 14px | Default copy and dense rows |
+| `text-small` | 13px | Supporting copy, labels |
+| `text-meta` | 12px | Structured values, with `font-meta` |
+| `text-micro` | 11px | Eyebrows, with `.u-caps` |
+
+Monospace (`font-meta`) is only for structured values: quantities, units, week indices. Never for labels, statuses or descriptions.
+
+`.u-caps` is for headings, tab labels, badges and step counters, capped at about six words. Never a sentence, paragraph, error or input label. Catalogue and DOM text stay sentence case.
+
+Educational reading columns use `.measure` (64ch) or `.measure-narrow` (52ch). Operational lists stay wide.
+
+## Spacing rhythm
+
+| Token | Value | Use |
+|---|---|---|
+| `spacing-tight` | 16px | Internal spacing of compact interactive elements |
+| `spacing-group` | 28px | Between related content groups |
+| `spacing-section` | 56px | Between major sections |
+| `spacing-gutter` | 20px | Mobile page padding |
+| `spacing-rail` | 240px | Product rail width |
+
+Desktop page padding steps to 32px, then 40px at `xl`. `PageShell` is wide (76rem) by default and `reading` (52rem) only where the content is educational — a narrow centred column is not the default.
+
+## Status without badges
+
+State is read from the composition, not from a badge on every module. See `ModuleRow`.
+
+| State | Treatment |
+|---|---|
+| Active | Strong title, primary action, progress. No "ACTIVE" pill — `ProgramPanel` hierarchy says it. |
+| Included | Ordinary interactive row, quiet metadata such as "Available in your plan" |
+| Locked | Lock icon, full text contrast, an explicit action such as "View upgrade" or "Explore biomarker support". Emphasis is reduced by hierarchy, never by opacity. |
+| Coming soon | Editorial row, quiet metadata, no interactive affordance |
+| Completed | Compact check plus context. Never a filled green container. |
+
+Colour is never the only distinction.
 
 ## Related
 
