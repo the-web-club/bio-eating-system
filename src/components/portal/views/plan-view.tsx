@@ -1,0 +1,116 @@
+import { DisclosureRow } from "../disclosure-row";
+import { InlineNote } from "../inline-note";
+import { Eyebrow, PageSections, PageShell, Section, Split } from "../layout";
+import { MetricValue } from "../metric-value";
+import { PageHeader } from "../page-header";
+import { Status } from "@/components/ui/status";
+
+export type PlanViewItem = {
+  id: string;
+  name: string;
+  note?: string;
+  amount: string;
+  unit: string;
+  why: string | null;
+};
+
+export type PlanViewGroup = {
+  title: string;
+  items: PlanViewItem[];
+};
+
+export type PlanViewProps = {
+  energyKcal: number;
+  groups: PlanViewGroup[];
+  notices: string[];
+  maintenanceOnly: boolean;
+  weekLabel: string;
+  programName: string;
+};
+
+/** Grouped portions on hairlines, each row able to explain itself in place. */
+export function PlanView({
+  energyKcal,
+  groups,
+  notices,
+  maintenanceOnly,
+  weekLabel,
+  programName,
+}: PlanViewProps) {
+  return (
+    <PageShell>
+      <PageSections>
+        <PageHeader
+          title="Daily plan"
+          description="Your portions for today. Open an item to see why it is there."
+          meta={
+            <p className="text-meta text-muted">
+              {programName} ·{" "}
+              <span className="font-meta tabular">{weekLabel}</span>
+            </p>
+          }
+        />
+
+        <Split
+          main={
+            <div className="space-y-section">
+              {groups.map((group) => (
+                <Section key={group.title} title={group.title}>
+                  <ul className="divide-y divide-hairline border-t border-hairline">
+                    {group.items.map((item) => (
+                      <DisclosureRow
+                        key={item.id}
+                        title={item.name}
+                        detailLabel={`Why ${item.name} is in your plan`}
+                        summary={item.note}
+                        value={<MetricValue value={item.amount} unit={item.unit} />}
+                      >
+                        {item.why ? <p>{item.why}</p> : null}
+                      </DisclosureRow>
+                    ))}
+                  </ul>
+                </Section>
+              ))}
+            </div>
+          }
+          aside={
+            <div className="space-y-group">
+              <div>
+                <Eyebrow>Energy target</Eyebrow>
+                <p className="mt-2">
+                  <MetricValue value={energyKcal} unit="kcal" className="text-lead" />
+                </p>
+              </div>
+
+              {maintenanceOnly || notices.length ? (
+                <div>
+                  <Eyebrow>Your safety limits</Eyebrow>
+                  <div className="mt-2.5">
+                    <Status role="neutral">
+                      {maintenanceOnly ? <p>Maintenance energy only.</p> : null}
+                      {notices.map((notice) => (
+                        <p
+                          key={notice}
+                          className={maintenanceOnly ? "mt-1" : undefined}
+                        >
+                          {notice}
+                        </p>
+                      ))}
+                    </Status>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="border-t border-hairline pt-4">
+                <InlineNote>
+                  Items without detail are waiting on reviewed preparation copy.
+                  Nothing is written by the product itself.
+                </InlineNote>
+              </div>
+            </div>
+          }
+        />
+      </PageSections>
+    </PageShell>
+  );
+}

@@ -1,0 +1,247 @@
+// Migration workflow, see rules.md §7:
+//   prisma migrate diff --from-schema-datasource --to-schema-datamodel --script > migration.sql
+//   review by hand, then: prisma migrate deploy
+// Never migrate dev, never db push, never migrate reset.
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// ---------------------------------------------------------------------------
+// Identity. Shape matches better-auth@1.6.26 core tables (getAuthTables).
+// Domain fields on User are additional; Better Auth ignores unknown columns.
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String
+  image         String?
+  locale        String   @default("EN")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  entitlements Entitlement?
+  profile      IntakeProfile?
+  schedule     RotationSchedule?
+
+  // Email consent. Marketing sends filter on these in the query, never after.
+  marketingOptIn   Boolean   @default(false)
+  unsubscribedAt   DateTime?
+  unsubscribeToken String    @unique @default(uuid())
+
+  emailDrops EmailDrop[]
+  auditLog   AuditEvent[]
+
+  @@index([unsubscribedAt])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  ipAddress String?
+  userAgent String?  @db.Text
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  userId                String
+  providerId            String
+  accountId             String
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String   @db.Text
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ---------------------------------------------------------------------------
+// Entitlements. Written only by a verified webhook or a logged admin action.
+// Never from a client request. See rules.md §5.3.
+// ---------------------------------------------------------------------------
+
+model Entitlement {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  corePlan       Boolean @default(false)
+  weeklyRotation Boolean @default(false)
+  labReference   Boolean @default(false)
+  coaching       Boolean @default(false)
+
+  // Shipped as flags only for MVP, the modules do not exist yet.
+  hormoneModule Boolean @default(false)
+  nervousModule Boolean @default(false)
+
+  grantedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Intake. Article 9 special category data. Never logged, never in errors.
+// ---------------------------------------------------------------------------
+
+model IntakeProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  age         Int
+  heightCm    Float
+  weightKg    Float
+  goal        Goal
+  unitSystem  UnitSystem @default(HOUSEHOLD)
+
+  // Exclusions are structured only. Free text never drives the plan.
+  declaredAllergens Json @default("[]") // Allergen[]
+  excludedSlots     Json @default("[]") // FoodSlot[]
+  swapRequests      Json @default("[]") // FoodSlot[]
+
+  // Stored for a human reviewer. Code must not parse this. rules.md §4.1.
+  notesForCoach String? @db.Text
+
+  // Screening answers. Drive the deficit gate. rules.md §4.2.
+  screeningFlags Json @default("[]") // ScreeningFlag[]
+
+  consentHealthDataAt DateTime
+  consentVersion      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  plans GeneratedPlan[]
+}
+
+enum Goal {
+  REDUCE
+  MAINTAIN
+  INCREASE
+}
+
+enum UnitSystem {
+  METRIC
+  HOUSEHOLD
+}
+
+// ---------------------------------------------------------------------------
+// Plan output. Persisted so an email and the portal always show the same
+// thing, and so a screening decision is auditable after the fact.
+// ---------------------------------------------------------------------------
+
+model GeneratedPlan {
+  id        String        @id @default(uuid())
+  profileId String
+  profile   IntakeProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  engineVersion   String
+  contentVersion  String
+  energyKcal      Int
+  screeningOutcome String       // allowed | maintenance_only | refused
+  screeningReasons Json         @default("[]")
+  slots           Json          // rendered slot list
+  createdAt       DateTime      @default(now())
+
+  @@index([profileId, createdAt])
+}
+
+model RotationSchedule {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  currentWeek Int      @default(1)
+  active      Boolean  @default(false)
+  lastSentAt  DateTime?
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, lastSentAt])
+}
+
+// ---------------------------------------------------------------------------
+// Idempotency and audit.
+// ---------------------------------------------------------------------------
+
+model WebhookEvent {
+  id          String   @id @default(uuid())
+  provider    String
+  providerEventId String
+  payloadHash String
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+  error       String?  @db.Text
+
+  @@unique([provider, providerEventId])
+}
+
+model EmailDrop {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  weekNumber Int
+  cycleYear  Int
+  sentAt     DateTime?
+  providerId String?
+  failedAt   DateTime?
+  failure    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  // Guarantees a cron retry cannot double-send. rules.md §6.3.
+  @@unique([userId, cycleYear, weekNumber])
+  @@index([sentAt])
+}
+
+model AuditEvent {
+  id       String   @id @default(uuid())
+  userId   String?
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action   String
+  actor    String
+  detail   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}

@@ -1,0 +1,49 @@
+import { cn } from "@/lib/cn";
+
+/**
+ * Shared shape for actions so a button and a link that do the same job look
+ * identical. Radius is modest and one of fill or border carries the control —
+ * never a fill plus a shadow, and never a pill for a primary action.
+ */
+export type ActionVariant =
+  | "primary"
+  | "secondary"
+  | "quiet"
+  | "feature"
+  | "confirm"
+  | "danger";
+export type ActionSize = "default" | "compact";
+
+export const ACTION_VARIANT: Record<ActionVariant, string> = {
+  primary: "bg-accent-fill text-on-accent hover:bg-accent-hover",
+  secondary:
+    "border border-hairline-strong text-foreground hover:bg-surface-inset",
+  quiet: "text-muted hover:bg-surface-inset hover:text-foreground",
+  /** Inverted, for use inside a high-contrast feature panel. */
+  feature: "bg-feature-fill text-on-feature-fill hover:opacity-90",
+  confirm: "bg-confirm text-on-fill hover:opacity-90",
+  danger: "bg-danger text-on-fill hover:opacity-90",
+};
+
+export const ACTION_SIZE: Record<ActionSize, string> = {
+  default: "min-h-11 rounded-button px-4 text-body",
+  compact: "min-h-9 rounded-input px-3 text-small",
+};
+
+export function actionClassName({
+  variant = "primary",
+  size = "default",
+  className,
+}: {
+  variant?: ActionVariant;
+  size?: ActionSize;
+  className?: string;
+} = {}) {
+  return cn(
+    "relative inline-grid place-items-center font-medium",
+    "transition-colors [transition-duration:var(--duration-fast)]",
+    ACTION_SIZE[size],
+    ACTION_VARIANT[variant],
+    className,
+  );
+}

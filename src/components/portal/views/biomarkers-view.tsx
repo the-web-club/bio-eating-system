@@ -1,0 +1,85 @@
+import { DisclosureRow } from "../disclosure-row";
+import { PortalEmptyState } from "../empty-state";
+import { InlineNote } from "../inline-note";
+import { Eyebrow, PageSections, PageShell, Section, Split } from "../layout";
+import { PageHeader } from "../page-header";
+
+export type BiomarkerEntry = {
+  id: string;
+  name: string;
+  reference: string | null;
+  why: string | null;
+  rationale: string | null;
+};
+
+export const BIOMARKER_DISCLAIMER =
+  "This reference is educational. It does not replace advice from a qualified clinician, and the ranges are context rather than personal targets.";
+
+/**
+ * Educational reference interface: one compact row per marker on hairlines, the
+ * rationale expanding in place, and the clinician notice permanently readable
+ * without shouting.
+ */
+export function BiomarkersView({ markers }: { markers: BiomarkerEntry[] }) {
+  return (
+    <PageShell>
+      <PageSections>
+        <PageHeader
+          title="Biomarkers"
+          description="What each marker describes, and the reference context around it."
+        />
+
+        <Split
+          main={
+            markers.length ? (
+              <Section title="Marker index">
+                <ul className="divide-y divide-hairline border-t border-hairline">
+                  {markers.map((marker) => (
+                    <DisclosureRow
+                      key={marker.id}
+                      title={marker.name}
+                      detailLabel={`${marker.name} rationale`}
+                      summary={
+                        marker.why ??
+                        "A short purpose appears here once the entry is published."
+                      }
+                      value={
+                        marker.reference ? (
+                          <span className="hidden font-meta text-meta tabular text-muted sm:inline">
+                            {marker.reference}
+                          </span>
+                        ) : null
+                      }
+                    >
+                      {marker.rationale ? <p>{marker.rationale}</p> : null}
+                    </DisclosureRow>
+                  ))}
+                </ul>
+              </Section>
+            ) : (
+              <PortalEmptyState title="No entries published yet">
+                Marker entries appear here after dietitian-reviewed content is added to
+                the catalogue. Nothing is generated in the meantime.
+              </PortalEmptyState>
+            )
+          }
+          aside={
+            <div className="space-y-group">
+              <div>
+                <Eyebrow>How to read this</Eyebrow>
+                <p className="mt-2.5 text-body text-soft">
+                  Entries are reference-only. There is no target, no score and no pass
+                  or fail — the context is there to help you have a better conversation
+                  with your clinician.
+                </p>
+              </div>
+              <div className="border-t border-hairline pt-4">
+                <InlineNote>{BIOMARKER_DISCLAIMER}</InlineNote>
+              </div>
+            </div>
+          }
+        />
+      </PageSections>
+    </PageShell>
+  );
+}

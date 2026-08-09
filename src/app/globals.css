@@ -1,0 +1,639 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Token system. Three layers, one direction of flow.
+
+   Layer 1  primitives   raw values, no meaning in the name
+   Layer 2  semantics    role aliases, the only layer that changes per theme
+   Layer 3  @theme       binds semantics to Tailwind utility names
+
+   Components reference layer 3 only. Adding a colour means adding a token.
+
+   Motion durations/easings synced with src/lib/motion.ts — keep in lockstep.
+   See docs/brand.md, docs/motion.md, docs/status-colour.md.
+   ========================================================================== */
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------- Layer 1: primitives ------------------------------------------ */
+
+:root {
+  /* Paper — warm near-white canvas and object surfaces */
+  --paper-000: #ffffff;
+  --paper-050: #fbfaf8;
+  --paper-100: #f7f5f1;
+
+  /* Stone — warm secondary surfaces and dividers */
+  --stone-100: #f4f2ed;
+  --stone-200: #eae6df;
+  --stone-300: #d8d3c9;
+
+  /* Ink — deep warm neutrals for text and feature panels */
+  --ink-900: #1b1a18;
+  --ink-800: #26251f;
+  --ink-700: #3a3833;
+  --ink-500: #6a665e;
+  --ink-400: #8f8a80;
+  --ink-300: #a8a29a;
+
+  /* Mineral — brand accent, derived from the product blue, deepened
+     and desaturated so it reads as considered rather than default SaaS. */
+  --mineral-800: #24486b;
+  --mineral-700: #2c5a86;
+  --mineral-500: #5c86ab;
+  --mineral-300: #8fb3d4;
+  --mineral-200: #b6cee4;
+  --mineral-050: #eef2f6;
+  /* Deep mineral for dark-mode selected surfaces and accent washes */
+  --mineral-shade: #1a2530;
+
+  /* Dark-mode neutrals */
+  --slate-950: #111111;
+  --slate-900: #161615;
+  --slate-850: #1e1d1c;
+  --slate-800: #2a2926;
+  --slate-100: #f4f2ee;
+  --slate-300: #a6a19a;
+  --slate-400: #7d7871;
+  --slate-500: #5c584f;
+
+  /* Semantic feedback primitives — kept accessible, used sparingly */
+  --blue-500: #007aff;
+  --blue-600: #0066cc;
+  --blue-text-dark: #8ab4e8;
+  --blue-mark-dark: #6bb3ff;
+
+  --green-500: #34c759;
+  --green-700: #1e7a3c;
+  --green-text: #1d6f3f;
+  --green-mark: #2e9b57;
+  --green-text-dark: #5dcaa0;
+  --green-mark-dark: #6bcb95;
+
+  --red-500: #ff3b30;
+  --red-700: #c4160b;
+  --red-text: #a62b21;
+  --red-mark: #d93b2e;
+  --red-text-dark: #e07a72;
+  --red-mark-dark: #ff6b61;
+
+  /* Radii — restrained product shape language. Pills are opt-in only. */
+  --radius-control: 6px;
+  --radius-badge: 5px;
+  --radius-input: 8px;
+  --radius-button: 9px;
+  --radius-panel: 11px;
+  --radius-dialog: 13px;
+  --radius-pill: 9999px;
+
+  /* Motion — synced with src/lib/motion.ts */
+  --duration-instant: 80ms;
+  --duration-press: 110ms;
+  --duration-fast: 140ms;
+  --duration-exit: 100ms;
+  --duration-selection: 170ms;
+  --duration-disclosure: 200ms;
+  --duration-moderate: 240ms;
+  --duration-slow: 360ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-state: cubic-bezier(0.2, 0, 0, 1);
+  --ease-linear: linear;
+  --travel-hair: 2px;
+  --travel-close: 4px;
+  --travel-near: 8px;
+  --travel-far: 80px;
+  --stagger: 24ms;
+  --loading-threshold: 300ms;
+
+  /* Type stacks. --font-inter is set by next/font on <html>.
+     Mono is reserved for structured values: quantities, units, week indices. */
+  --font-body-stack: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --font-meta-stack: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+
+  /* Reading measure for educational content, ~62–70 characters */
+  --measure: 64ch;
+  --measure-narrow: 52ch;
+
+  /* Cursor: default on controls, pointer on links (Linear-adjacent). */
+  --cursor-control: default;
+  --cursor-link: pointer;
+}
+
+/* ---------- Layer 2: semantics ------------------------------------------- */
+
+:root {
+  /* Elevation level 0 is the canvas. Level 1 differentiates with a surface
+     shift or a hairline. Level 2 is an interactive object. Level 3 floats. */
+  --surface-canvas: var(--paper-050);
+  --surface: var(--paper-000);
+  --surface-inset: var(--stone-100);
+  --surface-selected: var(--mineral-050);
+  --surface-feature: var(--ink-900);
+  --surface-overlay: rgb(27 26 24 / 0.32);
+
+  --foreground: var(--ink-900);
+  --foreground-soft: var(--ink-700);
+  --foreground-muted: var(--ink-500);
+  --foreground-faint: var(--ink-400);
+  --foreground-disabled: var(--ink-400);
+
+  --on-accent: var(--paper-000);
+  --on-fill: var(--paper-000);
+  --on-feature: var(--paper-100);
+  --on-feature-muted: var(--ink-300);
+  --on-feature-track: rgb(247 245 241 / 0.22);
+  /* Inverted action for use inside a feature panel */
+  --feature-fill: var(--paper-100);
+  --on-feature-fill: var(--ink-900);
+
+  /* Warm, ink-tinted hairlines — composite over any surface */
+  --hairline: rgb(27 26 24 / 0.09);
+  --hairline-strong: rgb(27 26 24 / 0.16);
+
+  /* accent = graphical / focus; accent-fill = primary action fill */
+  --accent: var(--mineral-700);
+  --accent-fill: var(--mineral-700);
+  --accent-hover: var(--mineral-800);
+  --accent-text: var(--mineral-700);
+  --accent-soft: var(--mineral-500);
+  --accent-subtle: var(--mineral-050);
+  --accent-track: var(--stone-200);
+  --chart-primary: var(--mineral-700);
+  --chart-secondary: var(--ink-400);
+
+  --confirm: var(--green-700);
+  --confirm-icon: var(--green-500);
+  --confirm-subtle: rgb(30 122 60 / 0.07);
+
+  --danger: var(--red-700);
+  --danger-icon: var(--red-500);
+  --danger-subtle: rgb(196 22 11 / 0.06);
+
+  --focus-ring: var(--mineral-700);
+
+  /* Status roles — mark + text; wash reserved for blocking danger */
+  --status-neutral-text: var(--foreground);
+  --status-neutral-mark: var(--foreground-muted);
+  --status-neutral-line: var(--hairline-strong);
+  --status-neutral-wash: var(--surface-inset);
+
+  --status-info-text: var(--mineral-700);
+  --status-info-mark: var(--mineral-500);
+  --status-info-line: rgb(44 90 134 / 0.24);
+  --status-info-wash: rgb(44 90 134 / 0.05);
+
+  --status-success-text: var(--green-text);
+  --status-success-mark: var(--green-mark);
+  --status-success-line: rgb(46 155 87 / 0.24);
+  --status-success-wash: rgb(46 155 87 / 0.05);
+
+  --status-danger-text: var(--red-text);
+  --status-danger-mark: var(--red-mark);
+  --status-danger-line: rgb(217 59 46 / 0.28);
+  --status-danger-wash: rgb(217 59 46 / 0.05);
+
+  /* Elevation. Level 2 objects take one of border or shadow, never both. */
+  --shadow-object:
+    0 1px 2px rgb(27 26 24 / 0.04),
+    0 1px 1px rgb(27 26 24 / 0.03);
+  --shadow-floating:
+    0 1px 1px rgb(27 26 24 / 0.04),
+    0 6px 16px rgb(27 26 24 / 0.08),
+    0 16px 32px rgb(27 26 24 / 0.05);
+  --shadow-modal:
+    0 2px 4px rgb(27 26 24 / 0.05),
+    0 12px 32px rgb(27 26 24 / 0.11),
+    0 32px 64px rgb(27 26 24 / 0.08);
+}
+
+.dark {
+  --surface-canvas: var(--slate-950);
+  --surface: var(--slate-900);
+  --surface-inset: var(--slate-850);
+  --surface-selected: var(--mineral-shade);
+  --surface-feature: var(--slate-800);
+  --surface-overlay: rgb(0 0 0 / 0.6);
+
+  --foreground: var(--slate-100);
+  --foreground-soft: var(--slate-300);
+  --foreground-muted: var(--slate-300);
+  --foreground-faint: var(--slate-400);
+  --foreground-disabled: var(--slate-500);
+
+  --on-accent: var(--slate-950);
+  --on-fill: var(--paper-000);
+  --on-feature: var(--slate-100);
+  --on-feature-muted: var(--slate-300);
+  --on-feature-track: rgb(244 242 238 / 0.2);
+  --feature-fill: var(--slate-100);
+  --on-feature-fill: var(--slate-950);
+
+  --hairline: rgb(244 242 238 / 0.09);
+  --hairline-strong: rgb(244 242 238 / 0.16);
+
+  --accent: var(--mineral-300);
+  --accent-fill: var(--mineral-300);
+  --accent-hover: var(--mineral-200);
+  --accent-text: var(--mineral-300);
+  --accent-soft: var(--mineral-500);
+  --accent-subtle: var(--mineral-shade);
+  --accent-track: var(--slate-800);
+  --chart-primary: var(--mineral-300);
+  --chart-secondary: var(--slate-400);
+
+  --confirm: var(--green-700);
+  --confirm-icon: var(--green-500);
+  --confirm-subtle: rgb(107 203 149 / 0.08);
+
+  --danger: var(--red-700);
+  --danger-icon: var(--red-500);
+  --danger-subtle: rgb(255 107 97 / 0.08);
+
+  --focus-ring: var(--mineral-300);
+
+  --status-neutral-text: var(--foreground);
+  --status-neutral-mark: var(--foreground-muted);
+  --status-neutral-line: var(--hairline-strong);
+  --status-neutral-wash: var(--surface-inset);
+
+  --status-info-text: var(--blue-text-dark);
+  --status-info-mark: var(--blue-mark-dark);
+  --status-info-line: rgb(107 179 255 / 0.28);
+  --status-info-wash: rgb(107 179 255 / 0.06);
+
+  --status-success-text: var(--green-text-dark);
+  --status-success-mark: var(--green-mark-dark);
+  --status-success-line: rgb(107 203 149 / 0.28);
+  --status-success-wash: rgb(107 203 149 / 0.06);
+
+  --status-danger-text: var(--red-text-dark);
+  --status-danger-mark: var(--red-mark-dark);
+  --status-danger-line: rgb(255 107 97 / 0.3);
+  --status-danger-wash: rgb(255 107 97 / 0.06);
+
+  --shadow-object: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-floating:
+    0 1px 0 rgb(244 242 238 / 0.04),
+    0 8px 24px rgb(0 0 0 / 0.5);
+  --shadow-modal:
+    0 1px 0 rgb(244 242 238 / 0.05),
+    0 16px 44px rgb(0 0 0 / 0.6);
+}
+
+/* ---------- Layer 3: Tailwind binding ------------------------------------ */
+
+@theme inline {
+  --color-surface-canvas: var(--surface-canvas);
+  --color-surface: var(--surface);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-selected: var(--surface-selected);
+  --color-surface-feature: var(--surface-feature);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-foreground: var(--foreground);
+  --color-soft: var(--foreground-soft);
+  --color-muted: var(--foreground-muted);
+  --color-faint: var(--foreground-faint);
+  --color-disabled: var(--foreground-disabled);
+
+  --color-on-accent: var(--on-accent);
+  --color-on-fill: var(--on-fill);
+  --color-on-feature: var(--on-feature);
+  --color-on-feature-muted: var(--on-feature-muted);
+  --color-on-feature-track: var(--on-feature-track);
+  --color-feature-fill: var(--feature-fill);
+  --color-on-feature-fill: var(--on-feature-fill);
+
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-track: var(--accent-track);
+  --color-chart-primary: var(--chart-primary);
+  --color-chart-secondary: var(--chart-secondary);
+
+  --color-confirm: var(--confirm);
+  --color-confirm-icon: var(--confirm-icon);
+  --color-confirm-subtle: var(--confirm-subtle);
+
+  --color-danger: var(--danger);
+  --color-danger-icon: var(--danger-icon);
+  --color-danger-subtle: var(--danger-subtle);
+
+  --color-focus-ring: var(--focus-ring);
+
+  --color-status-neutral-text: var(--status-neutral-text);
+  --color-status-neutral-mark: var(--status-neutral-mark);
+  --color-status-neutral-line: var(--status-neutral-line);
+  --color-status-neutral-wash: var(--status-neutral-wash);
+
+  --color-status-info-text: var(--status-info-text);
+  --color-status-info-mark: var(--status-info-mark);
+  --color-status-info-line: var(--status-info-line);
+  --color-status-info-wash: var(--status-info-wash);
+
+  --color-status-success-text: var(--status-success-text);
+  --color-status-success-mark: var(--status-success-mark);
+  --color-status-success-line: var(--status-success-line);
+  --color-status-success-wash: var(--status-success-wash);
+
+  --color-status-danger-text: var(--status-danger-text);
+  --color-status-danger-mark: var(--status-danger-mark);
+  --color-status-danger-line: var(--status-danger-line);
+  --color-status-danger-wash: var(--status-danger-wash);
+
+  --radius-control: var(--radius-control);
+  --radius-badge: var(--radius-badge);
+  --radius-input: var(--radius-input);
+  --radius-button: var(--radius-button);
+  --radius-panel: var(--radius-panel);
+  --radius-dialog: var(--radius-dialog);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-object: var(--shadow-object);
+  --shadow-floating: var(--shadow-floating);
+  --shadow-modal: var(--shadow-modal);
+
+  /* Vertical rhythm. section = major break, group = related content,
+     tight = internal spacing of compact interactive elements. */
+  --spacing-tight: 1rem;
+  --spacing-group: 1.75rem;
+  --spacing-section: 3.5rem;
+  --spacing-gutter: 1.25rem;
+  --spacing-rail: 15rem;
+
+  --font-body: var(--font-body-stack);
+  --font-display: var(--font-body-stack);
+  --font-meta: var(--font-meta-stack);
+
+  /* Editorial scale. Confident jumps between display, section, body, meta. */
+  --text-editorial: 2.125rem;
+  --text-editorial--line-height: 1.05;
+  --text-editorial--letter-spacing: -0.032em;
+  --text-editorial--font-weight: 500;
+
+  --text-display: 1.5rem;
+  --text-display--line-height: 1.18;
+  --text-display--letter-spacing: -0.022em;
+  --text-display--font-weight: 500;
+
+  --text-section: 1.0625rem;
+  --text-section--line-height: 1.35;
+  --text-section--letter-spacing: -0.011em;
+  --text-section--font-weight: 600;
+
+  --text-title: 0.9375rem;
+  --text-title--line-height: 1.4;
+  --text-title--letter-spacing: -0.008em;
+  --text-title--font-weight: 600;
+
+  --text-lead: 0.9375rem;
+  --text-lead--line-height: 1.6;
+  --text-lead--font-weight: 400;
+
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.65;
+  --text-body--font-weight: 400;
+
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.5;
+  --text-small--font-weight: 400;
+
+  --text-meta: 0.75rem;
+  --text-meta--line-height: 1.4;
+  --text-meta--letter-spacing: 0.005em;
+  --text-meta--font-weight: 500;
+
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.3;
+  --text-micro--letter-spacing: 0.02em;
+  --text-micro--font-weight: 500;
+
+  --animate-skeleton: skeleton 1.5s var(--ease-in-out) infinite;
+}
+
+/* ---------- Base ---------------------------------------------------------- */
+
+@layer base {
+  html {
+    color-scheme: light dark;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: var(--surface-canvas);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* The outline follows the element's own radius, so the ring must not
+     redefine border-radius — doing so reshapes buttons on focus. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--accent-subtle);
+    color: var(--foreground);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------- Keyframes ----------------------------------------------------- */
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(calc(var(--travel-close) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes menu-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--travel-close));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + var(--travel-near))) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes dialog-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + var(--travel-hair))) scale(0.99);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--travel-far) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Utilities ----------------------------------------------------- */
+
+@layer utilities {
+  /* Uppercase is a typographic decision for headings, tab labels, badges and
+     step counters only. Never a sentence, paragraph, error or input label. */
+  .u-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Constrain educational reading content. Operational lists stay wide. */
+  .measure {
+    max-width: var(--measure);
+  }
+
+  .measure-narrow {
+    max-width: var(--measure-narrow);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .force-reduced-motion *,
+  .force-reduced-motion *::before,
+  .force-reduced-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes menu-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  @keyframes dialog-out {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
