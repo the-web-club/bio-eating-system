@@ -21,8 +21,8 @@ export const ACTION_VARIANT: Record<ActionVariant, string> = {
   quiet: "text-muted hover:bg-surface-inset hover:text-foreground",
   /** Inverted, for use inside a high-contrast feature panel. */
   feature: "bg-feature-fill text-on-feature-fill hover:opacity-90",
-  confirm: "bg-confirm text-on-fill hover:opacity-90",
-  danger: "bg-danger text-on-fill hover:opacity-90",
+  confirm: "bg-confirm-fill text-on-fill hover:opacity-90",
+  danger: "bg-danger-fill text-on-fill hover:opacity-90",
 };
 
 export const ACTION_SIZE: Record<ActionSize, string> = {

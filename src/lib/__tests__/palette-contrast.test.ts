@@ -109,8 +109,11 @@ const TEXT_ON_SURFACE: [string, number][] = [
   ["--status-success-text", 4.5],
   ["--status-danger-text", 4.5],
   ["--foreground-faint", 3],
+  ["--foreground-disabled", 3],
   ["--accent", 3],
   ["--focus-ring", 3],
+  ["--confirm-icon", 3],
+  ["--danger-icon", 3],
   ["--status-info-mark", 3],
   ["--status-success-mark", 3],
   ["--status-danger-mark", 3],
@@ -138,8 +141,8 @@ describe.each([
   it("filled actions clear 4.5:1 against their own fill", () => {
     const pairs: [string, string][] = [
       ["--on-accent", "--accent-fill"],
-      ["--on-fill", "--confirm"],
-      ["--on-fill", "--danger"],
+      ["--on-fill", "--confirm-fill"],
+      ["--on-fill", "--danger-fill"],
       ["--on-feature", "--surface-feature"],
       ["--on-feature-fill", "--feature-fill"],
     ];
@@ -169,11 +172,9 @@ describe.each([
     }
   });
 
-  it("disabled text stays legible at 3:1 on the inset surface", () => {
-    const background = resolve("--surface-inset", dark);
-    const ratio = contrast(resolve("--foreground-disabled", dark, background), background);
-    expect(ratio, `--foreground-disabled is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(
-      3,
-    );
+  it("hairlines stay visible against the canvas", () => {
+    const background = resolve("--surface-canvas", dark);
+    const ratio = contrast(resolve("--hairline-strong", dark, background), background);
+    expect(ratio, `--hairline-strong is ${ratio.toFixed(2)}:1`).toBeGreaterThan(1.1);
   });
 });

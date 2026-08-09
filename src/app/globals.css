@@ -55,22 +55,18 @@
   --slate-100: #f4f2ee;
   --slate-300: #a6a19a;
   --slate-400: #7d7871;
-  --slate-500: #5c584f;
 
-  /* Semantic feedback primitives — kept accessible, used sparingly */
-  --blue-500: #007aff;
-  --blue-600: #0066cc;
+  /* Semantic feedback primitives — kept accessible, used sparingly.
+     text = body copy (4.5:1), mark = glyph (3:1), 700 = fill under white. */
   --blue-text-dark: #8ab4e8;
   --blue-mark-dark: #6bb3ff;
 
-  --green-500: #34c759;
   --green-700: #1e7a3c;
   --green-text: #1d6f3f;
   --green-mark: #2e9b57;
   --green-text-dark: #5dcaa0;
   --green-mark-dark: #6bcb95;
 
-  --red-500: #ff3b30;
   --red-700: #c4160b;
   --red-text: #a62b21;
   --red-mark: #d93b2e;
@@ -165,13 +161,17 @@
   --chart-primary: var(--mineral-700);
   --chart-secondary: var(--ink-400);
 
-  --confirm: var(--green-700);
-  --confirm-icon: var(--green-500);
+  /* Feedback text and marks, which must read on a surface. Separate from the
+     action fills below: a fill is measured against --on-fill, not the canvas. */
+  --confirm: var(--green-text);
+  --confirm-icon: var(--green-mark);
   --confirm-subtle: rgb(30 122 60 / 0.07);
+  --confirm-fill: var(--green-700);
 
-  --danger: var(--red-700);
-  --danger-icon: var(--red-500);
+  --danger: var(--red-text);
+  --danger-icon: var(--red-mark);
   --danger-subtle: rgb(196 22 11 / 0.06);
+  --danger-fill: var(--red-700);
 
   --focus-ring: var(--mineral-700);
 
@@ -222,7 +222,8 @@
   --foreground-soft: var(--slate-300);
   --foreground-muted: var(--slate-300);
   --foreground-faint: var(--slate-400);
-  --foreground-disabled: var(--slate-500);
+  /* Disabled must stay readable, so it matches faint rather than dimming further. */
+  --foreground-disabled: var(--slate-400);
 
   --on-accent: var(--slate-950);
   --on-fill: var(--paper-000);
@@ -245,13 +246,17 @@
   --chart-primary: var(--mineral-300);
   --chart-secondary: var(--slate-400);
 
-  --confirm: var(--green-700);
-  --confirm-icon: var(--green-500);
+  /* Feedback text lightens on a dark canvas. The fills do not: they keep white
+     text, so they stay deep in both themes. */
+  --confirm: var(--green-text-dark);
+  --confirm-icon: var(--green-mark-dark);
   --confirm-subtle: rgb(107 203 149 / 0.08);
+  --confirm-fill: var(--green-700);
 
-  --danger: var(--red-700);
-  --danger-icon: var(--red-500);
+  --danger: var(--red-text-dark);
+  --danger-icon: var(--red-mark-dark);
   --danger-subtle: rgb(255 107 97 / 0.08);
+  --danger-fill: var(--red-700);
 
   --focus-ring: var(--mineral-300);
 
@@ -324,10 +329,12 @@
   --color-confirm: var(--confirm);
   --color-confirm-icon: var(--confirm-icon);
   --color-confirm-subtle: var(--confirm-subtle);
+  --color-confirm-fill: var(--confirm-fill);
 
   --color-danger: var(--danger);
   --color-danger-icon: var(--danger-icon);
   --color-danger-subtle: var(--danger-subtle);
+  --color-danger-fill: var(--danger-fill);
 
   --color-focus-ring: var(--focus-ring);
 
