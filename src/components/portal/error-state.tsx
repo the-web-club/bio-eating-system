@@ -18,12 +18,21 @@ export function PortalErrorState({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-tight", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-tight sm:flex-row sm:items-start sm:gap-6",
+        className,
+      )}
+    >
       <Status role="danger">
         <p className="font-medium">{title}</p>
-        <div className="mt-0.5">{children}</div>
+        {/* Only the headline carries the danger colour; the instruction reads as
+            ordinary copy so the state never shouts twice. */}
+        <div className="mt-0.5 text-soft">{children}</div>
       </Status>
-      {action ? <div className="flex flex-wrap gap-3 pl-4">{action}</div> : null}
+      {action ? (
+        <div className="flex shrink-0 flex-wrap gap-3 pl-4 sm:pl-0">{action}</div>
+      ) : null}
     </div>
   );
 }

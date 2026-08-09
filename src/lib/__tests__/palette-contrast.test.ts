@@ -46,18 +46,19 @@ function hexToRgb(hex: string): Rgb {
   };
 }
 
+function lookup(name: string, dark: boolean): string {
+  const value = (dark ? darkOverrides.get(name) : undefined) ?? rootVars.get(name);
+  if (!value) throw new Error(`Token ${name} is not defined`);
+  return value;
+}
+
 /** Resolves a token to a colour, compositing alpha over `over` when present. */
 function resolve(name: string, dark: boolean, over?: Rgb): Rgb {
-  const scope = dark ? darkOverrides : rootVars;
-  let value = scope.get(name) ?? rootVars.get(name);
-  if (!value) throw new Error(`Token ${name} is not defined`);
+  let value = lookup(name, dark);
 
   let guard = 0;
   while (value.startsWith("var(")) {
-    const inner = value.slice(4, value.indexOf(")")).trim();
-    const next = (dark ? darkOverrides.get(inner) : undefined) ?? rootVars.get(inner);
-    if (!next) throw new Error(`Token ${inner} is not defined`);
-    value = next;
+    value = lookup(value.slice(4, value.indexOf(")")).trim(), dark);
     if (++guard > 10) throw new Error(`Cyclic token reference at ${name}`);
   }
 
@@ -102,6 +103,8 @@ const TEXT_ON_SURFACE: [string, number][] = [
   ["--foreground-soft", 4.5],
   ["--foreground-muted", 4.5],
   ["--accent-text", 4.5],
+  /* The mark is painted, not typed, but it carries the product name. */
+  ["--brand-mark", 4.5],
   ["--confirm", 4.5],
   ["--danger", 4.5],
   ["--status-neutral-text", 4.5],

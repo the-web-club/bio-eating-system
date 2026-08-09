@@ -1,6 +1,16 @@
 # Brand token reference
 
-Product identity: **Well with Katarina**. Written as one signature — "Well" leads, "with Katarina" signs it. Natural casing, never a stacked `KATARINA / Portal` pair, no invented logo symbol.
+Product identity: **Well with Katarina**. Written as one signature in natural casing, never a stacked `KATARINA / Portal` pair.
+
+## The mark
+
+The wordmark is a supplied script drawing at `public/brand/well-with-katarina.png`, trimmed to its own edges (189×91, transparent) by `scripts/prepare-logo.mjs`.
+
+It is rendered as an **alpha mask**, not an `<img>`: the `.brand-mark` utility paints `--brand-mark` through the artwork. That is what lets the mark carry the artwork's indigo on the light canvas and switch to the foreground ink on the dark one, from a token rather than a filter hack. Set a height on the element; the artwork's aspect ratio supplies the width, so the box is reserved before the mask loads.
+
+`BrandSignature` is the only component allowed to draw it. It always ships an `sr-only` product name, because a masked span has no accessible text of its own.
+
+The source artwork is 246 px wide, so the mark is soft above roughly 130 px on a 2× display. An SVG would remove that ceiling.
 
 Tokens live in `src/app/globals.css` in three layers, and components reference layer 3 only. Adding a colour means adding a token.
 
@@ -20,8 +30,9 @@ Warm, near-white canvas rather than cold dashboard grey. Deep warm ink for type.
 |---|---|
 | `--paper-*` | Canvas and object surfaces. `#FBFAF8` canvas, `#FFFFFF` objects. |
 | `--stone-*` | Inset surfaces, progress tracks, dividers. |
-| `--ink-*` | Type, and the feature panel fill. |
-| `--mineral-*` | The single brand accent. Light uses `--mineral-700`, dark uses `--mineral-300`. |
+| `--ink-*` | Type, and the light-mode feature panel fill. |
+| `--mineral-*` | The single brand accent. Light uses `--mineral-700`, dark uses `--mineral-300`. `--mineral-950` is the dark-mode feature panel, tinted so the dominant surface still reads as emphasis rather than a lighter grey. |
+| `--indigo-900` | Sampled from the wordmark artwork. Consumed only by `--brand-mark`. |
 | `--slate-*` | Dark-mode neutrals. |
 | green / red | Genuine semantic feedback only. Never decoration. |
 

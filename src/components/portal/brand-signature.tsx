@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
+export const BRAND_NAME = "Well with Katarina";
+
 /**
- * Typographic wordmark. One signature, not a stacked label pair: "Well" leads
- * and "with Katarina" signs it. Natural casing, no invented symbol.
+ * The wordmark. Painted through an alpha mask so the artwork's indigo can be
+ * replaced by an ink that survives dark mode — see .brand-mark in globals.css.
+ * The height is set here; the artwork's ratio supplies the width, so the box is
+ * reserved before the mask loads and nothing shifts.
  *
- * rail    stacked, for the product rail and the mobile menu
- * compact inline, for a single-line bar
+ * rail    product rail and the mobile menu
+ * compact single-line bar
  */
 export function BrandSignature({
   href,
@@ -17,29 +21,22 @@ export function BrandSignature({
   size?: "rail" | "compact";
   className?: string;
 }) {
-  const stacked = size === "rail";
-
-  const mark = stacked ? (
-    <span className="block">
-      <span className="block text-display text-foreground">Well</span>
-      <span className="mt-0.5 block text-small text-muted">with Katarina</span>
-    </span>
-  ) : (
-    <span className="flex items-baseline gap-1.5">
-      <span className="text-section text-foreground">Well</span>
-      <span className="truncate text-meta text-muted">with Katarina</span>
-    </span>
+  const mark = (
+    <>
+      <span className={cn("brand-mark", size === "rail" ? "h-16" : "h-9")} aria-hidden />
+      <span className="sr-only">{BRAND_NAME}</span>
+    </>
   );
 
   if (!href) {
-    return <span className={className}>{mark}</span>;
+    return <span className={cn("block", className)}>{mark}</span>;
   }
 
   return (
     <Link
       href={href}
       className={cn(
-        "block cursor-[var(--cursor-link)] rounded-control transition-opacity [transition-duration:var(--duration-fast)] hover:opacity-70",
+        "block w-fit cursor-[var(--cursor-link)] rounded-control transition-opacity [transition-duration:var(--duration-fast)] hover:opacity-70",
         className,
       )}
     >

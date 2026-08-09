@@ -32,7 +32,7 @@ export function ProgramPanel({
         className,
       )}
     >
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10 lg:gap-12">
         <div className="min-w-0">
           <Eyebrow className="text-on-feature-muted">{label}</Eyebrow>
           <h2 className="mt-2 text-display text-on-feature">{name}</h2>
@@ -40,7 +40,7 @@ export function ProgramPanel({
             {proposition}
           </p>
         </div>
-        <div className="w-full shrink-0 space-y-4 lg:w-64">
+        <div className="w-full shrink-0 space-y-4 md:w-52 lg:w-64">
           {progress ? (
             <ProgressLine
               tone="feature"

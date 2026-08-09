@@ -5,6 +5,7 @@ import { useReducedMotion } from "framer-motion";
 import { useCallback, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { duration, easeCss } from "@/lib/motion";
+import { IconChevronDown } from "@/components/portal/icons";
 import { ScrollArea } from "./scroll-area";
 
 export type SelectOption = { value: string; label: string };
@@ -47,12 +48,15 @@ export function Select({
           className={cn(
             "inline-flex h-11 w-full items-center justify-between gap-2 rounded-input border border-hairline-strong bg-surface px-3 text-body text-foreground",
             "cursor-[var(--cursor-control)] transition-colors [transition-duration:var(--duration-instant)]",
-            "data-[placeholder]:text-muted disabled:opacity-60",
+            /* Disabled drops the fill and border, not the text opacity, so the
+               chosen value stays readable. */
+            "data-[placeholder]:text-muted",
+            "disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-inset disabled:text-disabled",
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />
-          <SelectPrimitive.Icon className="text-muted" aria-hidden>
-            ▾
+          <SelectPrimitive.Icon className="text-faint" aria-hidden>
+            <IconChevronDown className="size-4" />
           </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
         <SelectPrimitive.Portal>

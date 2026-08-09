@@ -111,12 +111,16 @@ export function Split({
   return (
     <div
       className={cn(
-        "grid gap-group lg:grid-cols-[minmax(0,2fr)_minmax(15rem,1fr)] lg:gap-12",
+        "grid gap-group md:grid-cols-[minmax(0,1.6fr)_minmax(14rem,1fr)] md:gap-10",
+        "xl:grid-cols-[minmax(0,2fr)_minmax(15rem,1fr)] xl:gap-12",
         className,
       )}
     >
       <div className="min-w-0">{main}</div>
-      <div className="min-w-0 lg:border-l lg:border-hairline lg:pl-10">{aside}</div>
+      {/* Stacked, the hairline runs across; split, it becomes the column rule. */}
+      <div className="min-w-0 border-t border-hairline pt-group md:border-t-0 md:border-l md:pl-8 md:pt-0 xl:pl-10">
+        {aside}
+      </div>
     </div>
   );
 }

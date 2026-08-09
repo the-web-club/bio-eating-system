@@ -26,7 +26,7 @@ export function ModuleRows({
   );
 }
 
-const ROW = "group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-6 py-4";
+const ROW = "group grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-6 py-4";
 
 function Body({
   title,
@@ -51,9 +51,9 @@ function Body({
           ) : null}
           {title}
         </p>
-        <p className="mt-1 measure text-body text-muted">{description}</p>
+        <p className="mt-1 measure-narrow text-body text-muted">{description}</p>
       </div>
-      <div className="flex items-center gap-3 justify-self-end">
+      <div className="flex items-center gap-3 justify-self-end pt-0.5">
         {hint ? (
           <span
             className={cn(

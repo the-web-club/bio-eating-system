@@ -25,8 +25,8 @@ Mapped from primitives in `globals.css`. Never invent new primitive hues at the 
 
 | Role | text | mark | line | wash |
 | --- | --- | --- | --- | --- |
-| neutral | foreground | foreground-muted | hairline-strong | surface-sunken |
-| info | `#0066CC` | `#007AFF` | mark @ 24% | mark @ 5% |
+| neutral | foreground | foreground-muted | hairline-strong | surface-inset |
+| info | `--mineral-700` | `--mineral-500` | mark @ 24% | mark @ 5% |
 | success | `#1D6F3F` | `#2E9B57` | mark @ 24% | mark @ 5% |
 | danger | `#A62B21` | `#D93B2E` | mark @ 28% | mark @ 5% |
 
@@ -34,23 +34,14 @@ Mapped from primitives in `globals.css`. Never invent new primitive hues at the 
 
 | Role | text | mark | line | wash |
 | --- | --- | --- | --- | --- |
-| neutral | foreground | foreground-muted | hairline-strong | surface-sunken |
+| neutral | foreground | foreground-muted | hairline-strong | surface-inset |
 | info | `#8AB4E8` | `#6BB3FF` | mark @ 28% | mark @ 6% |
 | success | `#5DCAA0` | `#6BCB95` | mark @ 28% | mark @ 6% |
 | danger | `#E07A72` | `#FF6B61` | mark @ 30% | mark @ 6% |
 
-Measured contrast (approx., on surface):
+Targets: text ≥ 4.5:1, marks ≥ 3:1, on every surface the role can appear on. This is asserted in `src/lib/__tests__/palette-contrast.test.ts` against the real token values rather than recorded in a table here.
 
-| Token | Light vs `#FFFFFF` | Dark vs `#0A0A0A` |
-| --- | --- | --- |
-| danger text | 7.03:1 | 6.78:1 |
-| danger mark | 4.55:1 | 7.10:1 |
-| success text | 6.18:1 | 9.82:1 |
-| success mark | 3.53:1 | 9.99:1 |
-| info text | 5.57:1 | 9.21:1 |
-| info mark | 4.02:1 | 8.97:1 |
-
-Targets: text ≥ 4.5:1, marks ≥ 3:1.
+Filled destructive and confirm buttons do not use these text colours. They use `--danger-fill` / `--confirm-fill`, which are measured against white.
 
 ## Hard rules
 
@@ -59,6 +50,7 @@ Targets: text ≥ 4.5:1, marks ≥ 3:1.
 3. No coloured input borders at rest. Error may take line colour on the input; never success colour on the input.
 4. No green checkmarks decorating every row.
 5. Destructive actions are text-and-icon by default. Filled red button only in the final confirmation step.
+6. `Status` reports the outcome of an action or the state of a plan. Persistent guidance uses `InlineNote` instead, which has no rule and no wash.
 
 ## Component
 

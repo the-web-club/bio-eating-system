@@ -42,7 +42,7 @@ export function LessonNavigation({
                 aria-current={active ? "true" : undefined}
                 onClick={() => onSelect(lesson.id)}
                 className={cn(
-                  "relative flex min-h-11 w-full cursor-[var(--cursor-control)] items-center gap-3 py-2.5 pl-4 pr-1 text-left text-body",
+                  "relative flex min-h-11 w-full cursor-[var(--cursor-control)] items-start gap-3 py-2.5 pl-4 pr-1 text-left text-body",
                   "transition-colors [transition-duration:var(--duration-fast)]",
                   active ? "font-medium text-foreground" : "text-muted",
                   !active && !locked && "hover:text-foreground",
@@ -56,28 +56,33 @@ export function LessonNavigation({
                     aria-hidden
                   />
                 ) : null}
-                <span className="w-4 shrink-0 font-meta text-meta tabular text-faint">
+                <span className="w-4 shrink-0 pt-0.5 font-meta text-meta tabular text-faint">
                   {index + 1}
                 </span>
-                <span className="min-w-0 flex-1 truncate">{lesson.title}</span>
+                {/* Title wraps rather than truncates; state sits on its own line
+                    so a narrow index column never clips a lesson name. */}
+                <span className="min-w-0 flex-1">
+                  <span className="block">{lesson.title}</span>
+                  {locked || lesson.duration ? (
+                    <span className="mt-0.5 flex items-center gap-1.5 text-small text-faint">
+                      {locked ? (
+                        <>
+                          <IconLock className="size-3.5 shrink-0" aria-hidden />
+                          <span>Not available yet</span>
+                        </>
+                      ) : null}
+                      {lesson.duration ? (
+                        <span className="font-meta tabular">{lesson.duration}</span>
+                      ) : null}
+                    </span>
+                  ) : null}
+                </span>
                 {lesson.state === "complete" ? (
                   <IconCheck
-                    className="size-4 shrink-0 text-confirm"
+                    className="size-4 shrink-0 translate-y-0.5 text-confirm"
                     aria-label="Completed"
                     role="img"
                   />
-                ) : null}
-                {locked ? (
-                  <IconLock
-                    className="size-4 shrink-0 text-faint"
-                    aria-label="Not available yet"
-                    role="img"
-                  />
-                ) : null}
-                {lesson.duration ? (
-                  <span className="shrink-0 font-meta text-meta tabular text-faint">
-                    {lesson.duration}
-                  </span>
                 ) : null}
               </button>
             </li>

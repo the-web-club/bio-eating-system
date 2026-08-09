@@ -1,34 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { cn } from "@/lib/cn";
 import { THEME_STORAGE_KEY, type Appearance } from "@/lib/theme";
 import { IconMoon, IconSun } from "./icons";
 
 /**
+ * The applied theme is external state: the boot script sets the class on
+ * <html> before React runs. Reading it through a store keeps the control in
+ * sync with the DOM without a render-triggering effect.
+ */
+function subscribe(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+}
+
+function getSnapshot(): Appearance {
+  return document.documentElement.classList.contains("dark") ? "dark" : "light";
+}
+
+const OPTIONS: { value: Appearance; label: string; Icon: typeof IconSun }[] = [
+  { value: "light", label: "Light", Icon: IconSun },
+  { value: "dark", label: "Dark", Icon: IconMoon },
+];
+
+/**
  * Compact appearance control. Both themes are designed, so this is a real
- * setting rather than a debug affordance. The class is already applied by the
- * boot script; this reads it after mount to avoid a hydration mismatch.
+ * setting rather than a debug affordance.
  */
 export function ThemeControl({ className }: { className?: string }) {
-  const [appearance, setAppearance] = useState<Appearance | null>(null);
-
-  useEffect(() => {
-    setAppearance(
-      document.documentElement.classList.contains("dark") ? "dark" : "light",
-    );
-  }, []);
+  const appearance = useSyncExternalStore(subscribe, getSnapshot, () => null);
 
   function select(next: Appearance) {
-    setAppearance(next);
     document.documentElement.classList.toggle("dark", next === "dark");
     window.localStorage.setItem(THEME_STORAGE_KEY, next);
   }
-
-  const options: { value: Appearance; label: string; Icon: typeof IconSun }[] = [
-    { value: "light", label: "Light", Icon: IconSun },
-    { value: "dark", label: "Dark", Icon: IconMoon },
-  ];
 
   return (
     <div
@@ -39,7 +49,7 @@ export function ThemeControl({ className }: { className?: string }) {
       role="group"
       aria-label="Appearance"
     >
-      {options.map(({ value, label, Icon }) => {
+      {OPTIONS.map(({ value, label, Icon }) => {
         const selected = appearance === value;
         return (
           <button

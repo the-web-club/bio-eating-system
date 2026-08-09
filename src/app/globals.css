@@ -44,8 +44,12 @@
   --mineral-300: #8fb3d4;
   --mineral-200: #b6cee4;
   --mineral-050: #eef2f6;
-  /* Deep mineral for dark-mode selected surfaces and accent washes */
+  /* Deep mineral for dark-mode selected surfaces, washes and the feature panel */
   --mineral-shade: #1a2530;
+  --mineral-950: #16212c;
+
+  /* Indigo — sampled from the supplied wordmark artwork. Used only by the mark. */
+  --indigo-900: #1a0e64;
 
   /* Dark-mode neutrals */
   --slate-950: #111111;
@@ -129,7 +133,7 @@
   --surface-inset: var(--stone-100);
   --surface-selected: var(--mineral-050);
   --surface-feature: var(--ink-900);
-  --surface-overlay: rgb(27 26 24 / 0.32);
+  --surface-overlay: rgb(27 26 24 / 0.44);
 
   --foreground: var(--ink-900);
   --foreground-soft: var(--ink-700);
@@ -160,6 +164,10 @@
   --accent-track: var(--stone-200);
   --chart-primary: var(--mineral-700);
   --chart-secondary: var(--ink-400);
+
+  /* The wordmark is painted through an alpha mask, so its colour is a token
+     rather than something baked into the artwork. */
+  --brand-mark: var(--indigo-900);
 
   /* Feedback text and marks, which must read on a surface. Separate from the
      action fills below: a fill is measured against --on-fill, not the canvas. */
@@ -215,7 +223,9 @@
   --surface: var(--slate-900);
   --surface-inset: var(--slate-850);
   --surface-selected: var(--mineral-shade);
-  --surface-feature: var(--slate-800);
+  /* Mineral-tinted so the one dominant surface still reads as emphasis on a
+     dark canvas, rather than as a slightly lighter grey block. */
+  --surface-feature: var(--mineral-950);
   --surface-overlay: rgb(0 0 0 / 0.6);
 
   --foreground: var(--slate-100);
@@ -245,6 +255,10 @@
   --accent-track: var(--slate-800);
   --chart-primary: var(--mineral-300);
   --chart-secondary: var(--slate-400);
+
+  /* The artwork's indigo disappears on a dark canvas, so the mark is painted in
+     the foreground ink instead. Masking is what makes that possible. */
+  --brand-mark: var(--foreground);
 
   /* Feedback text lightens on a dark canvas. The fills do not: they keep white
      text, so they stay deep in both themes. */
@@ -578,6 +592,26 @@
 
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* The wordmark is drawn as an alpha mask rather than an <img>, so its colour
+     comes from --brand-mark and it can invert for dark mode. Set a height on
+     the element; the intrinsic ratio of the artwork supplies the width. */
+  .brand-mark {
+    display: block;
+    aspect-ratio: 189 / 91;
+    background-color: var(--brand-mark);
+    -webkit-mask: url("/brand/well-with-katarina.png") no-repeat center / contain;
+    mask: url("/brand/well-with-katarina.png") no-repeat center / contain;
+  }
+
+  /* Windows high-contrast strips background painting, which would erase a
+     masked mark entirely. Fall back to the artwork itself. */
+  @media (forced-colors: active) {
+    .brand-mark {
+      background: none;
+      content: url("/brand/well-with-katarina.png");
+    }
   }
 
   .force-reduced-motion *,

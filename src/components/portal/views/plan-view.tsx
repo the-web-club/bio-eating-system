@@ -53,7 +53,7 @@ export function PlanView({
 
         <Split
           main={
-            <div className="space-y-section">
+            <div className="space-y-group">
               {groups.map((group) => (
                 <Section key={group.title} title={group.title}>
                   <ul className="divide-y divide-hairline border-t border-hairline">

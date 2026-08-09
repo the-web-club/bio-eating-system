@@ -1,27 +1,47 @@
 # Motion system
 
-Engineering reference for interaction timing. Aesthetic stays blueprint (light, airy, pill). Standards borrow Linear’s restraint, not its look.
+Engineering reference for interaction timing. Motion is immediate, precise, spatially coherent, interruptible and purposeful. It borrows Linear’s restraint, not its look.
 
-Source of truth: `src/lib/motion.ts`. CSS custom properties in `src/app/globals.css` must match.
+Source of truth: `src/lib/motion.ts`. CSS custom properties in `src/app/globals.css` must match, and `src/lib/__tests__/motion-tokens.test.ts` fails the build if they drift.
 
 ## Tokens
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--duration-instant` | 80ms | Hover, press colour, focus ring appear |
-| `--duration-fast` | 140ms | Menu, tooltip, popover, toast enter |
+| `--duration-instant` | 80ms | Colour-only hover on dense rows |
+| `--duration-press` | 110ms | Press feedback |
+| `--duration-fast` | 140ms | Hover, focus, menu, tooltip, popover, toast enter |
 | `--duration-exit` | 100ms | Matching exits (~60–70% of enter) |
-| `--duration-moderate` | 240ms | Dialog, sheet, wizard step |
+| `--duration-selection` | 170ms | Active-navigation indicator, selected controls, tab underline |
+| `--duration-disclosure` | 200ms | Disclosure expand/collapse, dialog, sheet |
+| `--duration-moderate` | 240ms | Main content transition, progress, wizard step |
 | `--duration-slow` | 360ms | Ceiling. Longer is a bug |
 | `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Entrances |
-| `--ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Exits |
+| `--ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | Exits |
+| `--ease-state` | `cubic-bezier(0.2, 0, 0, 1)` | State changes: selection, press, chevron |
+| `--ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Legacy exits |
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Reversible only |
-| `--ease-linear` | `linear` | Opacity crossfade, progress |
+| `--ease-linear` | `linear` | Opacity crossfade, skeleton pulse |
 | `--travel-hair` | 2px | Press depth |
 | `--travel-close` | 4px | Menu / tooltip entry |
-| `--travel-near` | 8px | Popover, toast, dialog |
-| `--travel-far` | 80px | Wizard step slide |
+| `--travel-near` | 8px | Popover, toast, dialog, main content settle |
+| `--travel-far` | 80px | Off-canvas sheet |
 | `--stagger` | 24ms | Cap at 8 items; beyond that fade the container |
+
+`pressScale` is `0.985`, shared by `Button` and interactive rows.
+
+## Required behaviours
+
+| Where | Behaviour | Helper |
+| --- | --- | --- |
+| Product rail, mobile tabs, lesson index | Shared active indicator that travels between items | `selectionTransition` + framer `layoutId` |
+| Biomarker rationale, daily-plan detail | Height and opacity expansion in place | `disclosureVariants` / `disclosureTransition` |
+| Main content on navigation | Crossfade plus 8px vertical settle | `pageContentVariants` |
+| Dialog, sheet | 200ms in, 100ms out | `dialogTransition`, CSS keyframes |
+| Progress | Animates from the previous value, never from zero | `progressTransition` + `initial={false}` |
+| Buttons | `scale(0.985)` on press | `pressAnimation` / `pressTransition` |
+| Interactive rows | Colour change on hover, 2px directional icon travel | Tailwind `group-hover:translate-x-0.5` |
+| Loading | Skeleton dimensions match the resolved content, so nothing jumps | `PortalSkeleton` and friends |
 
 Springs (JS only, framer-motion):
 
@@ -47,11 +67,11 @@ Every interactive control implements all seven:
 | State | Behaviour |
 | --- | --- |
 | rest | Default |
-| hover | 80ms colour/surface only. No movement on list rows |
-| press | Scale 0.98 or 1px down, spring snappy, on `pointerdown` / `whileTap` |
-| focus | `:focus-visible` only. 2px accent ring + 2px surface offset. Instant |
+| hover | 140ms colour/surface only. No elevation change, no movement of the row itself |
+| press | `scale(0.985)`, 110ms, `--ease-state`, via `whileTap` |
+| focus | `:focus-visible` only. 2px accent ring + 2px offset, following the element's own radius. The ring must never redefine `border-radius` |
 | loading | Nothing under 300ms. Over 300ms keep width, swap content, `aria-busy` |
-| disabled | Reduced contrast, no hover/press, reason via `title` / `disabledReason` |
+| disabled | Fill drops rather than the label fading, so the text stays readable. Reason via `title` / `disabledReason` |
 | error | Mark + text (see `docs/status-colour.md`). Space reserved; no jump |
 
 ## Reduced motion

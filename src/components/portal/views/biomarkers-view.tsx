@@ -40,8 +40,15 @@ export function BiomarkersView({ markers }: { markers: BiomarkerEntry[] }) {
                       title={marker.name}
                       detailLabel={`${marker.name} rationale`}
                       summary={
-                        marker.why ??
-                        "A short purpose appears here once the entry is published."
+                        <>
+                          {marker.why ??
+                            "A short purpose appears here once the entry is published."}
+                          {marker.reference ? (
+                            <span className="mt-1 block font-meta text-meta tabular text-faint sm:hidden">
+                              {marker.reference}
+                            </span>
+                          ) : null}
+                        </>
                       }
                       value={
                         marker.reference ? (

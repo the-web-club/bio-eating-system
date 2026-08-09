@@ -95,6 +95,23 @@ export function PortalSkeleton() {
         }
         aside={<AsideSkeleton />}
       />
+      <div className="border-t border-hairline pt-group">
+        <div className="mb-tight space-y-2">
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-3 w-64 max-w-full" />
+        </div>
+        <div className="grid gap-x-12 xl:grid-cols-2">
+          <div>
+            <RowSkeleton />
+            <RowSkeleton />
+            <RowSkeleton />
+          </div>
+          <div className="hidden xl:block">
+            <RowSkeleton />
+            <RowSkeleton />
+          </div>
+        </div>
+      </div>
     </Frame>
   );
 }

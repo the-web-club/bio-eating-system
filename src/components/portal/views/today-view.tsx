@@ -14,21 +14,53 @@ export type TodayFocusItem = {
   unit: string;
 };
 
+export type TodayVariety = {
+  id: string;
+  name: string;
+  /** Which part of the plan the variety belongs to. */
+  group: string;
+};
+
 export type TodayViewProps = {
   firstName: string;
   weekLabel: string;
   programName: string;
   portionCount: number;
+  /** Leading portions, given the main column. */
   focus: TodayFocusItem[];
+  /** Everything else on the plan, so the page shows the whole day. */
+  rest: TodayFocusItem[];
   energyKcal: number;
   rotationPosition: number;
   authoredWeeks: number;
   notices: string[];
   maintenanceOnly: boolean;
-  varieties: string[];
+  varieties: TodayVariety[];
   weeklyAvailable: boolean;
   basePath: string;
 };
+
+/** Splits a list down the middle so two hairline columns stay balanced. */
+function halves<T>(items: T[]): [T[], T[]] {
+  const middle = Math.ceil(items.length / 2);
+  return [items.slice(0, middle), items.slice(middle)];
+}
+
+function PortionList({ items }: { items: TodayFocusItem[] }) {
+  return (
+    <DataRows>
+      {items.map((item) => (
+        <DataRow
+          key={item.id}
+          name={item.name}
+          note={item.note}
+          value={item.amount}
+          unit={item.unit}
+        />
+      ))}
+    </DataRows>
+  );
+}
 
 /**
  * One editorial composition: the greeting and the single primary action lead,
@@ -40,6 +72,7 @@ export function TodayView({
   programName,
   portionCount,
   focus,
+  rest,
   energyKcal,
   rotationPosition,
   authoredWeeks,
@@ -49,6 +82,8 @@ export function TodayView({
   weeklyAvailable,
   basePath,
 }: TodayViewProps) {
+  const [restLeft, restRight] = halves(rest);
+
   return (
     <PageShell>
       <PageSections>
@@ -69,19 +104,9 @@ export function TodayView({
           main={
             <Section
               title="Today’s focus"
-              description="Open the daily plan for the full list and preparation detail."
+              description="The portions to get right first. Quantities come from your own plan."
             >
-              <DataRows>
-                {focus.map((item) => (
-                  <DataRow
-                    key={item.id}
-                    name={item.name}
-                    note={item.note}
-                    value={item.amount}
-                    unit={item.unit}
-                  />
-                ))}
-              </DataRows>
+              <PortionList items={focus} />
               {maintenanceOnly || notices.length ? (
                 <div className="mt-group">
                   <Status role="neutral">
@@ -161,11 +186,35 @@ export function TodayView({
           }
         />
 
+        {rest.length ? (
+          <Section
+            ruled
+            title="The rest of today"
+            description="The remaining portions, in the same order as your daily plan."
+            action={
+              <ActionLink
+                href={`${basePath}/plan`}
+                variant="quiet"
+                size="compact"
+              >
+                Open daily plan
+              </ActionLink>
+            }
+          >
+            <div className="grid gap-x-12 xl:grid-cols-2">
+              <PortionList items={restLeft} />
+              {restRight.length ? (
+                <PortionList items={restRight} />
+              ) : null}
+            </div>
+          </Section>
+        ) : null}
+
         {varieties.length ? (
           <Section
             ruled
             title="This week’s varieties"
-            description={`Authored week ${rotationPosition} of ${authoredWeeks}.`}
+            description={`Authored week ${rotationPosition} of ${authoredWeeks}, rotating so the same foods do not repeat every week.`}
             action={
               weeklyAvailable ? (
                 <ActionLink
@@ -178,10 +227,11 @@ export function TodayView({
               ) : null
             }
           >
-            <ul className="flex flex-wrap gap-x-8 gap-y-2">
+            <ul className="grid gap-x-12 gap-y-4 border-t border-hairline pt-4 sm:grid-cols-2 xl:grid-cols-4">
               {varieties.map((variety) => (
-                <li key={variety} className="text-body text-soft">
-                  {variety}
+                <li key={variety.id} className="min-w-0">
+                  <p className="text-lead text-foreground">{variety.name}</p>
+                  <p className="mt-0.5 text-small text-faint">{variety.group}</p>
                 </li>
               ))}
             </ul>

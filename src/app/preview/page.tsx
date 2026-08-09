@@ -4,6 +4,7 @@ import {
   FIXTURE_AUTHORED_WEEKS,
   FIXTURE_ENTITLEMENTS,
   FIXTURE_TODAY,
+  FIXTURE_TODAY_REST,
   FIXTURE_VARIETIES,
   FIXTURE_WEEK,
 } from "./fixtures";
@@ -17,8 +18,9 @@ export default function PreviewTodayPage() {
         firstName="Maya"
         weekLabel={PREVIEW_WEEK}
         programName={PREVIEW_PROGRAM}
-        portionCount={9}
+        portionCount={FIXTURE_TODAY.length + FIXTURE_TODAY_REST.length}
         focus={FIXTURE_TODAY}
+        rest={FIXTURE_TODAY_REST}
         energyKcal={1850}
         rotationPosition={rotationPosition(FIXTURE_WEEK, FIXTURE_AUTHORED_WEEKS)}
         authoredWeeks={FIXTURE_AUTHORED_WEEKS}

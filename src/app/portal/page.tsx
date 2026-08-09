@@ -6,8 +6,9 @@ import { PageShell } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
 import { TodayView } from "@/components/portal/views/today-view";
 import { ActionLink } from "@/components/ui/action-link";
-import { SCREENING_REASON_COPY } from "@/lib/content/labels";
+import { SCREENING_REASON_COPY, SLOT_LABELS } from "@/lib/content/labels";
 import { resolveContent } from "@/lib/content/resolve";
+import type { PlanSlot } from "@/lib/nutrition/plan-engine";
 import {
   formatPlanSlot,
   formatVarietyKey,
@@ -17,6 +18,21 @@ import {
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 
 const PROGRAM_NAME = "Core plan";
+
+/** How many portions lead the composition before the remainder is listed. */
+const FOCUS_COUNT = 4;
+
+function toFocusItem(slot: PlanSlot) {
+  const { name, amount, unit } = formatPlanSlot(slot);
+  return {
+    id: slot.slot,
+    name,
+    amount,
+    unit,
+    note:
+      slot.absorbedFrom.length > 0 ? "Personal substitution applied" : undefined,
+  };
+}
 
 export default async function TodayPage() {
   let data;
@@ -78,19 +94,8 @@ export default async function TodayPage() {
         weekLabel={week}
         programName={PROGRAM_NAME}
         portionCount={plan.slots.length}
-        focus={plan.slots.slice(0, 4).map((slot) => {
-          const { name, amount, unit } = formatPlanSlot(slot);
-          return {
-            id: slot.slot,
-            name,
-            amount,
-            unit,
-            note:
-              slot.absorbedFrom.length > 0
-                ? "Personal substitution applied"
-                : undefined,
-          };
-        })}
+        focus={plan.slots.slice(0, FOCUS_COUNT).map(toFocusItem)}
+        rest={plan.slots.slice(FOCUS_COUNT).map(toFocusItem)}
         energyKcal={plan.energyKcal}
         rotationPosition={rotationPosition(data.week, data.authoredWeeks)}
         authoredWeeks={data.authoredWeeks}
@@ -98,12 +103,11 @@ export default async function TodayPage() {
           .map((code) => SCREENING_REASON_COPY[code])
           .filter(Boolean)}
         maintenanceOnly={plan.screeningOutcome === "maintenance_only"}
-        varieties={data.rotationItems
-          .slice(0, 4)
-          .map(
-            (item) =>
-              resolveContent(item.labelKey) ?? formatVarietyKey(item.labelKey),
-          )}
+        varieties={data.rotationItems.slice(0, 4).map((item) => ({
+          id: item.slot,
+          name: resolveContent(item.labelKey) ?? formatVarietyKey(item.labelKey),
+          group: SLOT_LABELS[item.slot] ?? item.slot,
+        }))}
         weeklyAvailable={data.entitlements.weeklyRotation}
       />
     </AppShell>

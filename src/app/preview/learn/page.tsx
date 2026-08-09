@@ -22,21 +22,33 @@ const LESSONS: LessonNavItem[] = [
   { id: "l4", title: "Review and next steps", state: "locked" },
 ];
 
-const BODIES: Record<string, { title: string; body: string; action: string }> = {
+/**
+ * Layout placeholders only. Lesson bodies and practice lines are authored and
+ * dietitian-reviewed in the content catalogue, so nothing here states guidance.
+ */
+const BODIES: Record<string, { title: string; body: string[]; action: string }> = {
   l1: {
     title: "Noticing hunger cues",
-    body: "Reviewed lesson text appears here. This layout holds the reading column at a comfortable measure so long-form guidance stays legible on a wide screen.",
-    action: "Pause once today before a meal and note hunger on a one to ten scale.",
+    body: [
+      "Reviewed lesson text appears in this column once the catalogue entry is published. The measure is held at roughly seventy characters so a long lesson stays legible on a wide screen.",
+      "A second paragraph shows the reading rhythm: the line height is looser than the operational lists, and the column does not stretch to the full width of the viewport.",
+    ],
+    action: "The reviewed practice for this lesson appears here.",
   },
   l2: {
     title: "Building a steady plate",
-    body: "Reviewed lesson text appears here. The lesson index stays beside the reading column on desktop and moves above it on smaller screens.",
-    action: "Include protein, plants and a fat source in your next main meal.",
+    body: [
+      "Reviewed lesson text appears in this column once the catalogue entry is published. The lesson index stays beside the reading column on desktop and moves above it on smaller screens.",
+      "Previous and next controls sit under one hairline at the end of the lesson, so the reader always finds them in the same place.",
+    ],
+    action: "The reviewed practice for this lesson appears here.",
   },
   l3: {
     title: "Planning around busy days",
-    body: "Reviewed lesson text appears here, for a lesson that is available but not yet read.",
-    action: "Choose one backup meal you can assemble in under fifteen minutes.",
+    body: [
+      "Reviewed lesson text appears in this column once the catalogue entry is published. This entry is available but has not been read yet, so the index shows it without a completion mark.",
+    ],
+    action: "The reviewed practice for this lesson appears here.",
   },
 };
 
@@ -57,8 +69,8 @@ export default function PreviewLearnPage() {
             description="Short lessons on eating practices, to read alongside your plan."
           />
 
-          <div className="grid gap-group lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
-            <div className="min-w-0 lg:order-first">
+          <div className="grid gap-group md:grid-cols-[16rem_minmax(0,1fr)] md:gap-10 xl:gap-12">
+            <div className="min-w-0 md:order-first">
               <Eyebrow className="mb-2.5">This course</Eyebrow>
               <LessonNavigation
                 lessons={LESSONS}
@@ -73,7 +85,9 @@ export default function PreviewLearnPage() {
             <article className="min-w-0">
               <h2 className="text-display text-foreground">{lesson.title}</h2>
               <Prose className="mt-4">
-                <p>{lesson.body}</p>
+                {lesson.body.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </Prose>
 
               <div className="mt-group border-l-2 border-accent pl-5">

@@ -58,7 +58,7 @@ export function ProgramsHub({
   }
 
   return (
-    <>
+    <div className="space-y-group">
       {entitlements.corePlan ? (
         <ProgramPanel
           name="Core plan"
@@ -85,10 +85,7 @@ export function ProgramsHub({
       ) : null}
 
       {included.length ? (
-        <Section
-          title="On your account"
-          className={entitlements.corePlan ? "mt-section" : undefined}
-        >
+        <Section title="On your account">
           <ModuleRows>
             {included.map((item) => (
               <ModuleRow
@@ -108,7 +105,6 @@ export function ProgramsHub({
         ruled
         title="Explore more"
         description="Not on your account yet. Nothing here changes your current plan."
-        className="mt-section"
       >
         <ModuleRows>
           {!entitlements.corePlan ? (
@@ -180,6 +176,6 @@ export function ProgramsHub({
           "Consultation notice on every view",
         ]}
       />
-    </>
+    </div>
   );
 }

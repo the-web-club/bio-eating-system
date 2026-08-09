@@ -26,9 +26,7 @@ export function PreviewShell({
       devBar={
         <div className="flex items-center gap-2 border-b border-hairline bg-surface-inset px-gutter py-1.5 sm:px-8">
           <span className="size-1.5 shrink-0 rounded-pill bg-accent" aria-hidden />
-          <p className="text-micro text-muted">
-            Internal design preview — fixture data, not a live account
-          </p>
+          <p className="text-micro text-muted">Design preview · fixture data</p>
         </div>
       }
     >

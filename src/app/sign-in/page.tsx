@@ -3,11 +3,11 @@ import { SignInForm } from "./sign-in-form";
 
 export default function SignInPage() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[26rem] flex-col justify-center gap-section px-gutter py-group sm:px-8">
+    <main className="mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col justify-center gap-section px-gutter py-group sm:px-8">
       <div>
         <BrandSignature />
         <h1 className="mt-section text-editorial text-foreground">Sign in</h1>
-        <p className="mt-2 text-lead text-muted">
+        <p className="mt-2 measure text-body text-muted">
           Enter your email and we will send you a one-time link.
         </p>
       </div>
