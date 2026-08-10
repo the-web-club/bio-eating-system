@@ -101,14 +101,20 @@
   box-shadow: none;
 }
 
-.surface--interactive:hover {
-  box-shadow: var(--edge-light), var(--shadow-object-hover);
-  transform: translateY(-1px);
-}
+@media (hover: hover) and (pointer: fine) {
+  .surface--interactive:hover {
+    box-shadow: var(--edge-light), var(--shadow-object-hover);
+    transform: translateY(-1px);
+  }
 
-.surface--interactive:active {
-  box-shadow: var(--edge-light-soft), var(--shadow-object);
-  transform: translateY(0);
+  .surface--interactive:active {
+    box-shadow: var(--edge-light-soft), var(--shadow-object);
+    transform: translateY(0);
+  }
+
+  .meal-card--optional:hover {
+    box-shadow: var(--edge-light-soft), var(--shadow-object);
+  }
 }
 
 /* Focus stays on the global :focus-visible outline from globals.css. */
@@ -203,10 +209,6 @@
   box-shadow: none;
 }
 
-.meal-card--optional:hover {
-  box-shadow: var(--edge-light-soft), var(--shadow-object);
-}
-
 .meal-card--done,
 .meal-card--done:hover {
   box-shadow: none;
@@ -218,6 +220,13 @@
    ========================================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+  .surface,
+  .surface-rail,
+  .surface-header,
+  .meal-card::before {
+    transition: none;
+  }
+
   .surface--interactive:hover,
   .surface--interactive:active {
     transform: none;
