@@ -1,7 +1,7 @@
 "use client";
 
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "motion/react";
 import { useId, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { selectionTransition } from "@/lib/motion";

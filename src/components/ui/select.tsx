@@ -1,7 +1,7 @@
 "use client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "motion/react";
 import { useCallback, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { duration, easeCss } from "@/lib/motion";

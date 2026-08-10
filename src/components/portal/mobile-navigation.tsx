@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/cn";
 import { selectionTransition } from "@/lib/motion";
 import { BrandSignature } from "./brand-signature";
@@ -45,8 +45,8 @@ export function MobileTopBar({
             </button>
           </Dialog.Trigger>
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 z-50 bg-surface-overlay data-[state=open]:animate-[fade-in_var(--duration-disclosure)_var(--ease-out)]" />
-            <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[min(19rem,86vw)] flex-col rounded-r-dialog border-r border-hairline bg-surface-canvas shadow-floating focus:outline-none data-[state=open]:animate-[sheet-in_var(--duration-disclosure)_var(--ease-out)]">
+            <Dialog.Overlay className="fixed inset-0 z-50 bg-surface-overlay data-[state=open]:animate-[overlay-in_var(--duration-disclosure)_var(--ease-emphasized)] data-[state=closed]:animate-[overlay-out_var(--duration-exit)_var(--ease-exit)]" />
+            <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[min(19rem,86vw)] flex-col rounded-r-dialog border-r border-hairline bg-surface-canvas shadow-floating focus:outline-none data-[state=open]:animate-[sheet-in_var(--duration-disclosure)_var(--ease-emphasized)]">
               <div className="flex items-start justify-between gap-3 px-5 pb-5 pt-6">
                 <Dialog.Title asChild>
                   <div>

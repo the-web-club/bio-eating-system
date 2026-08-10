@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { LayoutGroup } from "framer-motion";
+import { LayoutGroup } from "motion/react";
 import { MobileBottomNav, MobileTopBar } from "./mobile-navigation";
 import { PageTransition } from "./page-transition";
 import { PortalSidebar } from "./portal-sidebar";
