@@ -46,7 +46,7 @@ export function CommandMenu({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[70] bg-surface-overlay data-[state=open]:animate-[fade-in_var(--duration-fast)_var(--ease-out)]" />
+        <Dialog.Overlay className="fixed inset-0 z-[70] bg-surface-overlay data-[state=open]:animate-[overlay-in_var(--duration-disclosure)_var(--ease-emphasized)] data-[state=closed]:animate-[overlay-out_var(--duration-exit)_var(--ease-exit)]" />
         <Dialog.Content
           className={cn(
             "fixed left-1/2 top-[20%] z-[70] w-full max-w-lg -translate-x-1/2 overflow-hidden rounded-dialog bg-surface shadow-modal",

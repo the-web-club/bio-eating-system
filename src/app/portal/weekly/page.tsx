@@ -40,8 +40,12 @@ async function ShopPageContent() {
 
   if (!data.entitlements.weeklyRotation) {
     return (
-      <PortalEmptyState title="Weekly system not on your account" action={<WeeklyUpgradeClient />}>
-        With your weekly system you get a grocery list matched to your plan.
+      <PortalEmptyState
+        tone="locked"
+        title="Weekly list not on your account"
+        action={<WeeklyUpgradeClient />}
+      >
+        With your weekly list you get a grocery list matched to your plan.
       </PortalEmptyState>
     );
   }

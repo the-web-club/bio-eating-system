@@ -57,7 +57,7 @@ export function BiomarkersViewContent({ markers }: { markers: BiomarkerEntry[] }
             </ul>
           </Section>
         ) : (
-          <PortalEmptyState title="No entries published yet">
+          <PortalEmptyState tone="unpublished" title="No entries published yet">
             Marker entries appear here after dietitian-reviewed content is added to
             the catalogue. Nothing is generated in the meantime.
           </PortalEmptyState>

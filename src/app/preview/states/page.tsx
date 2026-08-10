@@ -48,9 +48,10 @@ export default function PreviewStatesPage() {
         <Section
           ruled
           title="Nothing published yet"
-          description="An empty state names the next action instead of apologising."
+          description="An empty state uses a quiet eyebrow, a clear title, and one next action - never a dashed box."
         >
           <PortalEmptyState
+            tone="unpublished"
             title="No lessons published yet"
             action={
               <ActionLink

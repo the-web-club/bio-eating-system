@@ -182,17 +182,8 @@ export function PrivacyControls({
         title="Delete account"
         description="This permanently removes your plan, intake answers and account. Type DELETE to confirm."
         showClose={false}
-      >
-        <div className="space-y-tight">
-          <TextField
-            id="erase-confirm"
-            label="Confirmation"
-            name="erase-confirm"
-            value={eraseConfirm}
-            onChange={(e) => setEraseConfirm(e.target.value)}
-            autoComplete="off"
-          />
-          <div className="flex justify-end gap-2">
+        footer={
+          <>
             <Button
               variant="secondary"
               size="compact"
@@ -214,8 +205,17 @@ export function PrivacyControls({
             >
               Delete account
             </Button>
-          </div>
-        </div>
+          </>
+        }
+      >
+        <TextField
+          id="erase-confirm"
+          label="Confirmation"
+          name="erase-confirm"
+          value={eraseConfirm}
+          onChange={(e) => setEraseConfirm(e.target.value)}
+          autoComplete="off"
+        />
       </Dialog>
     </div>
   );

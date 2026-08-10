@@ -340,7 +340,7 @@ export function ProofShowcase() {
         <h2 id="empty-heading" className="text-section text-foreground">
           Empty state
         </h2>
-        <EmptyState title="Nothing here yet">
+        <EmptyState eyebrow="Empty" title="Nothing here yet">
           Complete the next step and this section fills in.
         </EmptyState>
       </section>

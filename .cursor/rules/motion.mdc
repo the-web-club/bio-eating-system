@@ -1,10 +1,17 @@
+---
+description: Motion and interaction standard for every interactive surface in the app
+alwaysApply: true
+---
+
 # Motion and interaction standard
 
-Scope: every interactive surface in this app. Cursor agents load this from `.cursor/rules/motion.mdc` with `alwaysApply: true`.
+Scope: every interactive surface in this app.
+
+Human-readable copy also lives at `docs/motion.md`. Shared tokens live in `src/lib/motion.ts`.
 
 ## How to use this
 
-When building or changing any interactive UI, read this first, then state which patterns from section 5 apply and which springs from section 4 you will use, before writing code.
+When asked to build or change any interactive UI, read this first, then state which patterns from section 5 apply and which springs from section 4 you will use, and stop. Do not write code until that plan is confirmed.
 
 When reviewing existing UI against this document, produce a list of violations by file with the specific rule number, not a rewrite.
 

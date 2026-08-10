@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
-import { Section } from "@/components/portal/layout";
+import { MealListMeta } from "@/components/portal/meal-list-section";
 import {
   WeeklyBriefing,
   estimateCookingHours,
@@ -26,7 +26,7 @@ async function PlanPageContent() {
 
   if (!data.entitlements.corePlan) {
     return (
-      <PortalEmptyState title="Personal nutrition plan not on your account">
+      <PortalEmptyState tone="locked" title="Personal nutrition plan not on your account">
         Add the plan on the website to see your weekly meals here.
       </PortalEmptyState>
     );
@@ -73,12 +73,13 @@ async function PlanPageContent() {
         basePath="/portal"
       />
 
-      <Section title="This week">
-        <p className="mb-3 text-body text-muted">
-          Goal: {goalLabel} · Focus: simple high-protein meals
-        </p>
-        <MealListWithReplace meals={meals} />
-      </Section>
+      <MealListWithReplace
+        title="This week"
+        meals={meals}
+        meta={
+          <MealListMeta goal={goalLabel} focus="simple high-protein meals" />
+        }
+      />
 
       {plan.screeningOutcome === "maintenance_only" ||
       plan.screeningReasons.length ? (

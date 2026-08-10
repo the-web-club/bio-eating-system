@@ -18,7 +18,11 @@ async function ProgressPageContent() {
 
   if (!data.entitlements.corePlan || !data.plan) {
     return (
-      <PortalEmptyState title="No plan yet">
+      <PortalEmptyState
+        tone="default"
+        eyebrow="Setup"
+        title="No plan yet"
+      >
         Complete your setup to track progress.
       </PortalEmptyState>
     );

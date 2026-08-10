@@ -1,5 +1,5 @@
-import { Eyebrow, Section } from "../layout";
 import { MealListWithReplace } from "../meal-list-with-replace";
+import { Eyebrow } from "../layout";
 import { ActionLink } from "@/components/ui/action-link";
 import { Status } from "@/components/ui/status";
 import type { AssembledMeal, TodaySummary } from "@/lib/portal/meal-assembly";
@@ -50,9 +50,7 @@ export function TodayViewContent({
         </Status>
       ) : null}
 
-      <Section title="Today">
-        <MealListWithReplace meals={meals} />
-      </Section>
+      <MealListWithReplace title="Today" meals={meals} />
 
       <div className="border-t border-hairline pt-4">
         <Eyebrow>Today</Eyebrow>

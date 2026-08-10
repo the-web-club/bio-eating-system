@@ -23,28 +23,37 @@ export function UpgradeDialog({
       title={title}
       description={value}
       showClose={false}
+      footer={
+        <>
+          <Button variant="secondary" size="compact" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+          <Button
+            size="compact"
+            onClick={() => {
+              window.open(
+                process.env.NEXT_PUBLIC_APP_URL ?? "/",
+                "_blank",
+                "noopener,noreferrer",
+              );
+            }}
+          >
+            View plans
+          </Button>
+        </>
+      }
     >
-      <ul className="mt-2 list-disc space-y-1 pl-5 text-body text-foreground">
+      <ul className="space-y-2">
         {includes.map((item) => (
-          <li key={item}>{item}</li>
+          <li key={item} className="text-body text-foreground">
+            {item}
+          </li>
         ))}
       </ul>
-      <p className="mt-4 text-small text-muted">
+      <p className="mt-tight text-small text-muted">
         Upgrades are completed on the website. Access appears here after purchase
         confirmation.
       </p>
-      <div className="mt-6 flex flex-wrap justify-end gap-3">
-        <Button variant="secondary" onClick={() => onOpenChange(false)}>
-          Close
-        </Button>
-        <Button
-          onClick={() => {
-            window.open(process.env.NEXT_PUBLIC_APP_URL ?? "/", "_blank", "noopener,noreferrer");
-          }}
-        >
-          View plans
-        </Button>
-      </div>
     </Dialog>
   );
 }

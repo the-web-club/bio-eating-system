@@ -1,54 +1,43 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useState } from "react";
-import { cn } from "@/lib/cn";
 import type { AssembledMeal } from "@/lib/portal/meal-assembly";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
-import { ReplaceMealButton, type ReplaceStep } from "./replace-meal-button";
+import { MealListSection } from "./meal-list-section";
+import { MealRow } from "./meal-row";
 
-export function MealListWithReplace({ meals }: { meals: AssembledMeal[] }) {
-  const [activeRow, setActiveRow] = useState<string | null>(null);
+export function MealListWithReplace({
+  meals,
+  title = "Today",
+  meta,
+}: {
+  meals: AssembledMeal[];
+  title?: string;
+  meta?: ReactNode;
+}) {
+  const [openKind, setOpenKind] = useState<string | null>(null);
+  const visibleMeals = meals.filter((meal) => meal.items.length > 0);
 
   return (
-    <ul className="divide-y divide-hairline border-t border-hairline">
-      {meals
-        .filter((m) => m.items.length > 0)
-        .map((meal) => {
+    <MealListSection title={title} meta={meta}>
+      <ul>
+        {visibleMeals.map((meal, index) => {
           const primarySlot = meal.items[0]?.slot as FoodSlot | undefined;
-          const isReplacing = activeRow === meal.kind;
+          if (!primarySlot) return null;
 
           return (
-            <li
+            <MealRow
               key={meal.kind}
-              className={cn(
-                "py-4 transition-[opacity,transform]",
-                "[transition-duration:var(--duration-disclosure)] [transition-timing-function:var(--ease-state)]",
-                isReplacing && "opacity-[0.55] translate-y-0.5",
-              )}
-            >
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div
-                  className={cn(
-                    "transition-opacity [transition-duration:var(--duration-disclosure)] [transition-timing-function:var(--ease-state)]",
-                    isReplacing && "opacity-90",
-                  )}
-                >
-                  <p className="text-lead text-foreground">{meal.label}</p>
-                  <p className="mt-1 text-body text-muted">{meal.summary}</p>
-                </div>
-                {primarySlot ? (
-                  <ReplaceMealButton
-                    slot={primarySlot}
-                    mealLabel={meal.label}
-                    onStepChange={(step: ReplaceStep) => {
-                      setActiveRow(step === "idle" || step === "done" ? null : meal.kind);
-                    }}
-                  />
-                ) : null}
-              </div>
-            </li>
+              meal={meal}
+              primarySlot={primarySlot}
+              open={openKind === meal.kind}
+              onOpenChange={(next) => setOpenKind(next ? meal.kind : null)}
+              showDivider={index > 0}
+            />
           );
         })}
-    </ul>
+      </ul>
+    </MealListSection>
   );
 }

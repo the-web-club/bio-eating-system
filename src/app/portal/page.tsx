@@ -31,7 +31,7 @@ async function TodayPageContent() {
 
   if (!data.entitlements.corePlan) {
     return (
-      <PortalEmptyState title="Personal nutrition plan not on your account">
+      <PortalEmptyState tone="locked" title="Personal nutrition plan not on your account">
         Add the plan on the website. Your setup and daily meals appear here once
         the purchase is confirmed.
       </PortalEmptyState>

@@ -42,6 +42,7 @@ async function BiomarkersPageContent() {
     return (
       <div className="space-y-group">
         <PortalEmptyState
+          tone="locked"
           title="Not on your account yet"
           action={<BiomarkerUpgradeClient />}
         >

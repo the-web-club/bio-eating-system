@@ -26,7 +26,7 @@ async function LearnPageContent() {
 
   return (
     <div className="space-y-group">
-      <PortalEmptyState title="No lessons published yet">
+      <PortalEmptyState tone="unpublished" title="No lessons published yet">
         When the first lessons are reviewed you will find the lesson list here,
         with a reading view and previous and next controls.
       </PortalEmptyState>
