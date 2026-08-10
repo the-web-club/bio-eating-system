@@ -1,11 +1,11 @@
 "use client";
 
+import { MealRow } from "./meal-row";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import type { AssembledMeal } from "@/lib/portal/meal-assembly";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
 import { MealListSection } from "./meal-list-section";
-import { MealRow } from "./meal-row";
 
 export function MealListWithReplace({
   meals,
@@ -21,8 +21,8 @@ export function MealListWithReplace({
 
   return (
     <MealListSection title={title} meta={meta}>
-      <ul>
-        {visibleMeals.map((meal, index) => {
+      <ul className="meal-stack">
+        {visibleMeals.map((meal) => {
           const primarySlot = meal.items[0]?.slot as FoodSlot | undefined;
           if (!primarySlot) return null;
 
@@ -33,7 +33,6 @@ export function MealListWithReplace({
               primarySlot={primarySlot}
               open={openKind === meal.kind}
               onOpenChange={(next) => setOpenKind(next ? meal.kind : null)}
-              showDivider={index > 0}
             />
           );
         })}

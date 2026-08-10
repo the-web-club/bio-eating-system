@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { IconCheck } from "@/components/portal/icons";
-import { ContentMeasure } from "@/components/portal/layout";
+import { Surface } from "@/components/ui/surface";
 import { SLOT_LABELS } from "@/lib/content/labels";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
 import { cn } from "@/lib/cn";
@@ -30,13 +30,11 @@ export function MealRow({
   primarySlot,
   open,
   onOpenChange,
-  showDivider,
 }: {
   meal: AssembledMeal;
   primarySlot: FoodSlot;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  showDivider: boolean;
 }) {
   const reduceMotion = useReducedMotion() ?? false;
   const optional = meal.kind === "optional";
@@ -127,83 +125,85 @@ export function MealRow({
     handleReplace(pendingSelection);
   }
 
+  const saved = showCheck;
+
   return (
-    <li
+    <Surface
+      as="li"
+      level={saved ? "sunken" : "raised"}
+      interactive={!saved}
+      delegatesFocus
       className={cn(
-        "py-s4",
-        showDivider && "border-t border-hairline",
-        optional && "opacity-80",
+        "meal-card",
+        optional && "meal-card--optional",
+        saved && "meal-card--done",
       )}
     >
-      <ContentMeasure>
-        <div className="flex items-baseline justify-between gap-x-s4 gap-y-s1">
-          <p
-            className={cn(
-              "text-label",
-              optional ? "text-faint" : "text-muted",
-            )}
-          >
-            {meal.label}
-          </p>
-          <MealReplacePopover
-            slot={primarySlot}
-            mealLabel={meal.label}
-            open={open}
-            onOpenChange={onOpenChange}
-            onReplace={handleReplace}
-          />
-        </div>
-
-        <div
-          ref={mealContentRef}
-          className="mt-s1 flex items-start gap-s2"
-          style={
-            swapHeightHold !== undefined ? { minHeight: swapHeightHold } : undefined
-          }
+      <div className="flex items-baseline justify-between gap-x-s4 gap-y-s1">
+        <p
+          className={cn(
+            "text-label",
+            optional || saved ? "text-faint" : "text-muted",
+          )}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={formatMealIngredientNames(items)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={mealSwapVariants(reduceMotion)}
-              transition={mealSwapTransition(reduceMotion)}
-              className="min-w-0 flex-1"
+          {meal.label}
+        </p>
+        <MealReplacePopover
+          slot={primarySlot}
+          mealLabel={meal.label}
+          open={open}
+          onOpenChange={onOpenChange}
+          onReplace={handleReplace}
+        />
+      </div>
+
+      <div
+        ref={mealContentRef}
+        className="mt-s1 flex items-start gap-s2"
+        style={
+          swapHeightHold !== undefined ? { minHeight: swapHeightHold } : undefined
+        }
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={formatMealIngredientNames(items)}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            variants={mealSwapVariants(reduceMotion)}
+            transition={mealSwapTransition(reduceMotion)}
+            className="min-w-0 flex-1"
+          >
+            <MealIngredientLine items={items} optional={optional} />
+          </motion.div>
+        </AnimatePresence>
+        <AnimatePresence>
+          {showCheck ? (
+            <motion.span
+              key="check"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={opacityTween(reduceMotion, "confirmFade")}
+              className="mt-s1 shrink-0 text-confirm-icon"
+              aria-hidden
             >
-              <MealIngredientLine items={items} optional={optional} />
-            </motion.div>
-          </AnimatePresence>
-          <AnimatePresence>
-            {showCheck ? (
-              <motion.span
-                key="check"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={opacityTween(reduceMotion, "confirmFade")}
-                className="mt-s1 shrink-0 text-confirm-icon"
-                aria-hidden
-              >
-                <IconCheck className="size-4" />
-              </motion.span>
-            ) : null}
-          </AnimatePresence>
-        </div>
-      </ContentMeasure>
+              <IconCheck className="size-4" />
+            </motion.span>
+          ) : null}
+        </AnimatePresence>
+      </div>
 
       {failed ? (
-        <ContentMeasure>
-          <p className="mt-s2 text-control text-danger">
-            Replacement did not save.{" "}
-            <ReplaceGhostLink onClick={retryReplace}>Try again</ReplaceGhostLink>
-          </p>
-        </ContentMeasure>
+        <p className="mt-s2 text-control text-danger">
+          Replacement did not save.{" "}
+          <ReplaceGhostLink onClick={retryReplace}>Try again</ReplaceGhostLink>
+        </p>
       ) : null}
 
       <p aria-live="polite" className="sr-only">
         {liveMessage}
       </p>
-    </li>
+    </Surface>
   );
 }
