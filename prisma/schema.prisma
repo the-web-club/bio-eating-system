@@ -9,8 +9,12 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client"
+  output        = "../src/generated/prisma"
+  // native = this machine. rhel-openssl-3.0.x = Vercel Node serverless.
+  // Without the second target, Next.js file tracing can ship only the local
+  // engine and the Lambda fails at runtime looking for the RHEL binary.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 // ---------------------------------------------------------------------------
