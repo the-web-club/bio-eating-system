@@ -62,7 +62,7 @@ export function AdminShell({
                     >
                       {active ? (
                         <span
-                          className="absolute inset-y-1.5 left-0 w-0.5 rounded-pill bg-accent"
+                          className="absolute inset-y-1.5 left-0 w-0.5 rounded-control bg-accent"
                           aria-hidden
                         />
                       ) : null}

@@ -283,7 +283,7 @@ export function ProofShowcase() {
           <Panel>
             <h3 className="text-body-lg font-semibold text-foreground">Interactive object</h3>
             <p className="mt-1.5 text-body text-muted">
-              Elevation level 2: one hairline border, no shadow.
+              Elevation level 2: surface shadow and hairline edge.
             </p>
           </Panel>
           <InsetPanel>

@@ -26,7 +26,7 @@ export function Tooltip({
         <TooltipPrimitive.Content
           sideOffset={4}
           className={cn(
-            "z-50 rounded-control bg-foreground px-2 py-1 text-meta text-surface shadow-floating",
+            "surface-tooltip z-50 bg-foreground px-2 py-1 text-meta text-surface",
             "animate-[fade-in_100ms_var(--ease-out)] data-[state=closed]:animate-[fade-out_100ms_var(--ease-in)]",
           )}
         >

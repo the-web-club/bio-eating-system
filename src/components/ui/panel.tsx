@@ -8,20 +8,21 @@ import { cn } from "@/lib/cn";
 export function Panel({
   children,
   as: Tag = "div",
-  elevation = "border",
+  elevation = "raised",
   className,
 }: {
   children: ReactNode;
   as?: ElementType;
-  elevation?: "border" | "shadow" | "raised";
+  /** `raised` uses the surface elevation layer; `flat` is hairline only. */
+  elevation?: "flat" | "raised";
   className?: string;
 }) {
   return (
     <Tag
       className={cn(
         "p-5",
-        elevation === "border" && "rounded-surface border border-hairline bg-surface",
-        elevation === "shadow" && "surface bg-surface",
+        elevation === "flat" &&
+          "rounded-surface border border-hairline bg-surface",
         elevation === "raised" && "surface bg-surface",
         className,
       )}

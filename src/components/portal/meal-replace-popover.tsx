@@ -560,7 +560,7 @@ function MobileReplaceSheet({
             dragControls.start(event);
           }}
         >
-          <div className="h-1 w-9 rounded-pill bg-faint" aria-hidden />
+          <div className="h-1 w-9 rounded-control bg-faint" aria-hidden />
         </div>
         <div ref={scrollRef} className="overflow-y-auto px-s4 pb-s5 pt-s2">
           {children}

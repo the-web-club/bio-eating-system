@@ -15,7 +15,7 @@ export type ActionVariant =
 export type ActionSize = "default" | "compact";
 
 export const ACTION_VARIANT: Record<ActionVariant, string> = {
-  primary: "bg-accent-fill text-on-accent hover:bg-accent-hover",
+  primary: "bg-foreground text-on-fill hover:bg-soft",
   secondary:
     "border border-hairline-strong text-foreground hover:bg-surface-inset",
   quiet: "text-muted hover:bg-surface-inset hover:text-foreground",

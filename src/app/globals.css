@@ -38,23 +38,23 @@
 
   /* Editorial spa primitives - meal list and replace surfaces */
   --editorial-ink-950: #2a2248;
+  --editorial-ink-deep: #221b3a;
   --editorial-ink-900: #382c5c;
   --editorial-ink-500: #64638a;
   --editorial-ink-400: #857ea0;
   --editorial-paper-000: #fdfbf7;
   --editorial-paper-100: #f6f1e9;
   --editorial-paper-200: #ebe4d8;
+  --editorial-paper-selected: #f1efee;
   --editorial-olive: #5f7340;
 
-  /* Mineral - brand accent, derived from the product blue, deepened
-     and desaturated so it reads as considered rather than default SaaS. */
+  /* Mineral - legacy primitives, retained for reference. Semantics use editorial ink. */
   --mineral-800: #24486b;
   --mineral-700: #2c5a86;
   --mineral-500: #5c86ab;
   --mineral-300: #8fb3d4;
   --mineral-200: #b6cee4;
   --mineral-050: #eef2f6;
-  /* Deep mineral for dark-mode selected surfaces, washes and the feature panel */
   --mineral-shade: #1a2530;
   --mineral-950: #16212c;
 
@@ -66,6 +66,8 @@
   --slate-900: #161615;
   --slate-850: #1e1d1c;
   --slate-800: #2a2926;
+  --slate-selected: #262528;
+  --slate-accent-subtle: #232226;
   --slate-100: #f4f2ee;
   --slate-300: #a6a19a;
   --slate-400: #7d7871;
@@ -150,7 +152,7 @@
   --surface-canvas: var(--editorial-paper-100);
   --surface: var(--editorial-paper-000);
   --surface-inset: var(--editorial-paper-200);
-  --surface-selected: var(--mineral-050);
+  --surface-selected: var(--editorial-paper-selected);
   --surface-feature: var(--editorial-ink-950);
   --surface-overlay: rgb(36 28 61 / 0.28);
 
@@ -173,15 +175,15 @@
   --hairline: rgb(56 44 92 / 0.09);
   --hairline-strong: rgb(56 44 92 / 0.14);
 
-  /* accent = graphical / focus; accent-fill = primary action fill */
-  --accent: var(--mineral-700);
-  --accent-fill: var(--mineral-700);
-  --accent-hover: var(--mineral-800);
-  --accent-text: var(--mineral-700);
-  --accent-soft: var(--mineral-500);
-  --accent-subtle: var(--mineral-050);
+  /* accent = editorial ink rails, focus and emphasis; fill matches primary ink */
+  --accent: var(--editorial-ink-900);
+  --accent-fill: var(--editorial-ink-950);
+  --accent-hover: var(--editorial-ink-deep);
+  --accent-text: var(--editorial-ink-900);
+  --accent-soft: var(--editorial-ink-500);
+  --accent-subtle: var(--editorial-paper-selected);
   --accent-track: var(--stone-200);
-  --chart-primary: var(--mineral-700);
+  --chart-primary: var(--editorial-ink-900);
   --chart-secondary: var(--ink-400);
 
   /* The wordmark is painted through an alpha mask, so its colour is a token
@@ -200,7 +202,7 @@
   --danger-subtle: rgb(196 22 11 / 0.06);
   --danger-fill: var(--red-700);
 
-  --focus-ring: var(--mineral-700);
+  --focus-ring: var(--editorial-ink-900);
 
   /* Status roles - mark + text; wash reserved for blocking danger */
   --status-neutral-text: var(--foreground);
@@ -208,10 +210,10 @@
   --status-neutral-line: var(--hairline-strong);
   --status-neutral-wash: var(--surface-inset);
 
-  --status-info-text: var(--mineral-700);
-  --status-info-mark: var(--mineral-500);
-  --status-info-line: rgb(44 90 134 / 0.24);
-  --status-info-wash: rgb(44 90 134 / 0.05);
+  --status-info-text: var(--editorial-ink-900);
+  --status-info-mark: var(--editorial-ink-500);
+  --status-info-line: rgb(56 44 92 / 0.24);
+  --status-info-wash: rgb(56 44 92 / 0.05);
 
   --status-success-text: var(--green-text);
   --status-success-mark: var(--green-mark);
@@ -236,10 +238,8 @@
   --surface-canvas: var(--slate-950);
   --surface: var(--slate-900);
   --surface-inset: var(--slate-850);
-  --surface-selected: var(--mineral-shade);
-  /* Mineral-tinted so the one dominant surface still reads as emphasis on a
-     dark canvas, rather than as a slightly lighter grey block. */
-  --surface-feature: var(--mineral-950);
+  --surface-selected: var(--slate-selected);
+  --surface-feature: var(--editorial-ink-950);
   --surface-overlay: rgb(0 0 0 / 0.6);
 
   --foreground: var(--slate-100);
@@ -260,14 +260,14 @@
   --hairline: rgb(244 242 238 / 0.09);
   --hairline-strong: rgb(244 242 238 / 0.16);
 
-  --accent: var(--mineral-300);
-  --accent-fill: var(--mineral-300);
-  --accent-hover: var(--mineral-200);
-  --accent-text: var(--mineral-300);
-  --accent-soft: var(--mineral-500);
-  --accent-subtle: var(--mineral-shade);
+  --accent: var(--editorial-ink-400);
+  --accent-fill: var(--editorial-paper-000);
+  --accent-hover: var(--editorial-paper-100);
+  --accent-text: var(--slate-300);
+  --accent-soft: var(--editorial-ink-500);
+  --accent-subtle: var(--slate-accent-subtle);
   --accent-track: var(--slate-800);
-  --chart-primary: var(--mineral-300);
+  --chart-primary: var(--editorial-ink-400);
   --chart-secondary: var(--slate-400);
 
   /* The artwork's indigo disappears on a dark canvas, so the mark is painted in
@@ -286,17 +286,17 @@
   --danger-subtle: rgb(255 107 97 / 0.08);
   --danger-fill: var(--red-700);
 
-  --focus-ring: var(--mineral-300);
+  --focus-ring: var(--editorial-ink-400);
 
   --status-neutral-text: var(--foreground);
   --status-neutral-mark: var(--foreground-muted);
   --status-neutral-line: var(--hairline-strong);
   --status-neutral-wash: var(--surface-inset);
 
-  --status-info-text: var(--blue-text-dark);
-  --status-info-mark: var(--blue-mark-dark);
-  --status-info-line: rgb(107 179 255 / 0.28);
-  --status-info-wash: rgb(107 179 255 / 0.06);
+  --status-info-text: var(--slate-300);
+  --status-info-mark: var(--slate-400);
+  --status-info-line: rgb(166 161 154 / 0.28);
+  --status-info-wash: var(--slate-accent-subtle);
 
   --status-success-text: var(--green-text-dark);
   --status-success-mark: var(--green-mark-dark);
@@ -767,7 +767,7 @@
   }
 
   .auth-screen__panel {
-    border-radius: var(--radius-sheet);
+    border-radius: var(--radius-surface);
     border: 1px solid var(--auth-panel-border);
     background: var(--auth-panel);
     box-shadow: var(--shadow-floating);

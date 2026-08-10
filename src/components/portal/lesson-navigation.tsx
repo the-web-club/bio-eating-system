@@ -52,7 +52,7 @@ export function LessonNavigation({
                   <motion.span
                     layoutId={reduceMotion ? undefined : "lesson-rail"}
                     transition={selectionTransition(reduceMotion)}
-                    className="absolute inset-y-2 left-0 w-0.5 rounded-pill bg-accent"
+                    className="absolute inset-y-2 left-0 w-0.5 rounded-control bg-accent"
                     aria-hidden
                   />
                 ) : null}

@@ -129,9 +129,14 @@
 }
 
 .surface-modal {
-  border-radius: var(--radius-sheet);
+  border-radius: var(--radius-surface);
   border: 1px solid var(--hairline);
   box-shadow: var(--edge-light), var(--shadow-modal);
+}
+
+.surface-tooltip {
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-object);
 }
 
 .surface-modal-sheet {

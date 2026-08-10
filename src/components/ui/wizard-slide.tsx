@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import { wizardSlideVariants } from "@/lib/motion";
 import { Button } from "./button";
+import { Surface } from "./surface";
 
 const STEPS = [
   { id: "one", title: "Step one", body: "Key name: step.one.body" },
@@ -18,7 +19,7 @@ export function WizardSlideDemo() {
   const { variants, transition } = wizardSlideVariants(!!reduceMotion);
 
   return (
-    <div className="rounded-surface border border-hairline bg-surface p-s4 sm:p-s5">
+    <Surface level="raised" className="p-s4 sm:p-s5">
       <p className="text-label text-faint u-caps">
         Step {index + 1} of {STEPS.length}
       </p>
@@ -54,6 +55,6 @@ export function WizardSlideDemo() {
           Continue
         </Button>
       </div>
-    </div>
+    </Surface>
   );
 }

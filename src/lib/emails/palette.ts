@@ -1,7 +1,7 @@
 /**
  * Email palette. Mail clients ignore CSS custom properties, so these are the
  * resolved light-theme values from globals.css / docs/brand.md. One constant
- * for every template - same canvas, ink, mineral accent and button radius.
+ * for every template - same canvas, ink, editorial accent and button radius.
  */
 export const EMAIL_PALETTE = {
   /** --paper-050 */
@@ -18,8 +18,8 @@ export const EMAIL_PALETTE = {
   faint: "#8f8a80",
   /** --stone-200 */
   hairline: "#eae6df",
-  /** --mineral-700 - primary action fill */
-  accentFill: "#2c5a86",
+  /** --editorial-ink-950 - primary action fill */
+  accentFill: "#2a2248",
   /** --paper-000 on accent */
   onAccent: "#ffffff",
   /** --indigo-900 - wordmark ink when the PNG cannot load */

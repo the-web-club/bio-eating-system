@@ -26,8 +26,8 @@ const TEXT_TOKENS = [
 const RADII = [
   { name: "control · 2", className: "rounded-control" },
   { name: "surface · 2", className: "rounded-surface" },
-  { name: "sheet · 12", className: "rounded-sheet" },
-  { name: "pill · cap", className: "rounded-pill" },
+  { name: "sheet · 12 (bottom sheet)", className: "rounded-sheet" },
+  { name: "pill · progress cap", className: "rounded-pill" },
 ] as const;
 
 export default function DesignTokenPage() {

@@ -98,7 +98,7 @@ export function MobileTopBar({
                           >
                             {active ? (
                               <span
-                                className="absolute inset-y-2 left-0 w-0.5 rounded-pill bg-accent"
+                                className="absolute inset-y-2 left-0 w-0.5 rounded-control bg-accent"
                                 aria-hidden
                               />
                             ) : null}
@@ -170,7 +170,7 @@ export function MobileBottomNav({ basePath = "/portal" }: { basePath?: string })
                   <motion.span
                     layoutId={reduceMotion ? undefined : "nav-tab-indicator"}
                     transition={selectionTransition(reduceMotion)}
-                    className="absolute inset-x-4 top-0 h-0.5 rounded-pill bg-accent"
+                    className="absolute inset-x-4 top-0 h-0.5 rounded-control bg-accent"
                     aria-hidden
                   />
                 ) : null}

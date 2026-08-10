@@ -85,7 +85,7 @@ function ctaHtml(cta: EmailCta): string {
 
 /**
  * One shell for every outbound message: warm canvas, single white panel,
- * brand mark, hairline, title, copy, optional body, mineral CTA, quiet footer.
+ * brand mark, hairline, title, copy, optional body, editorial CTA, quiet footer.
  */
 export function renderEmailDocument(args: EmailDocumentArgs): string {
   const paragraphs = (args.paragraphs ?? [])

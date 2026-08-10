@@ -51,7 +51,7 @@ export function Tabs({
               {selected ? (
                 <motion.span
                   layoutId={reduceMotion ? undefined : `tab-indicator-${layoutId}`}
-                  className="absolute inset-x-0 -bottom-px h-0.5 rounded-pill bg-accent"
+                  className="absolute inset-x-0 -bottom-px h-0.5 rounded-control bg-accent"
                   transition={selectionTransition(reduceMotion)}
                 />
               ) : null}

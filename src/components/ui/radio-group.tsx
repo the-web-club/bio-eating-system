@@ -29,12 +29,12 @@ export function RadioGroup({
           <RadioGroupPrimitive.Item
             value={option.value}
             className={cn(
-              "flex size-5 shrink-0 items-center justify-center rounded-pill border border-hairline-strong bg-surface",
+              "flex size-5 shrink-0 items-center justify-center rounded-control border border-hairline-strong bg-surface",
               "cursor-[var(--cursor-control)] transition-colors [transition-duration:var(--duration-selection)] [transition-timing-function:var(--ease-state)]",
               "data-[state=checked]:border-accent",
             )}
           >
-            <RadioGroupPrimitive.Indicator className="size-2.5 rounded-pill bg-accent" />
+            <RadioGroupPrimitive.Indicator className="size-2.5 rounded-control bg-accent" />
           </RadioGroupPrimitive.Item>
           {option.label}
         </label>
