@@ -216,6 +216,13 @@
     0 2px 4px rgb(27 26 24 / 0.05),
     0 12px 32px rgb(27 26 24 / 0.11),
     0 32px 64px rgb(27 26 24 / 0.08);
+
+  /* Auth screen — photograph + radial veil keep the form centre readable. */
+  --auth-veil-core: rgb(251 250 248 / 0.88);
+  --auth-veil-mid: rgb(251 250 248 / 0.5);
+  --auth-panel: rgb(255 255 255 / 0.9);
+  --auth-panel-border: rgb(27 26 24 / 0.07);
+  --auth-photo-dim: rgb(27 26 24 / 0);
 }
 
 .dark {
@@ -301,6 +308,12 @@
   --shadow-modal:
     0 1px 0 rgb(244 242 238 / 0.05),
     0 16px 44px rgb(0 0 0 / 0.6);
+
+  --auth-veil-core: rgb(17 17 17 / 0.84);
+  --auth-veil-mid: rgb(17 17 17 / 0.58);
+  --auth-panel: rgb(22 22 21 / 0.94);
+  --auth-panel-border: rgb(244 242 238 / 0.08);
+  --auth-photo-dim: rgb(17 17 17 / 0.35);
 }
 
 /* ---------- Layer 3: Tailwind binding ------------------------------------ */
@@ -611,6 +624,59 @@
     .brand-mark {
       background: none;
       content: url("/brand/well-with-katarina.png");
+    }
+  }
+
+  /* Sign-in / magic-link sent — wellness photograph with a protected centre. */
+  .auth-screen__photo {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: url("/well-with-katarina-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .auth-screen__photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--auth-photo-dim);
+  }
+
+  .auth-screen__veil {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 52% 72% at 50% 48%,
+      var(--auth-veil-core) 0%,
+      var(--auth-veil-mid) 52%,
+      transparent 100%
+    );
+  }
+
+  .auth-screen__panel {
+    border-radius: var(--radius-panel);
+    border: 1px solid var(--auth-panel-border);
+    background: var(--auth-panel);
+    box-shadow: var(--shadow-floating);
+    backdrop-filter: blur(10px);
+    padding: clamp(1.75rem, 4vw, 2.25rem);
+  }
+
+  @media (forced-colors: active) {
+    .auth-screen__photo,
+    .auth-screen__veil {
+      display: none;
+    }
+
+    .auth-screen__panel {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      backdrop-filter: none;
     }
   }
 
