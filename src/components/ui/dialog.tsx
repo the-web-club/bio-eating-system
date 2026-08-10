@@ -42,8 +42,7 @@ export function Dialog({
         />
         <DialogPrimitive.Content
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2",
-            "rounded-sheet bg-surface px-s5 py-s5 shadow-modal sm:px-s6 sm:py-s6",
+            "surface-modal fixed left-1/2 top-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2 bg-surface px-s5 py-s5 sm:px-s6 sm:py-s6",
             "focus:outline-none",
             "data-[state=open]:animate-[dialog-in_var(--duration-disclosure)_var(--ease-emphasized)]",
             "data-[state=closed]:animate-[dialog-out_var(--duration-exit)_var(--ease-exit)]",

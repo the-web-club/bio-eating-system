@@ -2,9 +2,8 @@ import type { ElementType, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Elevation level 2: a discrete interactive object. It takes a hairline border
- * OR a minimal shadow, never both, and it is not the default wrapper for page
- * content. Ordinary sections use spacing and rules instead.
+ * Elevation wrapper for discrete objects. Prefer Surface for new work; Panel
+ * remains for existing call sites during migration.
  */
 export function Panel({
   children,
@@ -14,14 +13,16 @@ export function Panel({
 }: {
   children: ReactNode;
   as?: ElementType;
-  elevation?: "border" | "shadow";
+  elevation?: "border" | "shadow" | "raised";
   className?: string;
 }) {
   return (
     <Tag
       className={cn(
-        "rounded-surface bg-surface p-5",
-        elevation === "border" ? "border border-hairline" : "shadow-object",
+        "p-5",
+        elevation === "border" && "rounded-surface border border-hairline bg-surface",
+        elevation === "shadow" && "surface bg-surface",
+        elevation === "raised" && "surface bg-surface",
         className,
       )}
     >
@@ -32,7 +33,6 @@ export function Panel({
 
 /**
  * Elevation level 1: a warm inset surface for selected or actionable content.
- * No border, no shadow - the surface shift is the whole signal.
  */
 export function InsetPanel({
   children,
@@ -44,7 +44,7 @@ export function InsetPanel({
   className?: string;
 }) {
   return (
-    <Tag className={cn("rounded-surface bg-surface-inset p-5", className)}>
+    <Tag className={cn("surface surface--sunken bg-surface-inset p-5", className)}>
       {children}
     </Tag>
   );

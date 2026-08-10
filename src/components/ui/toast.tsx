@@ -128,7 +128,7 @@ function ToastCard({
         ease: motionTransition.ease as "linear" | [number, number, number, number],
       }}
     >
-      <div className={cn("rounded-surface bg-surface py-s2 pl-s1 pr-s4 shadow-floating")}>
+      <div className={cn("surface-panel bg-surface py-s2 pl-s1 pr-s4")}>
         <Status role={item.role}>{item.message}</Status>
       </div>
     </motion.div>

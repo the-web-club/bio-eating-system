@@ -229,8 +229,7 @@ export function MealReplacePopover({
   const surfaceTransition = floatingSurfaceTransition(reduceMotion);
   const transformOrigin = transformOriginFromPlacement(placement);
 
-  const panelSurfaceClass =
-    "rounded-control border border-hairline bg-surface p-s4 shadow-floating";
+  const panelSurfaceClass = "surface-panel bg-surface p-s4";
 
   const stepPanel = (
     <ReplaceStepPanel
@@ -550,7 +549,7 @@ function MobileReplaceSheet({
           opacity: opacityTween(reduceMotion, "sheetBackdrop"),
           y: sheetSurfaceTransition(reduceMotion),
         }}
-        className="fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-hidden rounded-t-sheet border border-hairline border-b-0 bg-surface shadow-floating"
+        className="surface-modal-sheet fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-hidden bg-surface"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <div

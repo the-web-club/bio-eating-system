@@ -18,7 +18,7 @@ export function DropdownMenu({
         <DropdownMenuPrimitive.Content
           sideOffset={4}
           className={cn(
-            "z-50 min-w-44 overflow-hidden rounded-surface bg-surface p-1 shadow-floating",
+            "surface-panel z-50 min-w-44 overflow-hidden bg-surface p-1",
             "origin-[var(--radix-dropdown-menu-content-transform-origin)]",
             "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)]",
             "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",

@@ -21,7 +21,7 @@ export function Popover({
           align={align}
           sideOffset={8}
           className={cn(
-            "z-50 w-72 rounded-surface bg-surface p-4 shadow-floating outline-none",
+            "surface-panel z-50 w-72 bg-surface p-4 outline-none",
             "origin-[var(--radix-popover-content-transform-origin)]",
             "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-standard)]",
             "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",

@@ -59,7 +59,7 @@ export function Combobox({
             align="start"
             sideOffset={4}
             className={cn(
-              "z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-surface bg-surface shadow-floating",
+              "surface-panel z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden bg-surface",
               "origin-[var(--radix-popover-content-transform-origin)]",
               "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)]",
               "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",
