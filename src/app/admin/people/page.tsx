@@ -84,7 +84,7 @@ export default async function AdminPeoplePage({ searchParams }: PeoplePageProps)
                   >
                     <div className="min-w-0">
                       <p className="text-body text-foreground">{user.email}</p>
-                      <p className="text-small text-muted">
+                      <p className="text-meta text-muted">
                         {user.name}
                         {user.profile ? " · Intake done" : " · Intake open"}
                         {" · "}

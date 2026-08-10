@@ -2,9 +2,9 @@
 
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { buttonClassName, type ButtonSize } from "./button-styles";
 import {
   actionClassName,
-  type ActionSize,
   type ActionVariant,
 } from "./action-styles";
 
@@ -15,11 +15,12 @@ type NativeButtonProps = Omit<
 
 export type ButtonProps = NativeButtonProps & {
   variant?: ActionVariant;
-  size?: ActionSize;
+  size?: ButtonSize;
   children: ReactNode;
   loading?: boolean;
   loadingLabel?: string;
   disabledReason?: string;
+  error?: boolean;
 };
 
 export function Button({
@@ -32,26 +33,43 @@ export function Button({
   loading = false,
   loadingLabel = "Working…",
   disabledReason,
+  error = false,
   onClick,
   title,
   ...rest
 }: ButtonProps) {
   const isDisabled = disabled || loading;
-  const filled = variant === "primary" || variant === "confirm" || variant === "danger";
+  const isEditorialPrimary = variant === "primary";
+  const filled =
+    isEditorialPrimary ||
+    variant === "confirm" ||
+    variant === "danger";
 
   return (
     <button
       type={type}
       disabled={isDisabled}
       aria-busy={loading || undefined}
+      aria-invalid={error || undefined}
       title={isDisabled && disabledReason ? disabledReason : title}
       className={cn(
-        actionClassName({ variant, size }),
-        "cursor-[var(--cursor-control)] disabled:pointer-events-none",
-        // Disabled drops the fill rather than the text, so the label stays readable.
-        isDisabled && filled && "bg-surface-inset text-disabled",
-        isDisabled && variant === "secondary" && "border-hairline text-disabled",
-        isDisabled && variant === "quiet" && "text-disabled",
+        isEditorialPrimary
+          ? buttonClassName({ size, disabled: isDisabled, error })
+          : actionClassName({ variant, size }),
+        !isEditorialPrimary &&
+          "cursor-control disabled:pointer-events-none",
+        !isEditorialPrimary &&
+          isDisabled &&
+          filled &&
+          "bg-surface-inset text-disabled",
+        !isEditorialPrimary &&
+          isDisabled &&
+          variant === "secondary" &&
+          "border-hairline text-disabled",
+        !isEditorialPrimary &&
+          isDisabled &&
+          variant === "quiet" &&
+          "text-disabled",
         className,
       )}
       onClick={onClick}

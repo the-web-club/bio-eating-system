@@ -34,8 +34,8 @@ export function WeeklyView({
           meta={
             <p className="text-meta text-muted">
               Authored week{" "}
-              <span className="font-meta tabular text-foreground">{position}</span> of{" "}
-              <span className="font-meta tabular text-foreground">{authoredWeeks}</span>
+              <span className="tabular text-meta text-foreground">{position}</span> of{" "}
+              <span className="tabular text-meta text-foreground">{authoredWeeks}</span>
             </p>
           }
           actions={

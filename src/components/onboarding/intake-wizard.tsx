@@ -265,11 +265,11 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
           <h2
             id={headingId}
             tabIndex={-1}
-            className="text-display text-foreground outline-none"
+            className="text-display-serif text-foreground outline-none"
           >
             {headingFor(step.id)}
           </h2>
-          <p className="mt-2 measure text-lead text-muted">{whyFor(step.id)}</p>
+          <p className="mt-2 measure text-body-lg text-muted">{whyFor(step.id)}</p>
 
           <div className="mt-group space-y-tight">
             {step.id === "welcome" ? (
@@ -720,7 +720,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             {step.id === "safety" ? (
               <div className="space-y-tight">
                 <Status role="neutral">
-                  <p className="font-meta text-foreground">Important</p>
+                  <p className="text-foreground">Important</p>
                   <p className="mt-1">
                     These circumstances materially change whether this product is
                     appropriate. If you indicate something requiring professional
@@ -790,7 +790,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                   />
                 </CheckboxGroup>
                 {errors.consent ? (
-                  <p className="text-small text-status-danger-text">{errors.consent}</p>
+                  <p className="text-meta text-status-danger-text">{errors.consent}</p>
                 ) : null}
                 {submitError ? (
                   <Status role="danger" wash>
@@ -817,7 +817,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             {step.id === "refused" ? (
               <div className="space-y-tight">
                 <Status role="neutral">
-                  <p className="font-meta text-foreground">
+                  <p className="text-foreground">
                     This product cannot generate a plan for your current answers
                   </p>
                   {resultNotice?.map((line) => (

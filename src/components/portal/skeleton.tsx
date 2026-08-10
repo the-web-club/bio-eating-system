@@ -46,7 +46,7 @@ function AsideSkeleton() {
       <div className="space-y-2">
         <Skeleton className="h-3 w-16" />
         <Skeleton className="h-4 w-44 max-w-full" />
-        <Skeleton className="h-9 w-36 rounded-input" />
+        <Skeleton className="h-9 w-36 rounded-control" />
       </div>
     </div>
   );
@@ -131,7 +131,7 @@ export function ListBodySkeleton() {
 export function ProgramsBodySkeleton() {
   return (
     <div>
-      <Skeleton className="h-48 w-full rounded-panel sm:h-40" />
+      <Skeleton className="h-48 w-full rounded-surface sm:h-40" />
       <div className="mt-section">
         <Skeleton className="mb-tight h-4 w-32" />
         <RowSkeleton tall />
@@ -150,9 +150,9 @@ export function ProgramsBodySkeleton() {
 export function ReadingBodySkeleton() {
   return (
     <div className="space-y-group">
-      <Skeleton className="h-24 w-full rounded-panel" />
-      <Skeleton className="h-16 w-full rounded-panel" />
-      <Skeleton className="h-16 w-full rounded-panel" />
+      <Skeleton className="h-24 w-full rounded-surface" />
+      <Skeleton className="h-16 w-full rounded-surface" />
+      <Skeleton className="h-16 w-full rounded-surface" />
     </div>
   );
 }
@@ -163,7 +163,7 @@ export function ProgressBodySkeleton() {
     <>
       <div className="space-y-3 border-t border-hairline pt-group">
         <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-40 w-full rounded-panel" />
+        <Skeleton className="h-40 w-full rounded-surface" />
       </div>
       <div className="space-y-3 border-t border-hairline pt-group">
         <Skeleton className="h-4 w-32" />
@@ -182,10 +182,10 @@ export function CheckInBodySkeleton() {
       {[0, 1, 2, 3].map((row) => (
         <div key={row} className="space-y-2">
           <Skeleton className="h-3 w-36" />
-          <Skeleton className="h-11 w-full rounded-input" />
+          <Skeleton className="h-11 w-full rounded-control" />
         </div>
       ))}
-      <Skeleton className="h-11 w-32 rounded-button" />
+      <Skeleton className="h-11 w-32 rounded-control" />
     </div>
   );
 }
@@ -253,7 +253,6 @@ export function pageLoadingFromCopy(copy: PortalPageCopy) {
 export function PortalSkeleton() {
   return pageLoadingFromCopy({
     title: "Today",
-    description: "Today's plan",
     skeleton: "today",
     loadingLabel: "Loading your program",
   });
@@ -263,7 +262,6 @@ export function PortalSkeleton() {
 export function PlanSkeleton() {
   return pageLoadingFromCopy({
     title: "Plan",
-    description: "My week.",
     skeleton: "plan",
     loadingLabel: "Loading your daily plan",
   });

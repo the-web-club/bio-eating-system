@@ -18,7 +18,7 @@ export function DropdownMenu({
         <DropdownMenuPrimitive.Content
           sideOffset={4}
           className={cn(
-            "z-50 min-w-44 overflow-hidden rounded-panel bg-surface p-1 shadow-floating",
+            "z-50 min-w-44 overflow-hidden rounded-surface bg-surface p-1 shadow-floating",
             "origin-[var(--radix-dropdown-menu-content-transform-origin)]",
             "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)]",
             "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",
@@ -56,7 +56,7 @@ export function DropdownMenuItem({
     >
       <span className="flex-1">{children}</span>
       {shortcut ? (
-        <span className="ml-4 font-meta text-meta text-muted">{shortcut}</span>
+        <span className="ml-4 text-meta text-muted">{shortcut}</span>
       ) : null}
     </DropdownMenuPrimitive.Item>
   );

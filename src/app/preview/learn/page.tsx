@@ -81,7 +81,7 @@ export default function PreviewLearnPage() {
           </div>
 
           <article className="min-w-0">
-            <h2 className="text-display text-foreground">{lesson.title}</h2>
+            <h2 className="text-section-serif text-foreground">{lesson.title}</h2>
             <Prose className="mt-4">
               {lesson.body.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>

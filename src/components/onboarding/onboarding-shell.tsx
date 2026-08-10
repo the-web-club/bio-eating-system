@@ -12,7 +12,7 @@ export function OnboardingShell({
     <div className="mx-auto flex min-h-dvh w-full max-w-[34rem] flex-col px-gutter py-group sm:px-8">
       <div className="mb-section">
         <BrandSignature size="compact" />
-        <p className="mt-1.5 text-small text-muted">
+        <p className="mt-1.5 text-meta text-muted">
           Your plan starts with a short profile.
         </p>
       </div>

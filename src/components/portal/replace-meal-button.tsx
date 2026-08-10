@@ -53,7 +53,7 @@ export function ReplaceMealButton({
         onReplace={(selection) => void handleReplace(selection)}
       />
       {failed ? (
-        <p className="mt-2 text-meal-replace text-alert">
+        <p className="mt-2 text-control text-danger">
           Replacement did not save.{" "}
           <ReplaceGhostLink onClick={retryReplace}>Try again</ReplaceGhostLink>
         </p>

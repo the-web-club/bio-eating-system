@@ -24,7 +24,7 @@ export function OptionCard({
   return (
     <label
       className={cn(
-        "flex min-h-12 cursor-[var(--cursor-control)] items-start gap-3 rounded-input border px-4 py-3",
+        "flex min-h-12 cursor-[var(--cursor-control)] items-start gap-3 rounded-control border px-4 py-3",
         "transition-colors [transition-duration:var(--duration-selection)] [transition-timing-function:var(--ease-state)]",
         selected
           ? "border-accent bg-surface-selected"
@@ -42,7 +42,7 @@ export function OptionCard({
       <span className="min-w-0">
         <span className="block text-body text-foreground">{title}</span>
         {description ? (
-          <span className="mt-0.5 block text-small text-muted">{description}</span>
+          <span className="mt-0.5 block text-meta text-muted">{description}</span>
         ) : null}
       </span>
     </label>

@@ -32,24 +32,24 @@ export function WeeklyBriefing({
   return (
     <div className="mb-group space-y-3 rounded-card border border-hairline p-4">
       <Eyebrow>Your week is ready</Eyebrow>
-      <p className="font-meta text-lead tabular text-foreground">
+      <p className="text-body-lg tabular text-foreground">
         Week {String(weekNumber).padStart(2, "0")}
       </p>
       <dl className="grid gap-2 text-body sm:grid-cols-2">
         <div>
-          <dt className="text-small text-muted">Goal</dt>
+          <dt className="text-meta text-muted">Goal</dt>
           <dd className="text-foreground">{goalLabel}</dd>
         </div>
         <div>
-          <dt className="text-small text-muted">Estimated shopping</dt>
+          <dt className="text-meta text-muted">Estimated shopping</dt>
           <dd className="text-foreground">€{estimatedCostEur}</dd>
         </div>
         <div>
-          <dt className="text-small text-muted">Cooking</dt>
+          <dt className="text-meta text-muted">Cooking</dt>
           <dd className="text-foreground">~{cookingHours} hours</dd>
         </div>
         <div>
-          <dt className="text-small text-muted">Meals</dt>
+          <dt className="text-meta text-muted">Meals</dt>
           <dd className="text-foreground">{mealCount}</dd>
         </div>
       </dl>
@@ -96,7 +96,7 @@ export function ShopViewContent({
       ) : null}
 
       <Section title="Already have">
-        <p className="mb-3 text-small text-muted">
+        <p className="mb-3 text-meta text-muted">
           Tick items you already have at home.
         </p>
         <WeeklyShopList items={items} />

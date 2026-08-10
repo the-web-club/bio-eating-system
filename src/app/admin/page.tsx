@@ -40,8 +40,8 @@ export default async function AdminOverviewPage() {
           <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label}>
-                <dt className="text-small text-muted">{stat.label}</dt>
-                <dd className="mt-1 font-meta text-display tabular text-foreground">
+                <dt className="text-meta text-muted">{stat.label}</dt>
+                <dd className="mt-1 text-body-lg tabular font-medium text-foreground">
                   {stat.value}
                 </dd>
               </div>
@@ -61,7 +61,7 @@ export default async function AdminOverviewPage() {
                 >
                   <div className="min-w-0">
                     <p className="text-body text-foreground">{event.action}</p>
-                    <p className="text-small text-muted">
+                    <p className="text-meta text-muted">
                       {event.user?.email ?? "No member"} · {event.actor}
                     </p>
                   </div>
@@ -88,12 +88,12 @@ export default async function AdminOverviewPage() {
               {data.failedDrops.map((drop) => (
                 <li key={drop.id} className="py-3">
                   <p className="text-body text-foreground">{drop.user.email}</p>
-                  <p className="text-small text-muted">
+                  <p className="text-meta text-muted">
                     Week {drop.weekNumber} · {drop.cycleYear}
                     {drop.failedAt ? ` · ${formatWhen(drop.failedAt)}` : ""}
                   </p>
                   {drop.failure ? (
-                    <p className="mt-1 text-small text-danger">{drop.failure}</p>
+                    <p className="mt-1 text-meta text-danger">{drop.failure}</p>
                   ) : null}
                 </li>
               ))}
@@ -111,9 +111,9 @@ export default async function AdminOverviewPage() {
                   <p className="text-body text-foreground">
                     {event.provider} · {event.providerEventId}
                   </p>
-                  <p className="text-small text-muted">{formatWhen(event.receivedAt)}</p>
+                  <p className="text-meta text-muted">{formatWhen(event.receivedAt)}</p>
                   {event.error ? (
-                    <p className="mt-1 text-small text-danger">{event.error}</p>
+                    <p className="mt-1 text-meta text-danger">{event.error}</p>
                   ) : null}
                 </li>
               ))}

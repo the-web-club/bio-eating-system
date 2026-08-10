@@ -25,7 +25,7 @@ export function PageShell({
     <div
       className={cn(
         "mx-auto w-full px-gutter py-group sm:px-8 sm:py-group xl:px-10",
-        width === "wide" ? "max-w-[76rem]" : "max-w-[52rem]",
+        width === "wide" ? "max-w-content" : "max-w-reading",
         className,
       )}
     >
@@ -78,7 +78,7 @@ export function Section({
         <div className="mb-tight flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <div className="min-w-0">
             {title ? (
-              <h2 className={cn("text-section text-foreground", headingClassName)}>
+              <h2 className={cn("text-body-lg font-semibold text-foreground", headingClassName)}>
                 {title}
               </h2>
             ) : null}
@@ -171,7 +171,7 @@ export function Eyebrow({
   className?: string;
 }) {
   return (
-    <span className={cn("block text-micro text-faint u-caps", className)}>
+    <span className={cn("block text-label text-faint", className)}>
       {children}
     </span>
   );

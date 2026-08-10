@@ -26,7 +26,7 @@ export function ActionLink({
     <Link
       className={cn(
         actionClassName({ variant, size }),
-        "cursor-[var(--cursor-link)]",
+        "cursor-link",
         className,
       )}
       {...rest}

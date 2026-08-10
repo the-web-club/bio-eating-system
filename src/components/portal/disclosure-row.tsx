@@ -39,7 +39,7 @@ export function DisclosureRow({
 
   const heading = (
     <div className="min-w-0">
-      <p className="text-title text-foreground">{title}</p>
+      <p className="text-body-lg font-semibold text-foreground">{title}</p>
       {summary ? <div className="mt-1 text-body text-muted">{summary}</div> : null}
     </div>
   );
@@ -63,7 +63,7 @@ export function DisclosureRow({
         onClick={() => setOpen((v) => !v)}
         className={cn(
           "group -mx-3 grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 rounded-control px-3 py-4 text-left",
-          "cursor-[var(--cursor-control)] transition-colors [transition-duration:var(--duration-fast)] hover:bg-surface-inset",
+          "cursor-control transition-colors duration-fast hover:bg-surface-inset",
         )}
       >
         {heading}
@@ -71,7 +71,7 @@ export function DisclosureRow({
           {value}
           <IconChevronDown
             className={cn(
-              "size-4 shrink-0 translate-y-0.5 text-faint transition-transform [transition-duration:var(--duration-selection)] [transition-timing-function:var(--ease-state)] group-hover:text-foreground",
+              "size-4 shrink-0 translate-y-0.5 text-faint transition-transform duration-selection ease-state group-hover:text-foreground",
               open && "rotate-180",
             )}
             aria-hidden

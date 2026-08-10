@@ -53,15 +53,15 @@ export function PlanPreviewView({
         <Section title="Overview">
           <dl className="divide-y divide-hairline border-t border-hairline">
             <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-              <dt className="text-small text-muted">Goal</dt>
+              <dt className="text-meta text-muted">Goal</dt>
               <dd className="text-body text-foreground">{GOAL_LABELS[goal]}</dd>
             </div>
             <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-              <dt className="text-small text-muted">Current</dt>
+              <dt className="text-meta text-muted">Current</dt>
               <dd className="text-body text-foreground">{profile.weightKg} kg</dd>
             </div>
             <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-              <dt className="text-small text-muted">Target approach</dt>
+              <dt className="text-meta text-muted">Target approach</dt>
               <dd className="text-body text-foreground">{approach}</dd>
             </div>
           </dl>
@@ -73,7 +73,7 @@ export function PlanPreviewView({
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <p className="mt-3 text-small text-muted">
+          <p className="mt-3 text-meta text-muted">
             Activity: {ACTIVITY_LABELS[profile.lifestyle.activityLevel]} · Cooking:{" "}
             {COOKING_ABILITY_LABELS[profile.practical.cookingAbility]}
           </p>
@@ -98,7 +98,7 @@ export function PlanPreviewView({
                 </DataRows>
               </div>
             ))}
-            <p className="text-small text-faint">
+            <p className="text-meta text-faint">
               Plus 4 more days in your weekly plan.
             </p>
           </div>

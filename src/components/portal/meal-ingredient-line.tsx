@@ -2,14 +2,14 @@ import type { AssembledMealItem } from "@/lib/portal/meal-assembly";
 
 export function MealIngredientLine({ items }: { items: readonly AssembledMealItem[] }) {
   if (items.length === 0) {
-    return <span className="text-meal-content text-ink-deep">Nothing planned</span>;
+    return <span className="text-body-lg text-foreground">Nothing planned</span>;
   }
 
   return (
-    <span className="text-meal-content leading-[1.45] text-ink-deep">
+    <span className="text-body-lg leading-[1.45] text-foreground">
       {items.map((item, index) => (
         <span key={item.slot}>
-          {index > 0 ? <span className="text-ink-faint"> + </span> : null}
+          {index > 0 ? <span className="text-faint"> + </span> : null}
           {item.name}
         </span>
       ))}

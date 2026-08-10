@@ -22,13 +22,11 @@ export type PortalPageCopy = {
 export const PORTAL_PAGE_COPY = {
   today: {
     title: "Today",
-    description: "Today's plan",
     skeleton: "today",
     loadingLabel: "Loading your program",
   },
   plan: {
     title: "Plan",
-    description: "My week.",
     skeleton: "plan",
     loadingLabel: "Loading your daily plan",
   },

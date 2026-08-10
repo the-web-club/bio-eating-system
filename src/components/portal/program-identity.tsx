@@ -32,10 +32,10 @@ export function ProgramIdentity({
   return (
     <div className={className}>
       {programLabel ? (
-        <p className="u-caps text-small text-soft">{programLabel}</p>
+        <p className="u-caps text-meta text-soft">{programLabel}</p>
       ) : null}
       {weekReading ? (
-        <p className="mt-0.5 font-meta text-meta tabular text-faint">
+        <p className="mt-0.5 text-meta tabular text-faint">
           {weekReading}
         </p>
       ) : null}

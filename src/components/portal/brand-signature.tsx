@@ -36,7 +36,7 @@ export function BrandSignature({
     <Link
       href={href}
       className={cn(
-        "block w-fit cursor-[var(--cursor-link)] rounded-control transition-opacity [transition-duration:var(--duration-fast)] hover:opacity-70",
+        "block w-fit cursor-link rounded-control transition-opacity duration-fast hover:opacity-70",
         className,
       )}
     >

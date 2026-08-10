@@ -66,7 +66,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                 key={row.label}
                 className="grid grid-cols-[9rem_minmax(0,1fr)] items-baseline gap-4 py-3"
               >
-                <dt className="text-small text-muted">{row.label}</dt>
+                <dt className="text-meta text-muted">{row.label}</dt>
                 <dd className="min-w-0 break-words text-body text-foreground">
                   {row.value}
                 </dd>
@@ -87,17 +87,17 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
           {member.schedule ? (
             <dl className="divide-y divide-hairline border-t border-hairline">
               <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
-                <dt className="text-small text-muted">Active</dt>
+                <dt className="text-meta text-muted">Active</dt>
                 <dd className="text-body text-foreground">
                   {member.schedule.active ? "Yes" : "No"}
                 </dd>
               </div>
               <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
-                <dt className="text-small text-muted">Current week</dt>
+                <dt className="text-meta text-muted">Current week</dt>
                 <dd className="text-body text-foreground">{member.schedule.currentWeek}</dd>
               </div>
               <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
-                <dt className="text-small text-muted">Last sent</dt>
+                <dt className="text-meta text-muted">Last sent</dt>
                 <dd className="text-body text-foreground">
                   {member.schedule.lastSentAt
                     ? formatWhen(member.schedule.lastSentAt)
@@ -121,15 +121,15 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
             <div className="space-y-tight">
               <dl className="divide-y divide-hairline border-t border-hairline">
                 <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
-                  <dt className="text-small text-muted">Goal</dt>
+                  <dt className="text-meta text-muted">Goal</dt>
                   <dd className="text-body text-foreground">{member.intake.goal}</dd>
                 </div>
                 <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
-                  <dt className="text-small text-muted">Units</dt>
+                  <dt className="text-meta text-muted">Units</dt>
                   <dd className="text-body text-foreground">{member.intake.unitSystem}</dd>
                 </div>
                 <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
-                  <dt className="text-small text-muted">Consent</dt>
+                  <dt className="text-meta text-muted">Consent</dt>
                   <dd className="text-body text-foreground">
                     {member.intake.consentVersion} ·{" "}
                     {formatWhen(member.intake.consentHealthDataAt)}
@@ -139,7 +139,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
 
               {member.intake.notesForCoach ? (
                 <div className="border-t border-hairline pt-tight">
-                  <p className="text-small text-muted">Notes for coach</p>
+                  <p className="text-meta text-muted">Notes for coach</p>
                   <p className="mt-1 whitespace-pre-wrap text-body text-foreground">
                     {member.intake.notesForCoach}
                   </p>
@@ -157,7 +157,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                         <p className="text-body text-foreground">
                           {plan.energyKcal} kcal · {plan.screeningOutcome}
                         </p>
-                        <p className="text-small text-muted">
+                        <p className="text-meta text-muted">
                           Plan {plan.engineVersion} · Content {plan.contentVersion}
                         </p>
                       </div>
@@ -182,7 +182,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                   <p className="text-body text-foreground">
                     Week {drop.weekNumber} · {drop.cycleYear}
                   </p>
-                  <p className="text-small text-muted">
+                  <p className="text-meta text-muted">
                     {drop.sentAt
                       ? `Sent ${formatWhen(drop.sentAt)}`
                       : drop.failedAt
@@ -190,7 +190,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                         : "Pending"}
                   </p>
                   {drop.failure ? (
-                    <p className="mt-1 text-small text-danger">{drop.failure}</p>
+                    <p className="mt-1 text-meta text-danger">{drop.failure}</p>
                   ) : null}
                 </li>
               ))}
@@ -210,7 +210,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                 >
                   <div className="min-w-0">
                     <p className="text-body text-foreground">{event.action}</p>
-                    <p className="text-small text-muted">{event.actor}</p>
+                    <p className="text-meta text-muted">{event.actor}</p>
                   </div>
                   <Meta>{formatWhen(event.createdAt)}</Meta>
                 </li>

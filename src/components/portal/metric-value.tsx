@@ -15,7 +15,7 @@ export function MetricValue({
 }) {
   return (
     <span
-      className={cn("font-meta text-small tabular text-foreground", className)}
+      className={cn("text-meta tabular text-foreground", className)}
     >
       {value}
       {unit ? <span className="ml-1 text-muted">{unit}</span> : null}

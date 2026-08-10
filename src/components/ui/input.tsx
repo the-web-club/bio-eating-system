@@ -34,7 +34,7 @@ export function TextField({
           {label}
         </span>
       ) : (
-        <label htmlFor={inputId} className="text-small text-soft">
+        <label htmlFor={inputId} className="text-meta text-soft">
           {label}
         </label>
       )}
@@ -44,7 +44,7 @@ export function TextField({
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
         className={cn(
-          "w-full min-h-11 rounded-input border bg-surface px-3 text-body text-foreground",
+          "w-full min-h-11 rounded-control border bg-surface px-3 text-body text-foreground",
           "placeholder:text-disabled",
           "transition-colors [transition-duration:var(--duration-fast)]",
           error

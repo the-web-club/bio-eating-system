@@ -22,7 +22,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <div className="flex flex-col gap-section">
         <div>
           <BrandSignature />
-          <h1 className="mt-section text-editorial text-foreground">Sign in</h1>
+          <h1 className="mt-section text-display-serif text-foreground">Sign in</h1>
           <p className="mt-2 measure text-body text-muted">
             Enter your email and we will send you a one-time link. Access is by
             purchase or invite.

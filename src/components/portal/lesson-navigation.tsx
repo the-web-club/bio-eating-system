@@ -42,8 +42,8 @@ export function LessonNavigation({
                 aria-current={active ? "true" : undefined}
                 onClick={() => onSelect(lesson.id)}
                 className={cn(
-                  "relative flex min-h-11 w-full cursor-[var(--cursor-control)] items-start gap-3 py-2.5 pl-4 pr-1 text-left text-body",
-                  "transition-colors [transition-duration:var(--duration-fast)]",
+                  "relative flex min-h-11 w-full cursor-control items-start gap-3 py-2.5 pl-4 pr-1 text-left text-body",
+                  "transition-colors duration-fast",
                   active ? "font-medium text-foreground" : "text-muted",
                   !active && !locked && "hover:text-foreground",
                 )}
@@ -56,7 +56,7 @@ export function LessonNavigation({
                     aria-hidden
                   />
                 ) : null}
-                <span className="w-4 shrink-0 pt-0.5 font-meta text-meta tabular text-faint">
+                <span className="w-4 shrink-0 pt-0.5 text-meta tabular text-faint">
                   {index + 1}
                 </span>
                 {/* Title wraps rather than truncates; state sits on its own line
@@ -64,7 +64,7 @@ export function LessonNavigation({
                 <span className="min-w-0 flex-1">
                   <span className="block">{lesson.title}</span>
                   {locked || lesson.duration ? (
-                    <span className="mt-0.5 flex items-center gap-1.5 text-small text-faint">
+                    <span className="mt-0.5 flex items-center gap-1.5 text-meta text-faint">
                       {locked ? (
                         <>
                           <IconLock className="size-3.5 shrink-0" aria-hidden />
@@ -72,7 +72,7 @@ export function LessonNavigation({
                         </>
                       ) : null}
                       {lesson.duration ? (
-                        <span className="font-meta tabular">{lesson.duration}</span>
+                        <span className="tabular text-meta">{lesson.duration}</span>
                       ) : null}
                     </span>
                   ) : null}

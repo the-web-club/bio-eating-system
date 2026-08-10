@@ -130,12 +130,12 @@ export function PrivacyControls({
           }}
         />
         {consentVersion && consentHealthDataAt ? (
-          <p className="text-small text-faint">
+          <p className="text-meta text-faint">
             Health data consent {consentVersion}, recorded{" "}
             {new Date(consentHealthDataAt).toLocaleDateString()}.
           </p>
         ) : (
-          <p className="text-small text-faint">
+          <p className="text-meta text-faint">
             Health data consent is recorded when you create your plan.
           </p>
         )}

@@ -18,18 +18,18 @@ export function MeasurementInput({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-small text-soft">
+      <label htmlFor={id} className="text-meta text-soft">
         {label}
       </label>
       {hint ? (
-        <p id={hintId} className="text-small text-muted">
+        <p id={hintId} className="text-meta text-muted">
           {hint}
         </p>
       ) : null}
       <input
         id={id}
         className={cn(
-          "min-h-11 w-full rounded-input border bg-surface px-3 text-body tabular text-foreground",
+          "min-h-11 w-full rounded-control border bg-surface px-3 text-body tabular text-foreground",
           "transition-colors [transition-duration:var(--duration-fast)]",
           error
             ? "border-status-danger-line focus:border-status-danger-mark"
@@ -42,7 +42,7 @@ export function MeasurementInput({
       />
       <div aria-live="polite">
         {error ? (
-          <p id={errorId} className="text-small text-status-danger-text">
+          <p id={errorId} className="text-meta text-status-danger-text">
             {error}
           </p>
         ) : null}

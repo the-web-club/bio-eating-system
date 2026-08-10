@@ -32,9 +32,7 @@ export function LifeHappenedButton(_props: { basePath: string }) {
   return (
     <div className="mt-group border-t border-hairline pt-group">
       {!open ? (
-        <Button variant="quiet" onClick={() => setOpen(true)}>
-          Life happened
-        </Button>
+        <Button onClick={() => setOpen(true)}>Life happened</Button>
       ) : (
         <div className="space-y-3">
           <p className="text-body text-foreground">What happened?</p>

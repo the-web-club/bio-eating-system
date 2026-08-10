@@ -42,7 +42,7 @@ function Body({
   return (
     <>
       <div className="min-w-0">
-        <p className="flex items-center gap-2 text-title text-foreground">
+        <p className="flex items-center gap-2 text-body-lg font-semibold text-foreground">
           {state === "locked" ? (
             <IconLock className="size-4 shrink-0 text-faint" />
           ) : null}
@@ -57,7 +57,7 @@ function Body({
         {hint ? (
           <span
             className={cn(
-              "hidden text-small sm:inline",
+              "hidden text-meta sm:inline",
               state === "soon" ? "text-faint" : "text-muted",
             )}
           >
@@ -66,7 +66,7 @@ function Body({
         ) : null}
         {state !== "soon" ? (
           <IconArrowRight
-            className="size-4 shrink-0 text-faint transition-colors [transition-duration:var(--duration-fast)] group-hover:text-foreground"
+            className="size-4 shrink-0 text-faint transition-colors duration-fast group-hover:text-foreground"
             aria-hidden
           />
         ) : null}
@@ -97,7 +97,7 @@ export function ModuleRow({
   );
 
   const interactiveClass =
-    "-mx-3 rounded-control px-3 transition-colors [transition-duration:var(--duration-fast)] hover:bg-surface-inset";
+    "-mx-3 rounded-control px-3 transition-colors duration-fast hover:bg-surface-inset";
 
   if (state === "locked" && onUnlock) {
     return (
@@ -108,7 +108,7 @@ export function ModuleRow({
           className={cn(
             ROW,
             interactiveClass,
-            "w-full cursor-[var(--cursor-control)] text-left",
+            "w-full cursor-control text-left",
           )}
         >
           {content}

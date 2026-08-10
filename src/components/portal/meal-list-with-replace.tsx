@@ -9,7 +9,7 @@ import { MealRow } from "./meal-row";
 
 export function MealListWithReplace({
   meals,
-  title = "Today",
+  title,
   meta,
 }: {
   meals: AssembledMeal[];

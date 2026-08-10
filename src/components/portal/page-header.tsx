@@ -28,9 +28,9 @@ export function PageHeader({
       )}
     >
       <div className="min-w-0">
-        <h1 className="text-editorial text-foreground">{title}</h1>
+        <h1 className="text-section-serif text-foreground">{title}</h1>
         {description ? (
-          <p className="mt-2 measure text-lead text-muted">{description}</p>
+          <p className="mt-2 measure text-body-lg text-muted">{description}</p>
         ) : null}
         {meta ? <div className="mt-3">{meta}</div> : null}
       </div>

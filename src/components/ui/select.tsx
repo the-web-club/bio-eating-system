@@ -2,10 +2,13 @@
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useReducedMotion } from "motion/react";
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useId, useState, type ReactNode } from "react";
+import { IconCheck, IconChevronDown } from "@/components/portal/icons";
 import { cn } from "@/lib/cn";
-import { duration, easeCss } from "@/lib/motion";
-import { IconChevronDown } from "@/components/portal/icons";
+import {
+  menuSurfaceAnimationClasses,
+  menuSurfaceReducedMotionStyle,
+} from "@/lib/motion";
 import { ScrollArea } from "./scroll-area";
 
 export type SelectOption = { value: string; label: string };
@@ -17,6 +20,7 @@ export function Select({
   placeholder = "Select…",
   label,
   disabled,
+  error,
 }: {
   options: SelectOption[];
   value?: string;
@@ -24,15 +28,17 @@ export function Select({
   placeholder?: string;
   label?: string;
   disabled?: boolean;
+  error?: boolean;
 }) {
   const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const onOpenChange = useCallback((next: boolean) => setOpen(next), []);
+  const labelId = useId();
 
   return (
     <div className="flex w-full flex-col gap-2">
       {label ? (
-        <span className="text-body text-foreground" id="select-label">
+        <span className="text-label text-muted" id={labelId}>
           {label}
         </span>
       ) : null}
@@ -44,13 +50,16 @@ export function Select({
         disabled={disabled}
       >
         <SelectPrimitive.Trigger
-          aria-labelledby={label ? "select-label" : undefined}
+          aria-labelledby={label ? labelId : undefined}
+          aria-invalid={error || undefined}
           className={cn(
-            "inline-flex h-11 w-full items-center justify-between gap-2 rounded-input border border-hairline-strong bg-surface px-3 text-body text-foreground",
-            "cursor-[var(--cursor-control)] transition-colors [transition-duration:var(--duration-instant)]",
-            /* Disabled drops the fill and border, not the text opacity, so the
-               chosen value stays readable. */
+            "inline-flex h-11 w-full items-center justify-between gap-2 rounded-control border bg-surface px-3 text-body text-foreground",
+            "cursor-control transition-colors duration-instant",
+            "hover:bg-surface-inset data-[state=open]:bg-surface-inset",
             "data-[placeholder]:text-muted",
+            error
+              ? "border-status-danger-line"
+              : "border-hairline-strong focus-visible:border-accent",
             "disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-inset disabled:text-disabled",
           )}
         >
@@ -64,21 +73,13 @@ export function Select({
             position="popper"
             sideOffset={4}
             className={cn(
-              "z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-panel bg-surface shadow-floating",
+              "z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-surface bg-surface shadow-floating",
               "origin-[var(--radix-select-content-transform-origin)]",
-              "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)]",
-              "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",
+              menuSurfaceAnimationClasses,
             )}
-            style={
-              reduceMotion
-                ? {
-                    animationDuration: `${duration.exit}ms`,
-                    animationTimingFunction: easeCss.linear,
-                  }
-                : undefined
-            }
+            style={menuSurfaceReducedMotionStyle(reduceMotion)}
           >
-            <ScrollArea className="max-h-[min(320px,var(--radix-select-content-available-height))]">
+            <ScrollArea className="max-h-[min(var(--max-height-menu),var(--radix-select-content-available-height))]">
               <SelectPrimitive.Viewport className="p-1">
                 {options.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
@@ -101,22 +102,18 @@ function SelectItem({
   children: ReactNode;
   value: string;
 }) {
-  // No highlight transition: keyboard arrows must not smear.
   return (
     <SelectPrimitive.Item
       value={value}
       className={cn(
-        "relative flex h-9 cursor-[var(--cursor-control)] select-none items-center rounded-control py-2 pl-8 pr-3 text-body text-foreground outline-none",
+        "relative flex h-9 cursor-control select-none items-center rounded-control py-2 pl-8 pr-3 text-body text-foreground outline-none",
         "data-[disabled]:pointer-events-none data-[disabled]:text-disabled",
         "data-[highlighted]:bg-surface-inset",
       )}
     >
-      <span className="absolute left-2 inline-flex w-4 items-center justify-center">
-        <span className="opacity-0" aria-hidden>
-          ✓
-        </span>
-        <SelectPrimitive.ItemIndicator className="absolute text-foreground">
-          ✓
+      <span className="absolute left-2 inline-flex size-4 items-center justify-center">
+        <SelectPrimitive.ItemIndicator className="text-foreground">
+          <IconCheck className="size-3.5" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText className="tabular">{children}</SelectPrimitive.ItemText>

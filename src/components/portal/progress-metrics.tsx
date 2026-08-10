@@ -27,36 +27,36 @@ export function ProgressMetrics({
   return (
     <dl className="divide-y divide-hairline border-t border-hairline">
       <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-        <dt className="text-small text-muted">Weight trend</dt>
+        <dt className="text-meta text-muted">Weight trend</dt>
         <dd className="text-body text-foreground">
           {currentWeight != null ? `${currentWeight} kg` : "-"}
           {checkIns.length > 1 && checkIns[0]?.weightKg && checkIns[1]?.weightKg ? (
-            <span className="ml-2 text-small text-muted">
+            <span className="ml-2 text-meta text-muted">
               (recent check-ins logged)
             </span>
           ) : null}
         </dd>
       </div>
       <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-        <dt className="text-small text-muted">Adherence</dt>
+        <dt className="text-meta text-muted">Adherence</dt>
         <dd className="text-body text-foreground">{avg("adherence") ?? "-"} / 5</dd>
       </div>
       <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-        <dt className="text-small text-muted">Hunger</dt>
+        <dt className="text-meta text-muted">Hunger</dt>
         <dd className="text-body text-foreground">{avg("hunger") ?? "-"} / 5</dd>
       </div>
       <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-        <dt className="text-small text-muted">Energy</dt>
+        <dt className="text-meta text-muted">Energy</dt>
         <dd className="text-body text-foreground">{avg("energy") ?? "-"} / 5</dd>
       </div>
       <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-        <dt className="text-small text-muted">Plan satisfaction</dt>
+        <dt className="text-meta text-muted">Plan satisfaction</dt>
         <dd className="text-body text-foreground">
           {avg("satisfaction") ?? "-"} / 5
         </dd>
       </div>
       {!latest ? (
-        <p className="py-3 text-small text-muted">
+        <p className="py-3 text-meta text-muted">
           Complete a weekly check-in to populate these trends.
         </p>
       ) : null}

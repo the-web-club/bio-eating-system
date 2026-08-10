@@ -54,7 +54,7 @@ export function Checkbox({
         disabled={disabled}
         onCheckedChange={(value) => onCheckedChange?.(value === true)}
         className={cn(
-          "flex size-5 shrink-0 items-center justify-center rounded-badge border border-hairline-strong bg-surface",
+          "flex size-5 shrink-0 items-center justify-center rounded-control border border-hairline-strong bg-surface",
           "cursor-[var(--cursor-control)] transition-colors [transition-duration:var(--duration-selection)] [transition-timing-function:var(--ease-state)]",
           "data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-on-accent",
         )}

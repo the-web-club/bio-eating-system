@@ -20,7 +20,7 @@ export function Panel({
   return (
     <Tag
       className={cn(
-        "rounded-panel bg-surface p-5",
+        "rounded-surface bg-surface p-5",
         elevation === "border" ? "border border-hairline" : "shadow-object",
         className,
       )}
@@ -44,7 +44,7 @@ export function InsetPanel({
   className?: string;
 }) {
   return (
-    <Tag className={cn("rounded-panel bg-surface-inset p-5", className)}>
+    <Tag className={cn("rounded-surface bg-surface-inset p-5", className)}>
       {children}
     </Tag>
   );

@@ -7,16 +7,22 @@ export function MealListSection({
   children,
   className,
 }: {
-  title: string;
+  title?: string;
   meta?: ReactNode;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <section className={cn(className)}>
-      <h2 className="font-serif-display text-meal-section italic text-ink">{title}</h2>
-      {meta ? <div className="mt-2 text-meal-meta text-ink-soft">{meta}</div> : null}
-      <div className={meta ? "mt-4" : "mt-3"}>{children}</div>
+      {title ? (
+        <h2 className="text-body-lg font-semibold text-foreground">{title}</h2>
+      ) : null}
+      {meta ? (
+        <div className={cn("text-meta text-muted", title ? "mt-2" : undefined)}>
+          {meta}
+        </div>
+      ) : null}
+      <div className={title || meta ? "mt-4" : undefined}>{children}</div>
     </section>
   );
 }
@@ -31,7 +37,7 @@ export function MealListMeta({
   return (
     <p>
       Goal: {goal}
-      <span className="text-ink-faint"> · </span>
+      <span className="text-faint"> · </span>
       Focus: {focus}
     </p>
   );

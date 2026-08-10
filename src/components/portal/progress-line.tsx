@@ -34,7 +34,7 @@ export function ProgressLine({
       <div className="flex items-baseline justify-between gap-4">
         <span
           className={cn(
-            "text-small",
+            "text-meta",
             featured ? "text-on-feature-muted" : "text-muted",
           )}
         >
@@ -42,7 +42,7 @@ export function ProgressLine({
         </span>
         <span
           className={cn(
-            "font-meta text-meta tabular",
+            "text-meta tabular",
             featured ? "text-on-feature" : "text-foreground",
           )}
         >

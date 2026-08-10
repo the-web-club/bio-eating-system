@@ -36,10 +36,10 @@ export function AdminShell({
         <aside className="sticky top-0 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline lg:flex">
           <div className="px-5 pb-6 pt-8">
             <BrandSignature href="/admin" />
-            <p className="mt-6 border-t border-hairline pt-4 text-micro text-faint u-caps">
+            <p className="mt-6 border-t border-hairline pt-4 text-label text-faint u-caps">
               Staff
             </p>
-            <p className="mt-1 truncate text-small text-muted">{staffEmail}</p>
+            <p className="mt-1 truncate text-meta text-muted">{staffEmail}</p>
           </div>
 
           <nav aria-label="Staff" className="flex-1 px-2">
@@ -91,7 +91,7 @@ export function AdminShell({
         <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
           <header className="flex items-center justify-between gap-4 border-b border-hairline px-gutter py-3 lg:hidden">
             <BrandSignature href="/admin" size="compact" />
-            <p className="truncate text-small text-muted">{staffEmail}</p>
+            <p className="truncate text-meta text-muted">{staffEmail}</p>
           </header>
           <nav
             aria-label="Staff"
@@ -105,7 +105,7 @@ export function AdminShell({
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "shrink-0 rounded-control px-3 py-2 text-small",
+                    "shrink-0 rounded-control px-3 py-2 text-meta",
                     active
                       ? "bg-surface-selected font-medium text-foreground"
                       : "text-muted",
@@ -117,7 +117,7 @@ export function AdminShell({
             })}
             <Link
               href="/portal"
-              className="shrink-0 rounded-control px-3 py-2 text-small text-muted"
+              className="shrink-0 rounded-control px-3 py-2 text-meta text-muted"
             >
               Portal
             </Link>

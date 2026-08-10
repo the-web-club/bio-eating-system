@@ -15,8 +15,8 @@ export default async function MagicLinkSentPage({ searchParams }: SentPageProps)
       <div className="flex flex-col gap-section">
         <div>
           <BrandSignature />
-          <h1 className="mt-section text-editorial text-foreground">Check your email</h1>
-          <p className="mt-2 text-lead text-muted">
+          <h1 className="mt-section text-display-serif text-foreground">Check your email</h1>
+          <p className="mt-2 text-body-lg text-muted">
             {email
               ? `We sent a sign-in link to ${email}. Open it on this device to continue.`
               : "We sent a sign-in link. Open it on this device to continue."}

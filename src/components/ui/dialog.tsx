@@ -43,14 +43,14 @@ export function Dialog({
         <DialogPrimitive.Content
           className={cn(
             "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2",
-            "rounded-dialog bg-surface px-6 py-6 shadow-modal sm:px-7 sm:py-7",
+            "rounded-sheet bg-surface px-6 py-6 shadow-modal sm:px-7 sm:py-7",
             "focus:outline-none",
             "data-[state=open]:animate-[dialog-in_var(--duration-disclosure)_var(--ease-emphasized)]",
             "data-[state=closed]:animate-[dialog-out_var(--duration-exit)_var(--ease-exit)]",
           )}
         >
           <div className={cn(showCornerClose && "pr-8")}>
-            <DialogPrimitive.Title className="text-section text-foreground">
+            <DialogPrimitive.Title className="text-body-lg font-semibold text-foreground">
               {title}
             </DialogPrimitive.Title>
             {description ? (

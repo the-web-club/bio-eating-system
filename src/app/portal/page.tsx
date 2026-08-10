@@ -5,6 +5,7 @@ import { PortalErrorState } from "@/components/portal/error-state";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
 import { TodayViewContent } from "@/components/portal/views/today-view-content";
 import { ActionLink } from "@/components/ui/action-link";
+import { ButtonLink } from "@/components/ui/button-link";
 import { SCREENING_REASON_COPY } from "@/lib/content/labels";
 import { assembleMeals, todaySummary } from "@/lib/portal/meal-assembly";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
@@ -76,9 +77,7 @@ export default function TodayPage() {
     <PortalPageWithSuspense
       copy={PORTAL_PAGE_COPY.today}
       actions={
-        <ActionLink href="/portal/plan" variant="secondary">
-          View full plan
-        </ActionLink>
+        <ButtonLink href="/portal/plan">View full plan</ButtonLink>
       }
     >
       <TodayPageContent />

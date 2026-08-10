@@ -1,6 +1,6 @@
 import { PageSections, PageShell } from "../layout";
 import { PageHeader } from "../page-header";
-import { ActionLink } from "@/components/ui/action-link";
+import { ButtonLink } from "@/components/ui/button-link";
 import {
   TodayViewContent,
   type TodayViewProps,
@@ -14,12 +14,9 @@ export function TodayView(props: TodayViewProps) {
     <PageShell>
       <PageSections>
         <PageHeader
-          title={`Good morning, ${props.firstName}`}
-          description="Today's plan"
+          title="Today"
           actions={
-            <ActionLink href={`${props.basePath}/plan`} variant="secondary">
-              View full plan
-            </ActionLink>
+            <ButtonLink href={`${props.basePath}/plan`}>View full plan</ButtonLink>
           }
         />
         <TodayViewContent {...props} />

@@ -24,7 +24,7 @@ export default function PreviewAccountPage() {
                 key={row.label}
                 className="grid grid-cols-[8rem_minmax(0,1fr)] items-baseline gap-4 py-3"
               >
-                <dt className="text-small text-muted">{row.label}</dt>
+                <dt className="text-meta text-muted">{row.label}</dt>
                 <dd className="min-w-0 break-words text-body text-foreground">
                   {row.value}
                 </dd>
@@ -43,7 +43,7 @@ export default function PreviewAccountPage() {
                 disabled
                 disabledReason="Inactive in the design preview"
               />
-              <p className="text-small text-faint">
+              <p className="text-meta text-faint">
                 Health data consent health-data-consent-v1, recorded 1 Jan 2026.
               </p>
             </div>

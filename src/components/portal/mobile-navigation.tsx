@@ -38,7 +38,7 @@ export function MobileTopBar({
           <Dialog.Trigger asChild>
             <button
               type="button"
-              className="inline-flex size-11 shrink-0 items-center justify-center rounded-control text-muted transition-colors [transition-duration:var(--duration-fast)] hover:bg-surface-inset hover:text-foreground"
+              className="inline-flex size-11 shrink-0 items-center justify-center rounded-control text-muted transition-colors duration-fast hover:bg-surface-inset hover:text-foreground"
               aria-label="Open menu"
             >
               <IconMenu className="size-5" />
@@ -56,7 +56,7 @@ export function MobileTopBar({
                 <Dialog.Close asChild>
                   <button
                     type="button"
-                    className="-mr-2 inline-flex size-11 shrink-0 items-center justify-center rounded-control text-muted transition-colors [transition-duration:var(--duration-fast)] hover:bg-surface-inset hover:text-foreground"
+                    className="-mr-2 inline-flex size-11 shrink-0 items-center justify-center rounded-control text-muted transition-colors duration-fast hover:bg-surface-inset hover:text-foreground"
                     aria-label="Close menu"
                   >
                     <IconClose className="size-5" />
@@ -85,7 +85,7 @@ export function MobileTopBar({
                             href={item.href}
                             aria-current={active ? "page" : undefined}
                             className={cn(
-                              "relative flex min-h-12 items-center gap-2.5 rounded-control py-2 pl-4 pr-3 text-lead",
+                              "relative flex min-h-12 items-center gap-2.5 rounded-control py-2 pl-4 pr-3 text-body-lg",
                               active
                                 ? "font-medium text-foreground"
                                 : "text-muted",
@@ -119,7 +119,7 @@ export function MobileTopBar({
           <BrandSignature href={root} size="compact" />
         </div>
         {weekLabel ? (
-          <span className="shrink-0 pr-2 font-meta text-meta tabular text-faint">
+          <span className="shrink-0 pr-2 text-meta tabular text-faint">
             {weekLabel}
           </span>
         ) : null}
@@ -157,7 +157,7 @@ export function MobileBottomNav({ basePath = "/portal" }: { basePath?: string })
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-micro",
+                  "relative flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-label",
                   active ? "font-medium text-foreground" : "text-muted",
                 )}
               >

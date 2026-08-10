@@ -26,8 +26,8 @@ export const ACTION_VARIANT: Record<ActionVariant, string> = {
 };
 
 export const ACTION_SIZE: Record<ActionSize, string> = {
-  default: "min-h-11 rounded-button px-4 text-body",
-  compact: "min-h-9 rounded-input px-3 text-small",
+  default: "min-h-11 rounded-control px-4 text-body",
+  compact: "min-h-9 rounded-control px-3 text-meta",
 };
 
 export function actionClassName({
@@ -41,8 +41,7 @@ export function actionClassName({
 } = {}) {
   return cn(
     "relative inline-grid place-items-center font-medium",
-    "transition-[color,background-color,border-color,transform]",
-    "[transition-duration:var(--duration-fast)] [transition-timing-function:var(--ease-state)]",
+    "transition-[color,background-color,border-color,transform] duration-fast ease-state",
     "hover:-translate-y-px active:translate-y-0",
     ACTION_SIZE[size],
     ACTION_VARIANT[variant],

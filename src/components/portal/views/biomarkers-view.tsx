@@ -37,7 +37,7 @@ export function BiomarkersViewContent({ markers }: { markers: BiomarkerEntry[] }
                       {marker.why ??
                         "A short purpose appears here once the entry is published."}
                       {marker.reference ? (
-                        <span className="mt-1 block font-meta text-meta tabular text-faint sm:hidden">
+                        <span className="mt-1 block text-meta tabular text-faint sm:hidden">
                           {marker.reference}
                         </span>
                       ) : null}
@@ -45,7 +45,7 @@ export function BiomarkersViewContent({ markers }: { markers: BiomarkerEntry[] }
                   }
                   value={
                     marker.reference ? (
-                      <span className="hidden font-meta text-meta tabular text-muted sm:inline">
+                      <span className="hidden text-meta tabular text-muted sm:inline">
                         {marker.reference}
                       </span>
                     ) : null

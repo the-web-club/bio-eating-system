@@ -230,7 +230,7 @@ export function MealReplacePopover({
   const transformOrigin = transformOriginFromPlacement(placement);
 
   const panelSurfaceClass =
-    "rounded-spa-control border border-ink-faint bg-paper-high p-5 shadow-popover";
+    "rounded-control border border-hairline bg-surface p-5 shadow-floating";
 
   const stepPanel = (
     <ReplaceStepPanel
@@ -367,7 +367,7 @@ function ReplaceStepPanel({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={opacityTween(reduceMotion, "heading")}
-          className="text-meal-chip font-medium text-ink-deep"
+          className="text-meta font-medium text-foreground"
         >
           {heading}
         </motion.h3>
@@ -523,7 +523,7 @@ function MobileReplaceSheet({
       <motion.button
         type="button"
         aria-label="Close"
-        className="fixed inset-0 z-40 bg-overlay-sheet"
+        className="fixed inset-0 z-40 bg-surface-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: backdropOpacity }}
         exit={{ opacity: 0 }}
@@ -550,7 +550,7 @@ function MobileReplaceSheet({
           opacity: opacityTween(reduceMotion, "sheetBackdrop"),
           y: sheetSurfaceTransition(reduceMotion),
         }}
-        className="fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-hidden rounded-t-dialog border border-ink-faint border-b-0 bg-paper-high shadow-popover"
+        className="fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-hidden rounded-t-sheet border border-hairline border-b-0 bg-surface shadow-floating"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <div
@@ -561,7 +561,7 @@ function MobileReplaceSheet({
             dragControls.start(event);
           }}
         >
-          <div className="h-1 w-9 rounded-pill bg-ink-faint" aria-hidden />
+          <div className="h-1 w-9 rounded-pill bg-faint" aria-hidden />
         </div>
         <div ref={scrollRef} className="overflow-y-auto px-5 pb-5 pt-3">
           {children}

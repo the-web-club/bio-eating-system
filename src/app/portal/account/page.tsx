@@ -51,11 +51,11 @@ async function ProfilePageContent() {
       <Section ruled title="Signed in as">
         <dl className="divide-y divide-hairline border-t border-hairline">
           <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-            <dt className="text-small text-muted">Name</dt>
+            <dt className="text-meta text-muted">Name</dt>
             <dd className="text-body text-foreground">{session.user.name}</dd>
           </div>
           <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-            <dt className="text-small text-muted">Email</dt>
+            <dt className="text-meta text-muted">Email</dt>
             <dd className="break-words text-body text-foreground">
               {session.user.email}
             </dd>

@@ -27,7 +27,7 @@ export default async function UnsubscribePage({
     <main className="mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col justify-center gap-section px-gutter py-group sm:px-8">
       <div>
         <BrandSignature />
-        <h1 className="mt-section text-editorial text-foreground">{copy.title}</h1>
+        <h1 className="mt-section text-display-serif text-foreground">{copy.title}</h1>
         <p className="mt-2 measure text-body text-muted">{copy.body}</p>
       </div>
       <p>

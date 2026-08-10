@@ -25,7 +25,7 @@ export function InlineNote({
 }) {
   const tokens = TONE[tone];
   return (
-    <p className={cn("flex gap-2 text-small", tokens.text, className)}>
+    <p className={cn("flex gap-2 text-meta", tokens.text, className)}>
       <span className={cn("mt-[0.2em] shrink-0", tokens.mark)} aria-hidden>
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
           <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" />

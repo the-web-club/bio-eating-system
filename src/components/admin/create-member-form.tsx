@@ -87,7 +87,7 @@ export function CreateMemberForm() {
       />
 
       <fieldset className="space-y-2 border-t border-hairline pt-tight">
-        <legend className="text-small text-soft">Starting access</legend>
+        <legend className="text-meta text-soft">Starting access</legend>
         <CheckboxGroup>
           <Checkbox
             id="create-core"

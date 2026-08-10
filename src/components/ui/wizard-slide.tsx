@@ -18,8 +18,8 @@ export function WizardSlideDemo() {
   const { variants, transition } = wizardSlideVariants(!!reduceMotion);
 
   return (
-    <div className="overflow-hidden rounded-panel border border-hairline bg-surface p-5 sm:p-6">
-      <p className="text-micro text-faint u-caps">
+    <div className="overflow-hidden rounded-surface border border-hairline bg-surface p-5 sm:p-6">
+      <p className="text-label text-faint u-caps">
         Step {index + 1} of {STEPS.length}
       </p>
       <div className="relative mt-4 min-h-28">
@@ -32,7 +32,7 @@ export function WizardSlideDemo() {
             exit="exit"
             transition={transition}
           >
-            <h3 className="text-display text-foreground">{step.title}</h3>
+            <h3 className="text-section-serif text-foreground">{step.title}</h3>
             <p className="mt-2 measure text-body text-muted">{step.body}</p>
           </motion.div>
         </AnimatePresence>

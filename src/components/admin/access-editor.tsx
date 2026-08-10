@@ -68,7 +68,7 @@ export function AccessEditor({
                 setAccess((prev) => ({ ...prev, [flag.key]: checked }))
               }
             />
-            <p className="mt-1 pl-8 text-small text-muted">{flag.hint}</p>
+            <p className="mt-1 pl-8 text-meta text-muted">{flag.hint}</p>
           </li>
         ))}
       </ul>

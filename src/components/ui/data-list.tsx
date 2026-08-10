@@ -22,7 +22,7 @@ export function DataList({
             >
               {row.label}
             </th>
-            <td className="py-3 text-right font-meta text-small tabular text-foreground">
+            <td className="py-3 text-right text-meta tabular text-foreground">
               {row.value}
             </td>
           </tr>

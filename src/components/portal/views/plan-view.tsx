@@ -53,7 +53,7 @@ export function PlanView({
           meta={
             <p className="text-meta text-muted">
               {programName} ·{" "}
-              <span className="font-meta tabular">{weekLabel}</span>
+              <span className="tabular text-meta">{weekLabel}</span>
             </p>
           }
         />
@@ -104,7 +104,7 @@ export function PlanView({
                   <MetricValue
                     value={energyKcal}
                     unit="kcal"
-                    className="text-lead"
+                    className="text-body-lg"
                   />
                 </p>
               </div>

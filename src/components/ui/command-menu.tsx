@@ -49,7 +49,7 @@ export function CommandMenu({
         <Dialog.Overlay className="fixed inset-0 z-[70] bg-surface-overlay data-[state=open]:animate-[overlay-in_var(--duration-disclosure)_var(--ease-emphasized)] data-[state=closed]:animate-[overlay-out_var(--duration-exit)_var(--ease-exit)]" />
         <Dialog.Content
           className={cn(
-            "fixed left-1/2 top-[20%] z-[70] w-full max-w-lg -translate-x-1/2 overflow-hidden rounded-dialog bg-surface shadow-modal",
+            "fixed left-1/2 top-[20%] z-[70] w-full max-w-lg -translate-x-1/2 overflow-hidden rounded-sheet bg-surface shadow-modal",
             "data-[state=open]:animate-[menu-in_var(--duration-disclosure)_var(--ease-out)]",
             "focus:outline-none",
           )}
@@ -66,7 +66,7 @@ export function CommandMenu({
           >
             <Command.Input
               placeholder="Search…"
-              className="h-12 w-full border-0 border-b border-hairline bg-transparent px-4 text-lead text-foreground outline-none placeholder:text-muted"
+              className="h-12 w-full border-0 border-b border-hairline bg-transparent px-4 text-body-lg text-foreground outline-none placeholder:text-muted"
             />
             <Command.List className="max-h-72 overflow-auto p-2">
               <Command.Empty className="px-3 py-6 text-center text-body text-muted">
@@ -76,7 +76,7 @@ export function CommandMenu({
                 <Command.Group
                   key={group}
                   heading={group}
-                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-micro [&_[cmdk-group-heading]]:text-faint [&_[cmdk-group-heading]]:u-caps"
+                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-label [&_[cmdk-group-heading]]:text-faint [&_[cmdk-group-heading]]:u-caps"
                 >
                   {groupItems.map((item) => (
                     <Command.Item
@@ -93,7 +93,7 @@ export function CommandMenu({
                     >
                       <span>{item.label}</span>
                       {item.shortcut ? (
-                        <span className="font-meta text-meta text-muted">
+                        <span className="text-meta text-muted">
                           {item.shortcut}
                         </span>
                       ) : null}
@@ -111,11 +111,11 @@ export function CommandMenu({
 
 export function CommandMenuHint({ children }: { children?: ReactNode }) {
   return (
-    <p className="text-small text-muted">
+    <p className="text-meta text-muted">
       {children ?? (
         <>
           Press{" "}
-          <kbd className="rounded-badge border border-hairline px-1.5 font-meta text-meta">
+          <kbd className="rounded-control border border-hairline px-1.5 text-meta">
             ⌘K
           </kbd>{" "}
           for the command menu

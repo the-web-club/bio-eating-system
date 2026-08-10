@@ -120,6 +120,25 @@ export const easeCss = {
   linear: "linear",
 } as const;
 
+/**
+ * Radix Select, DropdownMenu, Combobox, and Popover content panels.
+ * Keyframes menu-in and menu-out live in globals.css and use --travel-close.
+ * Class strings reference CSS duration and easing vars synced with durationCss
+ * and easeCss above.
+ */
+export const menuSurfaceAnimationClasses =
+  "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)] data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]" as const;
+
+export function menuSurfaceReducedMotionStyle(
+  reduceMotion: boolean | null | undefined,
+): { animationDuration: string; animationTimingFunction: string } | undefined {
+  if (!reduceMotion) return undefined;
+  return {
+    animationDuration: durationCss.exit,
+    animationTimingFunction: easeCss.linear,
+  };
+}
+
 export const travel = {
   hair: 2,
   close: 4,

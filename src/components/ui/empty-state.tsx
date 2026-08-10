@@ -22,9 +22,9 @@ export function EmptyState({
   return (
     <div className={cn("border-t border-hairline pt-tight", className)}>
       {eyebrow ? (
-        <span className="mb-2 block text-micro text-faint u-caps">{eyebrow}</span>
+        <span className="mb-2 block text-label text-faint u-caps">{eyebrow}</span>
       ) : null}
-      <p className="text-title text-foreground">{title}</p>
+      <p className="text-body-lg font-semibold text-foreground">{title}</p>
       {children ? (
         <div className="mt-1.5 measure text-body text-muted">{children}</div>
       ) : null}

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconCheck } from "@/components/portal/icons";
 import { SLOT_LABELS } from "@/lib/content/labels";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
@@ -38,7 +38,10 @@ export function MealRow({
   showDivider: boolean;
 }) {
   const reduceMotion = useReducedMotion() ?? false;
+  const mealContentRef = useRef<HTMLDivElement>(null);
+  const swapHoldActive = useRef(false);
   const [items, setItems] = useState<AssembledMealItem[]>(() => [...meal.items]);
+  const [swapHeightHold, setSwapHeightHold] = useState<number | undefined>();
   const [showCheck, setShowCheck] = useState(false);
   const [liveMessage, setLiveMessage] = useState("");
   const [failed, setFailed] = useState(false);
@@ -56,6 +59,21 @@ export function MealRow({
     return () => window.clearTimeout(hold);
   }, [showCheck]);
 
+  useEffect(() => {
+    if (!swapHoldActive.current || swapHeightHold === undefined) return;
+    const ms = reduceMotion ? 0 : 400;
+    const id = window.setTimeout(() => {
+      swapHoldActive.current = false;
+      setSwapHeightHold(undefined);
+    }, ms);
+    return () => window.clearTimeout(id);
+  }, [items, swapHeightHold, reduceMotion]);
+
+  function clearSwapHeightHold() {
+    swapHoldActive.current = false;
+    setSwapHeightHold(undefined);
+  }
+
   async function runMutation(selection: ReplaceSelection, previousItems: AssembledMealItem[]) {
     try {
       const res = await postReplaceMeal({
@@ -71,6 +89,7 @@ export function MealRow({
       setFailed(true);
       setPendingSelection(selection);
       setLiveMessage("Replacement did not save. Try again.");
+      clearSwapHeightHold();
     }
   }
 
@@ -88,7 +107,12 @@ export function MealRow({
         )
       : items;
     const mealText = formatMealIngredientNames(nextItems);
+    const heldHeight = mealContentRef.current?.offsetHeight;
 
+    if (heldHeight) {
+      swapHoldActive.current = true;
+      setSwapHeightHold(heldHeight);
+    }
     setItems(nextItems);
     setShowCheck(true);
     setFailed(false);
@@ -105,13 +129,11 @@ export function MealRow({
     <li
       className={cn(
         "py-5",
-        showDivider && "border-t border-ink-faint",
+        showDivider && "border-t border-hairline",
       )}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <p className="mb-1.5 text-meal-slot uppercase tracking-[0.14em] text-ink-soft">
-          {meal.label}
-        </p>
+        <p className="mb-1.5 text-label text-muted">{meal.label}</p>
         <MealReplacePopover
           slot={primarySlot}
           mealLabel={meal.label}
@@ -121,7 +143,13 @@ export function MealRow({
         />
       </div>
 
-      <div className="flex min-h-[calc(2*1.45*1.0625rem)] items-start gap-2">
+      <div
+        ref={mealContentRef}
+        className="flex items-start gap-2"
+        style={
+          swapHeightHold !== undefined ? { minHeight: swapHeightHold } : undefined
+        }
+      >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={formatMealIngredientNames(items)}
@@ -143,7 +171,7 @@ export function MealRow({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={opacityTween(reduceMotion, "confirmFade")}
-              className="mt-0.5 shrink-0 text-olive"
+              className="mt-0.5 shrink-0 text-confirm-icon"
               aria-hidden
             >
               <IconCheck className="size-4" />
@@ -153,7 +181,7 @@ export function MealRow({
       </div>
 
       {failed ? (
-        <p className="mt-2 text-meal-replace text-alert">
+        <p className="mt-2 text-control text-danger">
           Replacement did not save.{" "}
           <ReplaceGhostLink onClick={retryReplace}>Try again</ReplaceGhostLink>
         </p>

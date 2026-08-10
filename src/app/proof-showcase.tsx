@@ -59,7 +59,7 @@ export function ProofShowcase() {
       }
     >
       <section className="space-y-tight" aria-labelledby="playground-controls">
-        <h2 id="playground-controls" className="text-section text-foreground">
+        <h2 id="playground-controls" className="text-body-lg font-semibold text-foreground">
           Playground controls
         </h2>
         <InsetPanel>
@@ -88,7 +88,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="status-heading">
-        <h2 id="status-heading" className="text-section text-foreground">
+        <h2 id="status-heading" className="text-body-lg font-semibold text-foreground">
           Status roles
         </h2>
         <div className="space-y-3">
@@ -105,7 +105,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="buttons-heading">
-        <h2 id="buttons-heading" className="text-section text-foreground">
+        <h2 id="buttons-heading" className="text-body-lg font-semibold text-foreground">
           Buttons
         </h2>
         <div className="flex flex-wrap items-center gap-3">
@@ -133,7 +133,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="menus-heading">
-        <h2 id="menus-heading" className="text-section text-foreground">
+        <h2 id="menus-heading" className="text-body-lg font-semibold text-foreground">
           Select, menu, combobox
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -179,7 +179,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="input-heading">
-        <h2 id="input-heading" className="text-section text-foreground">
+        <h2 id="input-heading" className="text-body-lg font-semibold text-foreground">
           Fields
         </h2>
         <div className="max-w-md space-y-4">
@@ -276,18 +276,18 @@ export function ProofShowcase() {
       />
 
       <section className="mt-section space-y-tight" aria-labelledby="panels-heading">
-        <h2 id="panels-heading" className="text-section text-foreground">
+        <h2 id="panels-heading" className="text-body-lg font-semibold text-foreground">
           Panels
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Panel>
-            <h3 className="text-title text-foreground">Interactive object</h3>
+            <h3 className="text-body-lg font-semibold text-foreground">Interactive object</h3>
             <p className="mt-1.5 text-body text-muted">
               Elevation level 2: one hairline border, no shadow.
             </p>
           </Panel>
           <InsetPanel>
-            <h3 className="text-title text-foreground">Inset surface</h3>
+            <h3 className="text-body-lg font-semibold text-foreground">Inset surface</h3>
             <p className="mt-1.5 text-body text-muted">
               Elevation level 1: a surface shift only, for selected or actionable
               content.
@@ -297,7 +297,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="tabs-heading">
-        <h2 id="tabs-heading" className="text-section text-foreground">
+        <h2 id="tabs-heading" className="text-body-lg font-semibold text-foreground">
           Tabs
         </h2>
         <Tabs
@@ -310,7 +310,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="list-heading">
-        <h2 id="list-heading" className="text-section text-foreground">
+        <h2 id="list-heading" className="text-body-lg font-semibold text-foreground">
           Data list
         </h2>
         <DataList
@@ -324,7 +324,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="badge-heading">
-        <h2 id="badge-heading" className="text-section text-foreground">
+        <h2 id="badge-heading" className="text-body-lg font-semibold text-foreground">
           Badges
         </h2>
         <p className="measure text-body text-muted">
@@ -337,7 +337,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="empty-heading">
-        <h2 id="empty-heading" className="text-section text-foreground">
+        <h2 id="empty-heading" className="text-body-lg font-semibold text-foreground">
           Empty state
         </h2>
         <EmptyState eyebrow="Empty" title="Nothing here yet">
@@ -346,7 +346,7 @@ export function ProofShowcase() {
       </section>
 
       <section className="mt-section space-y-tight" aria-labelledby="wizard-heading">
-        <h2 id="wizard-heading" className="text-section text-foreground">
+        <h2 id="wizard-heading" className="text-body-lg font-semibold text-foreground">
           Wizard slide
         </h2>
         <WizardSlideDemo />

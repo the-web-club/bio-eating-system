@@ -10,10 +10,11 @@ export const ReplaceChip = forwardRef<
       ref={ref}
       type="button"
       className={cn(
-        "rounded-spa-control border border-ink-faint bg-transparent px-4 py-2.5 text-meal-chip text-ink-deep",
-        "transition-colors [transition-duration:var(--duration-fast)] [transition-timing-function:var(--ease-standard)]",
-        "hover:bg-paper-shade hover:border-ink-hairline",
-        selected && "border-ink bg-ink text-paper-high hover:bg-ink hover:border-ink",
+        "rounded-control border border-hairline bg-transparent px-4 py-2.5 text-meta text-foreground",
+        "transition-colors duration-fast ease-standard",
+        "hover:bg-surface-inset hover:border-hairline-strong",
+        selected &&
+          "border-foreground bg-foreground text-surface hover:border-foreground hover:bg-foreground",
         className,
       )}
       {...props}
@@ -30,7 +31,7 @@ export function ReplaceChipSkeleton() {
       {widths.map((width) => (
         <div
           key={width}
-          className="h-[2.375rem] animate-skeleton rounded-spa-control bg-paper-shade"
+          className="h-[2.375rem] animate-skeleton rounded-control bg-surface-inset"
           style={{ width }}
         />
       ))}

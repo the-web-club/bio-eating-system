@@ -42,7 +42,7 @@ export function Combobox({
           <button
             type="button"
             className={cn(
-              "inline-flex h-11 w-full items-center justify-between rounded-input border border-hairline-strong bg-surface px-3 text-body",
+              "inline-flex h-11 w-full items-center justify-between rounded-control border border-hairline-strong bg-surface px-3 text-body",
               "cursor-[var(--cursor-control)] text-left",
               selected ? "text-foreground" : "text-muted",
             )}
@@ -58,7 +58,7 @@ export function Combobox({
             align="start"
             sideOffset={4}
             className={cn(
-              "z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-panel bg-surface shadow-floating",
+              "z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-surface bg-surface shadow-floating",
               "origin-[var(--radix-popover-content-transform-origin)]",
               "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)]",
               "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",
@@ -70,7 +70,7 @@ export function Combobox({
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={placeholder}
-                className="h-9 w-full rounded-input border-0 bg-surface-inset px-3 text-body text-foreground outline-none focus-visible:outline-none"
+                className="h-9 w-full rounded-control border-0 bg-surface-inset px-3 text-body text-foreground outline-none focus-visible:outline-none"
               />
             </div>
             <ScrollArea className="max-h-56">

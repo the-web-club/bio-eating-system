@@ -28,7 +28,7 @@ function RailLink({
       aria-current={active ? "page" : undefined}
       className={cn(
         "relative flex min-h-11 items-center gap-2.5 rounded-control py-2 pl-4 pr-3 text-body",
-        "transition-colors [transition-duration:var(--duration-fast)]",
+        "transition-colors duration-fast",
         active
           ? "font-medium text-foreground"
           : "text-muted hover:bg-surface-inset hover:text-foreground",

@@ -1,6 +1,7 @@
 import { MealListWithReplace } from "../meal-list-with-replace";
 import { Eyebrow } from "../layout";
 import { ActionLink } from "@/components/ui/action-link";
+import { GhostLink } from "@/components/ui/ghost-link";
 import { Status } from "@/components/ui/status";
 import type { AssembledMeal, TodaySummary } from "@/lib/portal/meal-assembly";
 
@@ -30,7 +31,7 @@ export function TodayViewContent({
 }: TodayViewProps) {
   return (
     <>
-      <p className="text-lead text-foreground">Good morning, {firstName}</p>
+      <p className="text-body-lg text-foreground">Good morning, {firstName}</p>
 
       {showRecalibration ? (
         <Status role="neutral">
@@ -50,23 +51,18 @@ export function TodayViewContent({
         </Status>
       ) : null}
 
-      <MealListWithReplace title="Today" meals={meals} />
+      <MealListWithReplace meals={meals} />
 
       <div className="border-t border-hairline pt-4">
-        <Eyebrow>Today</Eyebrow>
+        <Eyebrow>Summary</Eyebrow>
         <p className="mt-2 text-body text-foreground">
           {summary.mealCount} meals · {summary.optionalCount} optional ·{" "}
           {summary.groceryTasks} grocery task · {summary.decisions} decisions
         </p>
         {weeklyAvailable ? (
-          <ActionLink
-            href={`${basePath}/weekly`}
-            variant="quiet"
-            size="compact"
-            className="mt-2.5"
-          >
+          <GhostLink href={`${basePath}/weekly`} className="mt-2.5">
             Open shopping list
-          </ActionLink>
+          </GhostLink>
         ) : null}
       </div>
 

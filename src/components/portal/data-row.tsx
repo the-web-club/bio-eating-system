@@ -52,8 +52,8 @@ export function DataRow({
       )}
     >
       <div className="min-w-0">
-        <p className="text-lead text-foreground">{name}</p>
-        {note ? <p className="mt-0.5 text-small text-muted">{note}</p> : null}
+        <p className="text-body-lg text-foreground">{name}</p>
+        {note ? <p className="mt-0.5 text-meta text-muted">{note}</p> : null}
       </div>
       {value != null ? (
         <MetricValue value={value} unit={unit} className="justify-self-end" />

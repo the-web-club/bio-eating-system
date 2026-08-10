@@ -44,7 +44,7 @@ export default async function AdminActivityPage() {
                 >
                   <div className="min-w-0">
                     <p className="text-body text-foreground">{event.action}</p>
-                    <p className="text-small text-muted">
+                    <p className="text-meta text-muted">
                       {event.userId && event.user ? (
                         <Link
                           href={`/admin/people/${event.userId}`}

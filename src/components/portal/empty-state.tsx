@@ -45,8 +45,8 @@ export function PortalEmptyState({
           <Eyebrow>{label}</Eyebrow>
         </div>
       ) : null}
-      <h2 className="text-display text-foreground">{title}</h2>
-      <div className="mt-2 measure-narrow text-lead text-muted">{children}</div>
+      <h2 className="text-body-lg font-semibold text-foreground">{title}</h2>
+      <div className="mt-2 measure-narrow text-body-lg text-muted">{children}</div>
       {action ? (
         <div className="mt-group flex flex-wrap items-center gap-3">{action}</div>
       ) : null}

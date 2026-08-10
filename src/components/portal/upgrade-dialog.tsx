@@ -50,7 +50,7 @@ export function UpgradeDialog({
           </li>
         ))}
       </ul>
-      <p className="mt-tight text-small text-muted">
+      <p className="mt-tight text-meta text-muted">
         Upgrades are completed on the website. Access appears here after purchase
         confirmation.
       </p>

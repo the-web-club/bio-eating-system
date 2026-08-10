@@ -52,7 +52,7 @@ async function PlanPageContent() {
   return (
     <>
       <p className="text-meta text-muted">
-        <span className="font-meta tabular">{week}</span>
+        <span className="tabular text-meta">{week}</span>
       </p>
       {data.entitlements.weeklyRotation ? (
         <div className="flex flex-wrap gap-3">
@@ -74,7 +74,6 @@ async function PlanPageContent() {
       />
 
       <MealListWithReplace
-        title="This week"
         meals={meals}
         meta={
           <MealListMeta goal={goalLabel} focus="simple high-protein meals" />
