@@ -223,15 +223,7 @@
   --status-danger-line: rgb(217 59 46 / 0.28);
   --status-danger-wash: rgb(217 59 46 / 0.05);
 
-  /* Elevation. Level 2 objects take one of border or shadow, never both. */
-  --shadow-object:
-    0 1px 2px rgb(27 26 24 / 0.04),
-    0 1px 1px rgb(27 26 24 / 0.03);
-  --shadow-floating: 0 18px 48px -24px rgb(36 28 61 / 0.4);
-  --shadow-modal:
-    0 2px 4px rgb(27 26 24 / 0.05),
-    0 12px 32px rgb(27 26 24 / 0.11),
-    0 32px 64px rgb(27 26 24 / 0.08);
+  /* Shadow tokens live in styles/surfaces.css (revalued, tint on editorial ink). */
 
   /* Auth screen - photograph dimmed by a dark overlay; vignette keeps the form centre focal. */
   --auth-overlay: rgb(36 28 61 / 0.48);
@@ -316,11 +308,7 @@
   --status-danger-line: rgb(255 107 97 / 0.3);
   --status-danger-wash: rgb(255 107 97 / 0.06);
 
-  --shadow-object: 0 1px 2px rgb(0 0 0 / 0.4);
-  --shadow-floating: 0 18px 48px -24px rgb(0 0 0 / 0.55);
-  --shadow-modal:
-    0 1px 0 rgb(244 242 238 / 0.05),
-    0 16px 44px rgb(0 0 0 / 0.6);
+  /* Shadow tokens: dark overrides in styles/surfaces.css */
 
   --auth-overlay: rgb(0 0 0 / 0.58);
   --auth-overlay-vignette: rgb(0 0 0 / 0.36);
@@ -405,6 +393,7 @@
   --radius-pill: var(--radius-pill);
 
   --shadow-object: var(--shadow-object);
+  --shadow-object-hover: var(--shadow-object-hover);
   --shadow-floating: var(--shadow-floating);
   --shadow-modal: var(--shadow-modal);
 
@@ -479,6 +468,8 @@
 
   --animate-skeleton: skeleton 1.5s var(--ease-in-out) infinite;
 }
+
+@import "./styles/surfaces.css";
 
 /* ---------- Base ---------------------------------------------------------- */
 

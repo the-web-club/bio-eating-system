@@ -85,7 +85,7 @@ export function DisclosureRow({
               animate={variants.expanded}
               exit={variants.collapsed}
               transition={disclosureTransition(reduceMotion)}
-              className="overflow-hidden"
+              className="overflow-clip [overflow-clip-margin:3px]"
             >
               <div className="measure space-y-s4 pb-s4 text-body text-soft">
                 {children}

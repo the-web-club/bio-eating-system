@@ -26,6 +26,7 @@ export { Popover } from "./popover";
 export { RadioGroup } from "./radio-group";
 export { ScrollArea } from "./scroll-area";
 export { Select } from "./select";
+export { Surface, type SurfaceLevel } from "./surface";
 export { Status } from "./status";
 export { Tabs } from "./tabs";
 export { ToastProvider, useToast } from "./toast";

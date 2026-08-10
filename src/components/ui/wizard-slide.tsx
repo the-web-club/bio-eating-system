@@ -18,11 +18,11 @@ export function WizardSlideDemo() {
   const { variants, transition } = wizardSlideVariants(!!reduceMotion);
 
   return (
-    <div className="overflow-hidden rounded-surface border border-hairline bg-surface p-s4 sm:p-s5">
+    <div className="rounded-surface border border-hairline bg-surface p-s4 sm:p-s5">
       <p className="text-label text-faint u-caps">
         Step {index + 1} of {STEPS.length}
       </p>
-      <div className="relative mt-s4 min-h-28">
+      <div className="relative mt-s4 min-h-28 overflow-clip [overflow-clip-margin:3px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={step.id}

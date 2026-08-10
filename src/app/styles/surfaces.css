@@ -1,0 +1,243 @@
+/* =========================================================================
+   surfaces.css  v2
+   Elevation layer for the "well with Katarina" portal.
+
+   Defines no surface colours and no focus-ring. Reuses tokens from
+   globals.css and revalues the three shadow tokens plus one hover step.
+
+   Import in globals.css after @theme:
+     @import "./styles/surfaces.css";
+   ========================================================================= */
+
+/* =========================================================================
+   1. Shadow tokens, revalued
+      Replaces values previously on globals.css. Names stay identical so
+      existing shadow-object / shadow-floating / shadow-modal calls improve
+      without component changes. New token: --shadow-object-hover.
+
+      Tint is --editorial-ink-950 (#2a2248), not black.
+   ========================================================================= */
+
+:root {
+  --shadow-tint: 42 34 72;
+
+  /* Level 1, resting card. Barely visible by design. */
+  --shadow-object:
+    0 1px 1px       rgb(var(--shadow-tint) / 0.03),
+    0 2px 6px -1px  rgb(var(--shadow-tint) / 0.04),
+    0 8px 24px -8px rgb(var(--shadow-tint) / 0.05);
+
+  /* Level 2, hover and active row */
+  --shadow-object-hover:
+    0 1px 2px         rgb(var(--shadow-tint) / 0.04),
+    0 4px 12px -2px   rgb(var(--shadow-tint) / 0.06),
+    0 16px 40px -12px rgb(var(--shadow-tint) / 0.08);
+
+  /* Level 3, floating panel. Was single-layer, now three layers. */
+  --shadow-floating:
+    0 2px 4px         rgb(var(--shadow-tint) / 0.05),
+    0 12px 28px -6px  rgb(var(--shadow-tint) / 0.10),
+    0 32px 64px -24px rgb(var(--shadow-tint) / 0.14);
+
+  /* Level 4, modal and sheet */
+  --shadow-modal:
+    0 4px 8px          rgb(var(--shadow-tint) / 0.06),
+    0 24px 48px -12px  rgb(var(--shadow-tint) / 0.14),
+    0 64px 120px -40px rgb(var(--shadow-tint) / 0.20);
+
+  /* Top edge highlight. Paper thickness, not a grey box. */
+  --edge-light:      inset 0 1px 0 rgb(255 255 255 / 0.70);
+  --edge-light-soft: inset 0 1px 0 rgb(255 255 255 / 0.45);
+
+  --ease-surface: cubic-bezier(0.20, 0, 0, 1);
+  --dur-surface:  240ms;
+}
+
+/* In dark mode shadows carry little hierarchy; tone and hairlines do. */
+.dark {
+  --shadow-tint: 0 0 0;
+
+  --shadow-object:
+    0 1px 1px      rgb(0 0 0 / 0.20),
+    0 2px 8px -2px rgb(0 0 0 / 0.24);
+
+  --shadow-object-hover:
+    0 1px 2px       rgb(0 0 0 / 0.26),
+    0 6px 16px -4px rgb(0 0 0 / 0.32);
+
+  --shadow-floating:
+    0 2px 4px        rgb(0 0 0 / 0.30),
+    0 14px 32px -8px rgb(0 0 0 / 0.44);
+
+  --shadow-modal:
+    0 4px 8px         rgb(0 0 0 / 0.34),
+    0 28px 56px -12px rgb(0 0 0 / 0.52);
+
+  --edge-light:      inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --edge-light-soft: inset 0 1px 0 rgb(255 255 255 / 0.04);
+}
+
+/* =========================================================================
+   2. Surface classes
+      Background colours come from bg-surface, bg-surface-inset and
+      bg-surface-canvas. These classes handle elevation, edge light and motion.
+   ========================================================================= */
+
+.surface {
+  border-radius: var(--radius-surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--edge-light), var(--shadow-object);
+  transition:
+    box-shadow var(--dur-surface) var(--ease-surface),
+    transform  var(--dur-surface) var(--ease-surface),
+    background-color var(--dur-surface) var(--ease-surface);
+}
+
+.surface--flat {
+  box-shadow: var(--edge-light-soft);
+}
+
+.surface--sunken {
+  box-shadow: none;
+}
+
+.surface--interactive:hover {
+  box-shadow: var(--edge-light), var(--shadow-object-hover);
+  transform: translateY(-1px);
+}
+
+.surface--interactive:active {
+  box-shadow: var(--edge-light-soft), var(--shadow-object);
+  transform: translateY(0);
+}
+
+/* Focus stays on the global :focus-visible outline from globals.css. */
+.surface--interactive:focus-visible {
+  outline-offset: 3px;
+}
+
+.surface-panel {
+  border-radius: var(--radius-surface);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--edge-light), var(--shadow-floating);
+}
+
+.surface-modal {
+  border-radius: var(--radius-sheet);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--edge-light), var(--shadow-modal);
+}
+
+.surface-modal-sheet {
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  border: 1px solid var(--hairline);
+  border-bottom: none;
+  box-shadow: var(--edge-light), var(--shadow-modal);
+}
+
+/* =========================================================================
+   3. Scroll-revealed edges
+      Sidebar, sticky header and summary rail stay flat at scroll top.
+      Set data-scrolled via IntersectionObserver or scroll listener.
+   ========================================================================= */
+
+.surface-rail {
+  box-shadow: none;
+  transition: box-shadow var(--dur-surface) var(--ease-surface);
+}
+
+.surface-rail[data-scrolled="true"] {
+  box-shadow: 1px 0 0 var(--hairline), 8px 0 24px -12px rgb(var(--shadow-tint) / 0.10);
+}
+
+/* Summary column beside main content: shadow falls left onto the reading pane. */
+.surface-rail--leading[data-scrolled="true"] {
+  box-shadow: -1px 0 0 var(--hairline), -8px 0 24px -12px rgb(var(--shadow-tint) / 0.10);
+}
+
+.surface-header {
+  box-shadow: none;
+  transition: box-shadow var(--dur-surface) var(--ease-surface);
+}
+
+.surface-header[data-scrolled="true"] {
+  box-shadow: 0 1px 0 var(--hairline), 0 8px 24px -16px rgb(var(--shadow-tint) / 0.14);
+}
+
+/* =========================================================================
+   4. Today screen meal surfaces
+      Only this list pattern moves from hairlines to cards.
+   ========================================================================= */
+
+.meal-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meal-card {
+  position: relative;
+  padding: 22px 26px 24px;
+}
+
+.meal-card::before {
+  content: "";
+  position: absolute;
+  inset: 10px auto 10px 0;
+  width: 2px;
+  border-radius: 2px;
+  background-color: rgb(var(--shadow-tint) / 0.18);
+  opacity: 0;
+  transition: opacity var(--dur-surface) var(--ease-surface);
+}
+
+.meal-card:hover::before,
+.meal-card:focus-within::before {
+  opacity: 1;
+}
+
+.meal-card--optional {
+  background-color: transparent;
+  border-style: dashed;
+  border-color: var(--hairline-strong);
+  box-shadow: none;
+}
+
+.meal-card--optional:hover {
+  box-shadow: var(--edge-light-soft), var(--shadow-object);
+}
+
+.meal-card--done,
+.meal-card--done:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+/* =========================================================================
+   5. Quality floor
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .surface--interactive:hover,
+  .surface--interactive:active {
+    transform: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .surface,
+  .surface-panel,
+  .surface-modal {
+    border-color: var(--hairline-strong);
+  }
+}
+
+@media print {
+  .surface,
+  .surface-panel,
+  .surface-modal {
+    box-shadow: none;
+    border: 1px solid #999;
+    background: #fff;
+  }
+}
