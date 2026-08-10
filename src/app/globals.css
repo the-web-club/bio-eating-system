@@ -88,24 +88,28 @@
 
   /* Motion — synced with src/lib/motion.ts */
   --duration-instant: 80ms;
-  --duration-press: 110ms;
-  --duration-fast: 140ms;
+  --duration-press: 120ms;
+  --duration-fast: 120ms;
   --duration-exit: 100ms;
-  --duration-selection: 170ms;
+  --duration-selection: 180ms;
   --duration-disclosure: 200ms;
-  --duration-moderate: 240ms;
-  --duration-slow: 360ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-moderate: 180ms;
+  --duration-slow: 260ms;
+  --motion-fast: var(--duration-fast);
+  --motion-normal: var(--duration-selection);
+  --motion-slow: var(--duration-slow);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: var(--ease-standard);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
-  --ease-state: cubic-bezier(0.2, 0, 0, 1);
+  --ease-state: var(--ease-standard);
   --ease-linear: linear;
   --travel-hair: 2px;
   --travel-close: 4px;
   --travel-near: 8px;
   --travel-far: 80px;
-  --stagger: 24ms;
   --loading-threshold: 300ms;
 
   /* Type stacks. --font-inter is set by next/font on <html>.
@@ -503,22 +507,20 @@
 @keyframes menu-in {
   from {
     opacity: 0;
-    transform: scale(0.97) translateY(calc(var(--travel-close) * -1));
+    transform: translateY(var(--travel-close));
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
 }
 
 @keyframes menu-out {
   from {
     opacity: 1;
-    transform: scale(1);
   }
   to {
     opacity: 0;
-    transform: scale(0.985);
   }
 }
 
@@ -545,22 +547,22 @@
 @keyframes dialog-in {
   from {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + var(--travel-near))) scale(0.98);
+    transform: translate(-50%, calc(-50% + var(--travel-close)));
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
   }
 }
 
 @keyframes dialog-out {
   from {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
   }
   to {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + var(--travel-hair))) scale(0.99);
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -606,6 +608,14 @@
 
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+
+  .ui-transition {
+    transition:
+      opacity var(--motion-fast) var(--ease-standard),
+      transform var(--motion-fast) var(--ease-standard),
+      background-color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard);
   }
 
   /* The wordmark is drawn as an alpha mask rather than an <img>, so its colour

@@ -21,20 +21,23 @@ describe("motion tokens CSS sync", () => {
   });
 
   it("matches easing curves from motion.ts", () => {
-    expect(css).toContain(`--ease-out: ${easeCss.out}`);
+    expect(css).toContain(`--ease-standard: ${easeCss.standard}`);
+    expect(css).toContain(`--ease-emphasized: ${easeCss.emphasized}`);
+    expect(css).toContain(`--ease-out: var(--ease-standard)`);
     expect(css).toContain(`--ease-in: ${easeCss.in}`);
     expect(css).toContain(`--ease-in-out: ${easeCss.inOut}`);
     expect(css).toContain(`--ease-exit: ${easeCss.exit}`);
-    expect(css).toContain(`--ease-state: ${easeCss.state}`);
+    expect(css).toContain(`--ease-state: var(--ease-standard)`);
     expect(css).toContain(`--ease-linear: ${easeCss.linear}`);
   });
 
   it("keeps the brief's timing bands", () => {
-    expect(durationCss.press).toBe("110ms");
-    expect(durationCss.fast).toBe("140ms");
-    expect(durationCss.selection).toBe("170ms");
+    expect(durationCss.press).toBe("120ms");
+    expect(durationCss.fast).toBe("120ms");
+    expect(durationCss.selection).toBe("180ms");
     expect(durationCss.disclosure).toBe("200ms");
-    expect(durationCss.moderate).toBe("240ms");
+    expect(durationCss.moderate).toBe("180ms");
+    expect(durationCss.slow).toBe("260ms");
   });
 
   it("matches travel distances from motion.ts", () => {

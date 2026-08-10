@@ -26,8 +26,7 @@ export function ActionLink({
     <Link
       className={cn(
         actionClassName({ variant, size }),
-        "cursor-[var(--cursor-link)] active:scale-[0.985]",
-        "[transition-property:color,background-color,border-color,transform]",
+        "cursor-[var(--cursor-link)]",
         className,
       )}
       {...rest}

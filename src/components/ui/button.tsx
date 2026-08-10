@@ -1,9 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { pressAnimation, pressTransition } from "@/lib/motion";
 import {
   actionClassName,
   type ActionSize,
@@ -38,18 +36,15 @@ export function Button({
   title,
   ...rest
 }: ButtonProps) {
-  const reduceMotion = useReducedMotion() ?? false;
   const isDisabled = disabled || loading;
   const filled = variant === "primary" || variant === "confirm" || variant === "danger";
 
   return (
-    <motion.button
+    <button
       type={type}
       disabled={isDisabled}
       aria-busy={loading || undefined}
       title={isDisabled && disabledReason ? disabledReason : title}
-      whileTap={pressAnimation(reduceMotion, isDisabled)}
-      transition={pressTransition(reduceMotion)}
       className={cn(
         actionClassName({ variant, size }),
         "cursor-[var(--cursor-control)] disabled:pointer-events-none",
@@ -82,6 +77,6 @@ export function Button({
           <span className="sr-only">{loadingLabel}</span>
         </span>
       ) : null}
-    </motion.button>
+    </button>
   );
 }

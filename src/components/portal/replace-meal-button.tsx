@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { REPLACE_REASON_LABELS } from "@/lib/content/labels";
 import { replaceReasonSchema, type ReplaceReason } from "@/lib/intake/schema";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
 import { SLOT_LABELS } from "@/lib/content/labels";
+import { cn } from "@/lib/cn";
 
 type Reason = ReplaceReason;
 
@@ -13,18 +14,29 @@ const REPLACE_REASONS = replaceReasonSchema.options;
 
 type ReplaceOption = { slot: FoodSlot; label: string; tier: string };
 
+export type ReplaceStep = "idle" | "reason" | "pick" | "done";
+
 export function ReplaceMealButton({
   slot,
   mealLabel,
+  onStepChange,
+  className,
 }: {
   slot: FoodSlot;
   mealLabel: string;
+  onStepChange?: (step: ReplaceStep) => void;
+  className?: string;
 }) {
-  const [step, setStep] = useState<"idle" | "reason" | "pick" | "done">("idle");
+  const [step, setStep] = useState<ReplaceStep>("idle");
   const [reason, setReason] = useState<Reason | null>(null);
   const [options, setOptions] = useState<ReplaceOption[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+
+  function goTo(next: ReplaceStep) {
+    setStep(next);
+    onStepChange?.(next);
+  }
 
   async function pickReason(r: Reason) {
     setReason(r);
@@ -33,7 +45,7 @@ export function ReplaceMealButton({
       const res = await fetch(`/api/portal/adapt/replace?slot=${slot}`);
       const data = (await res.json()) as { options?: ReplaceOption[] };
       setOptions(data.options ?? []);
-      setStep("pick");
+      goTo("pick");
     } finally {
       setLoading(false);
     }
@@ -50,7 +62,7 @@ export function ReplaceMealButton({
       });
       if (res.ok) {
         setMessage("Plan updated");
-        setStep("done");
+        goTo("done");
       }
     } finally {
       setLoading(false);
@@ -59,14 +71,14 @@ export function ReplaceMealButton({
 
   if (step === "idle") {
     return (
-      <Button variant="quiet" size="compact" onClick={() => setStep("reason")}>
+      <Button variant="quiet" size="compact" className={className} onClick={() => goTo("reason")}>
         Replace
       </Button>
     );
   }
 
   return (
-    <div className="mt-2 space-y-2">
+    <ReplacePanel className={className}>
       <p className="text-small text-muted">
         Replace {mealLabel} — why are you replacing it?
       </p>
@@ -110,11 +122,26 @@ export function ReplaceMealButton({
         </div>
       ) : null}
       {step === "done" && message ? (
-        <p className="text-small text-confirm">{message}</p>
+        <p className="text-small text-confirm animate-[fade-in_var(--duration-disclosure)_var(--ease-state)]">
+          {message}
+        </p>
       ) : null}
-      <Button variant="quiet" size="compact" onClick={() => setStep("idle")}>
+      <Button variant="quiet" size="compact" onClick={() => goTo("idle")}>
         Cancel
       </Button>
+    </ReplacePanel>
+  );
+}
+
+function ReplacePanel({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <div
+      className={cn(
+        "mt-2 space-y-2 animate-[fade-in_var(--duration-disclosure)_var(--ease-state)]",
+        className,
+      )}
+    >
+      {children}
     </div>
   );
 }

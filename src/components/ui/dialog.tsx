@@ -30,7 +30,7 @@ export function Dialog({
         <DialogPrimitive.Overlay
           className={cn(
             "fixed inset-0 z-50 bg-surface-overlay",
-            "data-[state=open]:animate-[fade-in_var(--duration-disclosure)_var(--ease-out)]",
+            "data-[state=open]:animate-[fade-in_var(--duration-disclosure)_var(--ease-emphasized)]",
             "data-[state=closed]:animate-[fade-out_var(--duration-exit)_var(--ease-exit)]",
           )}
         />
@@ -39,7 +39,7 @@ export function Dialog({
             "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2",
             "rounded-dialog bg-surface p-6 shadow-modal sm:p-7",
             "focus:outline-none",
-            "data-[state=open]:animate-[dialog-in_var(--duration-disclosure)_var(--ease-out)]",
+            "data-[state=open]:animate-[dialog-in_var(--duration-disclosure)_var(--ease-emphasized)]",
             "data-[state=closed]:animate-[dialog-out_var(--duration-exit)_var(--ease-exit)]",
           )}
         >

@@ -41,7 +41,9 @@ export function actionClassName({
 } = {}) {
   return cn(
     "relative inline-grid place-items-center font-medium",
-    "transition-colors [transition-duration:var(--duration-fast)]",
+    "transition-[color,background-color,border-color,transform]",
+    "[transition-duration:var(--duration-fast)] [transition-timing-function:var(--ease-state)]",
+    "hover:-translate-y-px active:translate-y-0",
     ACTION_SIZE[size],
     ACTION_VARIANT[variant],
     className,

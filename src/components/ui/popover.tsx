@@ -23,7 +23,7 @@ export function Popover({
           className={cn(
             "z-50 w-72 rounded-panel bg-surface p-4 shadow-floating outline-none",
             "origin-[var(--radix-popover-content-transform-origin)]",
-            "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-out)]",
+            "data-[state=open]:animate-[menu-in_var(--duration-fast)_var(--ease-standard)]",
             "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",
           )}
         >

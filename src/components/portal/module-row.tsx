@@ -66,7 +66,7 @@ function Body({
         ) : null}
         {state !== "soon" ? (
           <IconArrowRight
-            className="size-4 shrink-0 text-faint transition-transform [transition-duration:var(--duration-fast)] [transition-timing-function:var(--ease-out)] group-hover:translate-x-0.5 group-hover:text-foreground"
+            className="size-4 shrink-0 text-faint transition-colors [transition-duration:var(--duration-fast)] group-hover:text-foreground"
             aria-hidden
           />
         ) : null}

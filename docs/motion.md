@@ -1,34 +1,48 @@
 # Motion system
 
-Engineering reference for interaction timing. Motion is immediate, precise, spatially coherent, interruptible and purposeful. It borrows Linear’s restraint, not its look.
+Engineering reference for interaction timing. Content is static by default. Motion confirms interaction, state change, hierarchy, loading, or feedback — it never decorates.
 
 Source of truth: `src/lib/motion.ts`. CSS custom properties in `src/app/globals.css` must match, and `src/lib/__tests__/motion-tokens.test.ts` fails the build if they drift.
+
+## Principles
+
+1. **Page load:** almost no animation. The interface is immediately visible.
+2. **Navigation:** subtle active-state transition on the rail only — no page-wide crossfade.
+3. **Cards and sections:** static. No floating, scaling, or continuous motion.
+4. **Buttons:** colour and an optional 1px hover lift. No scale on press.
+5. **Modals / popovers / menus:** opacity plus a 4px vertical settle. No scale.
+6. **Replace meal:** localized row dimming and panel fade within the affected row only.
+7. **Shopping list:** checkbox and row opacity transition when an item is checked.
+8. **Progress:** animates from the previous value when it actually changes.
+9. **Skeleton:** only while genuinely loading.
 
 ## Tokens
 
 | Token | Value | Use |
 | --- | --- | --- |
 | `--duration-instant` | 80ms | Colour-only hover on dense rows |
-| `--duration-press` | 110ms | Press feedback |
-| `--duration-fast` | 140ms | Hover, focus, menu, tooltip, popover, toast enter |
+| `--duration-press` | 120ms | Legacy press alias |
+| `--duration-fast` / `--motion-fast` | 120ms | Hover, focus, menus, tooltips |
 | `--duration-exit` | 100ms | Matching exits (~60–70% of enter) |
-| `--duration-selection` | 170ms | Active-navigation indicator, selected controls, tab underline |
-| `--duration-disclosure` | 200ms | Disclosure expand/collapse, dialog, sheet |
-| `--duration-moderate` | 240ms | Main content transition, progress, wizard step |
-| `--duration-slow` | 360ms | Ceiling. Longer is a bug |
-| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Entrances |
+| `--duration-selection` / `--motion-normal` | 180ms | Active navigation, checkbox, row state |
+| `--duration-disclosure` | 200ms | Disclosure, replace panel, toast |
+| `--duration-moderate` | 180ms | Wizard step, progress |
+| `--duration-slow` / `--motion-slow` | 260ms | Ceiling. Longer is a bug |
+| `--ease-standard` / `--ease-state` | `cubic-bezier(0.2, 0, 0, 1)` | Default UI easing |
+| `--ease-emphasized` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Dialog entrance only |
 | `--ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | Exits |
-| `--ease-state` | `cubic-bezier(0.2, 0, 0, 1)` | State changes: selection, press, chevron |
-| `--ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Legacy exits |
-| `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Reversible only |
-| `--ease-linear` | `linear` | Opacity crossfade, skeleton pulse |
-| `--travel-hair` | 2px | Press depth |
-| `--travel-close` | 4px | Menu / tooltip entry |
-| `--travel-near` | 8px | Popover, toast, dialog, main content settle |
-| `--travel-far` | 80px | Off-canvas sheet |
-| `--stagger` | 24ms | Cap at 8 items; beyond that fade the container |
+| `--travel-close` | 4px | Menu, tooltip, toast, dialog settle |
+| `--loading-threshold` | 300ms | Show loading state only after this delay |
 
-`pressScale` is `0.985`, shared by `Button` and interactive rows.
+Shared CSS transition for controls:
+
+```css
+transition:
+  opacity var(--motion-fast) var(--ease-standard),
+  transform var(--motion-fast) var(--ease-standard),
+  background-color var(--motion-fast) var(--ease-standard),
+  border-color var(--motion-fast) var(--ease-standard);
+```
 
 ## Required behaviours
 
@@ -36,43 +50,23 @@ Source of truth: `src/lib/motion.ts`. CSS custom properties in `src/app/globals.
 | --- | --- | --- |
 | Product rail, mobile tabs, lesson index | Shared active indicator that travels between items | `selectionTransition` + framer `layoutId` |
 | Biomarker rationale, daily-plan detail | Height and opacity expansion in place | `disclosureVariants` / `disclosureTransition` |
-| Main content on navigation | Crossfade plus 8px vertical settle | `pageContentVariants` |
-| Dialog, sheet | 200ms in, 100ms out | `dialogTransition`, CSS keyframes |
+| Main content on navigation | Static — no entrance animation | `PageTransition` passthrough |
+| Dialog, sheet, menu, popover | Opacity + 4px settle. Dialog uses emphasized easing | CSS keyframes |
 | Progress | Animates from the previous value, never from zero | `progressTransition` + `initial={false}` |
-| Buttons | `scale(0.985)` on press | `pressAnimation` / `pressTransition` |
-| Interactive rows | Colour change on hover, 2px directional icon travel | Tailwind `group-hover:translate-x-0.5` |
-| Loading | Skeleton dimensions match the resolved content, so nothing jumps | `PortalSkeleton` and friends |
+| Buttons and action links | Colour + optional 1px hover lift | `actionClassName` |
+| Replace meal | Row dims locally; panel fades in within the row | `MealListWithReplace` |
+| Shopping list check | Row opacity on checked state | `WeeklyShopList` |
+| Toast | Opacity + 4px settle. No spring, stack scale, or drag | `toastTransition` |
+| Loading | Skeleton dimensions match resolved content | `PortalSkeleton` |
 
-Springs (JS only, framer-motion):
-
-| Name | stiffness / damping / mass | Use |
-| --- | --- | --- |
-| `snappy` | 420 / 32 / 0.85 | Press, toggle, toast |
-| `smooth` | 260 / 28 / 1 | Layout, tab underline |
-| `gentle` | 180 / 26 / 1 | Large surfaces |
-
-No visible overshoot on utility controls.
+No springs on utility controls.
 
 ## Hard rules
 
-1. Animate only `transform` and `opacity`.
+1. Animate only `transform` and `opacity`, plus colour on interactive surfaces.
 2. Exits at ~60–70% of entrance duration.
 3. Every animation is interruptible — no queues on double-click.
-4. Never CSS keywords `ease` or `ease-in-out`.
-
-## Interaction state matrix
-
-Every interactive control implements all seven:
-
-| State | Behaviour |
-| --- | --- |
-| rest | Default |
-| hover | 140ms colour/surface only. No elevation change, no movement of the row itself |
-| press | `scale(0.985)`, 110ms, `--ease-state`, via `whileTap` |
-| focus | `:focus-visible` only. 2px accent ring + 2px offset, following the element's own radius. The ring must never redefine `border-radius` |
-| loading | Nothing under 300ms. Over 300ms keep width, swap content, `aria-busy` |
-| disabled | Fill drops rather than the label fading, so the text stays readable. Reason via `title` / `disabledReason` |
-| error | Mark + text (see `docs/status-colour.md`). Space reserved; no jump |
+4. Never CSS keywords `ease` or `ease-in-out` on product surfaces.
 
 ## Reduced motion
 
@@ -80,22 +74,10 @@ First-class, not a downgrade. `useReducedMotion` (framer) and `usePrefersReduced
 
 Under reduced motion: zero translation, zero scale, opacity only, durations clamped to ≤100ms (`duration.exit`).
 
-OS setting must be verified visually.
-
-## Focus restore (where focus lands)
-
-| Close case | Focus returns to |
-| --- | --- |
-| Dialog / confirm | Trigger that opened it (Radix) |
-| Select / dropdown / popover | Trigger |
-| Command menu (⌘K) | Previously focused element / opener |
-| Toast dismiss | No steal; leave focus where it was |
-| Delete from menu → confirm | Confirm dialog; Cancel/Delete restore to menu trigger chain |
-
-## Cursor decision
-
-`--cursor-control: default` on buttons and menu items; `--cursor-link: pointer` on links. Chosen to match Linear / native apps rather than web-default hand cursor on every control.
-
 ## What not to build
 
-Scroll reveals, parallax, blur-in text, animated gradients, page transition overlays, visible spring bounce on utility controls, long staggers, hover lift on list rows, motion on readable text, spinners under 300ms.
+Scroll reveals, parallax, page-wide entrance fades, staggered text reveals, animated headings, animated cards, floating effects, perpetual/ambient animation, visible spring bounce, hover lift on list rows, motion on readable text by default, spinners under 300ms.
+
+## Acceptance
+
+If a user opens any page and does nothing, the interface feels essentially still. Animation becomes noticeable primarily because the user interacted with something.
