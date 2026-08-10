@@ -27,7 +27,7 @@ function RailLink({
       href={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "relative flex min-h-11 items-center gap-2.5 rounded-control py-2 pl-4 pr-3 text-body",
+        "relative flex min-h-11 items-center gap-s2 rounded-control py-s2 pl-4 pr-s2 text-body",
         "transition-colors duration-fast",
         active
           ? "font-medium text-foreground"
@@ -74,10 +74,10 @@ export function PortalSidebar({
 
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline bg-surface-canvas lg:flex">
-      <div className="px-5 pb-6 pt-8">
+      <div className="px-s4 pb-s6 pt-s6">
         <BrandSignature href={root} />
         <ProgramIdentity
-          className="mt-6 border-t border-hairline pt-4"
+          className="mt-s6 border-t border-hairline pt-s4"
           programLabel={programLabel}
           weekLabel={weekLabel}
           rotationPosition={rotationPosition}
@@ -85,7 +85,7 @@ export function PortalSidebar({
         />
       </div>
 
-      <nav aria-label="Primary" className="flex-1 px-2">
+      <nav aria-label="Primary" className="flex-1 px-s1">
         <ul>
           {primary.map((item) => (
             <li key={item.href}>
@@ -100,7 +100,7 @@ export function PortalSidebar({
         </ul>
       </nav>
 
-      <div className="border-t border-hairline px-2 py-3">
+      <div className="border-t border-hairline px-s1 py-s2">
         <RailLink
           item={account}
           active={isNavItemActive(pathname, account.href, basePath)}

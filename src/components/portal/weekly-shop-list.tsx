@@ -57,7 +57,7 @@ export function WeeklyShopList({ items }: { items: ShopItem[] }) {
                     checked && "opacity-70",
                   )}
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="flex flex-wrap items-start justify-between gap-s4">
                     <Checkbox
                       id={`have-${item.id}`}
                       label={item.line}

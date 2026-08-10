@@ -11,10 +11,10 @@ export function ReviewGroup({
   onEdit: () => void;
 }) {
   return (
-    <section className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 border-b border-hairline py-3">
+    <section className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-s4 border-b border-hairline py-s4">
       <div className="min-w-0">
         <h3 className="text-body-lg font-semibold text-foreground">{title}</h3>
-        <div className="mt-0.5 space-y-0.5 text-body text-muted">{children}</div>
+        <div className="mt-s1 text-body text-muted">{children}</div>
       </div>
       <Button variant="quiet" size="compact" onClick={onEdit}>
         Edit

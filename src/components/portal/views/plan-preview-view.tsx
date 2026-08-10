@@ -52,15 +52,15 @@ export function PlanPreviewView({
 
         <Section title="Overview">
           <dl className="divide-y divide-hairline border-t border-hairline">
-            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s2">
               <dt className="text-meta text-muted">Goal</dt>
               <dd className="text-body text-foreground">{GOAL_LABELS[goal]}</dd>
             </div>
-            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s2">
               <dt className="text-meta text-muted">Current</dt>
               <dd className="text-body text-foreground">{profile.weightKg} kg</dd>
             </div>
-            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s2">
               <dt className="text-meta text-muted">Target approach</dt>
               <dd className="text-body text-foreground">{approach}</dd>
             </div>
@@ -68,12 +68,12 @@ export function PlanPreviewView({
         </Section>
 
         <Section ruled title="Your plan is built around">
-          <ul className="list-inside list-disc space-y-1 text-body text-foreground">
+          <ul className="list-inside list-disc space-y-s1 text-body text-foreground">
             {bullets.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <p className="mt-3 text-meta text-muted">
+          <p className="mt-s2 text-meta text-muted">
             Activity: {ACTIVITY_LABELS[profile.lifestyle.activityLevel]} · Cooking:{" "}
             {COOKING_ABILITY_LABELS[profile.practical.cookingAbility]}
           </p>
@@ -81,9 +81,9 @@ export function PlanPreviewView({
 
         <Section ruled title="Your first week">
           <p className="text-body text-muted">7 days with actual meals.</p>
-          <div className="mt-4 space-y-4">
+          <div className="mt-s4 space-y-s4">
             {weekTeaser.slice(0, 3).map((day) => (
-              <div key={day.day} className="border-t border-hairline pt-3">
+              <div key={day.day} className="border-t border-hairline pt-s2">
                 <Eyebrow>{day.day}</Eyebrow>
                 <DataRows>
                   {day.meals
@@ -104,7 +104,7 @@ export function PlanPreviewView({
           </div>
         </Section>
 
-        <div className="pt-2">
+        <div className="pt-s1">
           <ActionLink href={basePath} variant="feature">
             Go to today
           </ActionLink>

@@ -40,7 +40,7 @@ async function BiomarkersPageContent() {
 
   if (!data.entitlements.labReference) {
     return (
-      <div className="space-y-group">
+      <div className="space-y-s5">
         <PortalEmptyState
           tone="locked"
           title="Not on your account yet"

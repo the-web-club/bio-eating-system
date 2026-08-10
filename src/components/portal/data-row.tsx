@@ -2,17 +2,12 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { MetricValue } from "./metric-value";
 
-/**
- * Compact data list. Rows are separated by hairlines and aligned to a dedicated
- * value column. No enclosing card, no per-row surface.
- */
 export function DataRows({
   children,
   ruled = true,
   className,
 }: {
   children: ReactNode;
-  /** Hairline on the top edge, anchoring the list under its heading. */
   ruled?: boolean;
   className?: string;
 }) {
@@ -47,13 +42,13 @@ export function DataRow({
   return (
     <li
       className={cn(
-        "grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 gap-y-1 py-3",
+        "grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-s4 gap-y-s1 py-s4",
         className,
       )}
     >
       <div className="min-w-0">
         <p className="text-body-lg text-foreground">{name}</p>
-        {note ? <p className="mt-0.5 text-meta text-muted">{note}</p> : null}
+        {note ? <p className="mt-s1 text-meta text-muted">{note}</p> : null}
       </div>
       {value != null ? (
         <MetricValue value={value} unit={unit} className="justify-self-end" />

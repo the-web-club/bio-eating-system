@@ -12,7 +12,7 @@ export function PortionDetail({
   if (!why && !adjustment) return null;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-s4">
       {adjustment ? <p>{adjustment}</p> : null}
       {why ? <p>{why}</p> : null}
     </div>

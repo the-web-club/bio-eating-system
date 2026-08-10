@@ -31,7 +31,7 @@ export function ProgressLine({
 
   return (
     <div className={cn("space-y-s1", className)}>
-      <div className="flex items-baseline justify-between gap-4">
+      <div className="flex items-baseline justify-between gap-s4">
         <span
           className={cn(
             "text-meta",

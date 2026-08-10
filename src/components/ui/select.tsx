@@ -36,9 +36,9 @@ export function Select({
   const labelId = useId();
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col gap-s1">
       {label ? (
-        <span className="text-label text-muted" id={labelId}>
+        <span className="text-meta text-soft" id={labelId}>
           {label}
         </span>
       ) : null}
@@ -53,14 +53,14 @@ export function Select({
           aria-labelledby={label ? labelId : undefined}
           aria-invalid={error || undefined}
           className={cn(
-            "inline-flex h-11 w-full items-center justify-between gap-2 rounded-control border bg-surface px-3 text-body text-foreground",
+            "inline-flex h-11 w-full items-center justify-between gap-s2 border-0 border-b border-hairline-strong bg-transparent px-0 text-body text-foreground",
             "cursor-control transition-colors duration-instant",
-            "hover:bg-surface-inset data-[state=open]:bg-surface-inset",
+            "hover:border-accent data-[state=open]:border-accent",
             "data-[placeholder]:text-muted",
             error
               ? "border-status-danger-line"
-              : "border-hairline-strong focus-visible:border-accent",
-            "disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-inset disabled:text-disabled",
+              : "focus-visible:border-accent",
+            "disabled:cursor-not-allowed disabled:border-hairline disabled:text-disabled",
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />

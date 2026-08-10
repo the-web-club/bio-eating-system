@@ -58,7 +58,7 @@ export function ProgramsHub({
   }
 
   return (
-    <div className="space-y-group">
+    <div className="space-y-s6">
       {entitlements.corePlan ? (
         <ProgramPanel
           name="Core plan"

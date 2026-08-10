@@ -182,7 +182,7 @@ export function MealRow({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={opacityTween(reduceMotion, "confirmFade")}
-                className="mt-0.5 shrink-0 text-confirm-icon"
+                className="mt-s1 shrink-0 text-confirm-icon"
                 aria-hidden
               >
                 <IconCheck className="size-4" />

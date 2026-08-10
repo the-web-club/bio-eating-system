@@ -118,7 +118,7 @@ export function PlanView({
                       {notices.map((notice) => (
                         <p
                           key={notice}
-                          className={maintenanceOnly ? "mt-1" : undefined}
+                          className={maintenanceOnly ? "mt-s1" : undefined}
                         >
                           {notice}
                         </p>

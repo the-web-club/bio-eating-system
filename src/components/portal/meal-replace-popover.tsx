@@ -230,7 +230,7 @@ export function MealReplacePopover({
   const transformOrigin = transformOriginFromPlacement(placement);
 
   const panelSurfaceClass =
-    "rounded-control border border-hairline bg-surface p-5 shadow-floating";
+    "rounded-control border border-hairline bg-surface p-s4 shadow-floating";
 
   const stepPanel = (
     <ReplaceStepPanel
@@ -373,7 +373,7 @@ function ReplaceStepPanel({
         </motion.h3>
       </AnimatePresence>
 
-      <div className="mt-4">
+      <div className="mt-s4">
         <AnimatePresence mode="wait" initial={false}>
           {step === "reason" ? (
             <motion.div
@@ -404,7 +404,7 @@ function ReplaceStepPanel({
               ) : (
                 <div
                   className={cn(
-                    "flex flex-wrap gap-2",
+                    "flex flex-wrap gap-s1",
                     fetching && "pointer-events-none opacity-50",
                   )}
                 >
@@ -441,9 +441,9 @@ function ReplaceStepPanel({
                 },
                 hidden: { transition: { duration: 0 } },
               }}
-              className="space-y-3"
+              className="space-y-s2"
             >
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-s1">
                 {options.map((opt, index) => (
                   <motion.div
                     key={`${opt.tier}-${opt.slot}`}
@@ -460,7 +460,7 @@ function ReplaceStepPanel({
                 ))}
               </div>
               <ReplaceGhostLink onClick={() => onConfirm()}>Show another meal</ReplaceGhostLink>
-              <div className="flex flex-wrap gap-4 pt-1">
+              <div className="flex flex-wrap gap-s4 pt-s1">
                 <ReplaceGhostLink onClick={onBack}>Back</ReplaceGhostLink>
                 <ReplaceGhostLink onClick={onCancel}>Cancel</ReplaceGhostLink>
               </div>
@@ -470,7 +470,7 @@ function ReplaceStepPanel({
       </div>
 
       {step === "reason" ? (
-        <div className="mt-4">
+        <div className="mt-s4">
           <ReplaceGhostLink onClick={onCancel}>Cancel</ReplaceGhostLink>
         </div>
       ) : null}
@@ -554,7 +554,7 @@ function MobileReplaceSheet({
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <div
-          className="flex cursor-grab justify-center pt-3 active:cursor-grabbing"
+          className="flex cursor-grab justify-center pt-s2 active:cursor-grabbing"
           onPointerDown={(event) => {
             const scrollTop = scrollRef.current?.scrollTop ?? 0;
             if (scrollTop > 0) return;
@@ -563,7 +563,7 @@ function MobileReplaceSheet({
         >
           <div className="h-1 w-9 rounded-pill bg-faint" aria-hidden />
         </div>
-        <div ref={scrollRef} className="overflow-y-auto px-5 pb-5 pt-3">
+        <div ref={scrollRef} className="overflow-y-auto px-s4 pb-s5 pt-s2">
           {children}
         </div>
       </motion.div>

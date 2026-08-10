@@ -10,7 +10,7 @@ export const ReplaceChip = forwardRef<
       ref={ref}
       type="button"
       className={cn(
-        "rounded-control border border-hairline bg-transparent px-4 py-2.5 text-meta text-foreground",
+        "rounded-control border border-hairline bg-transparent px-s4 py-s2 text-meta text-foreground",
         "transition-colors duration-fast ease-standard",
         "hover:bg-surface-inset hover:border-hairline-strong",
         selected &&
@@ -27,7 +27,7 @@ export const ReplaceChip = forwardRef<
 export function ReplaceChipSkeleton() {
   const widths = [88, 104, 72] as const;
   return (
-    <div className="flex flex-wrap gap-2" aria-hidden>
+    <div className="flex flex-wrap gap-s1" aria-hidden>
       {widths.map((width) => (
         <div
           key={width}

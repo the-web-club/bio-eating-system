@@ -56,7 +56,7 @@ export function ProgressMetrics({
         </dd>
       </div>
       {!latest ? (
-        <p className="py-3 text-meta text-muted">
+        <p className="py-s4 text-meta text-muted">
           Complete a weekly check-in to populate these trends.
         </p>
       ) : null}

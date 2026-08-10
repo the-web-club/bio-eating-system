@@ -33,7 +33,7 @@ export function MobileTopBar({
 
   return (
     <header className="sticky top-0 z-40 border-b border-hairline bg-surface-canvas lg:hidden">
-      <div className="flex min-h-14 items-center gap-1 px-2">
+      <div className="flex min-h-14 items-center gap-s1 px-s1">
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger asChild>
             <button
@@ -47,7 +47,7 @@ export function MobileTopBar({
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 z-50 bg-surface-overlay data-[state=open]:animate-[overlay-in_var(--duration-disclosure)_var(--ease-emphasized)] data-[state=closed]:animate-[overlay-out_var(--duration-exit)_var(--ease-exit)]" />
             <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[min(19rem,86vw)] flex-col rounded-r-dialog border-r border-hairline bg-surface-canvas shadow-floating focus:outline-none data-[state=open]:animate-[sheet-in_var(--duration-disclosure)_var(--ease-emphasized)]">
-              <div className="flex items-start justify-between gap-3 px-5 pb-5 pt-6">
+              <div className="flex items-start justify-between gap-s2 px-s4 pb-s5 pt-s6">
                 <Dialog.Title asChild>
                   <div>
                     <BrandSignature />
@@ -67,13 +67,13 @@ export function MobileTopBar({
                 Move to another part of your program.
               </Dialog.Description>
               <ProgramIdentity
-                className="mx-5 border-t border-hairline pt-4"
+                className="mx-s4 border-t border-hairline pt-s4"
                 programLabel={programLabel}
                 weekLabel={weekLabel}
                 rotationPosition={rotationPosition}
                 authoredWeeks={authoredWeeks}
               />
-              <nav className="mt-5 flex-1 px-3" aria-label="Mobile primary">
+              <nav className="mt-s5 flex-1 px-s2" aria-label="Mobile primary">
                 <ul>
                   {[...primary, account].map((item) => {
                     const active = isNavItemActive(pathname, item.href, basePath);
@@ -85,7 +85,7 @@ export function MobileTopBar({
                             href={item.href}
                             aria-current={active ? "page" : undefined}
                             className={cn(
-                              "relative flex min-h-12 items-center gap-2.5 rounded-control py-2 pl-4 pr-3 text-body-lg",
+                              "relative flex min-h-12 items-center gap-s2 rounded-control py-s2 pl-4 pr-s2 text-body-lg",
                               active
                                 ? "font-medium text-foreground"
                                 : "text-muted",
@@ -157,7 +157,7 @@ export function MobileBottomNav({ basePath = "/portal" }: { basePath?: string })
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-label",
+                  "relative flex min-h-14 flex-col items-center justify-center gap-s1 px-s1 text-label",
                   active ? "font-medium text-foreground" : "text-muted",
                 )}
               >

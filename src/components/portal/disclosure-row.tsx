@@ -10,8 +10,6 @@ import { IconChevronDown } from "./icons";
  * A data row that reveals its rationale in place. The row is the control, the
  * detail expands directly beneath it, and the whole thing sits on hairlines
  * rather than inside a card.
- *
- * Rows without detail render as static rows: no chevron, no false affordance.
  */
 export function DisclosureRow({
   title,
@@ -22,13 +20,9 @@ export function DisclosureRow({
   className,
 }: {
   title: string;
-  /** Always-visible supporting line. */
   summary?: ReactNode;
-  /** Right-aligned structured value or reference context. */
   value?: ReactNode;
-  /** Expanded content. Omit to render a static row. */
   children?: ReactNode;
-  /** Accessible name for the control, e.g. "Ferritin rationale". */
   detailLabel?: string;
   className?: string;
 }) {
@@ -40,13 +34,18 @@ export function DisclosureRow({
   const heading = (
     <div className="min-w-0">
       <p className="text-body-lg font-semibold text-foreground">{title}</p>
-      {summary ? <div className="mt-1 text-body text-muted">{summary}</div> : null}
+      {summary ? <div className="mt-s1 text-body text-muted">{summary}</div> : null}
     </div>
   );
 
   if (!children) {
     return (
-      <li className={cn("grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 py-4", className)}>
+      <li
+        className={cn(
+          "grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-s4 py-s4",
+          className,
+        )}
+      >
         {heading}
         {value ? <div className="justify-self-end">{value}</div> : null}
       </li>
@@ -62,12 +61,12 @@ export function DisclosureRow({
         aria-label={detailLabel}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "group -mx-3 grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 rounded-control px-3 py-4 text-left",
+          "group -mx-3 grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-s4 rounded-control px-3 py-s4 text-left",
           "cursor-control transition-colors duration-fast hover:bg-surface-inset",
         )}
       >
         {heading}
-        <span className="flex items-baseline gap-3 justify-self-end">
+        <span className="flex items-baseline gap-s4 justify-self-end">
           {value}
           <IconChevronDown
             className={cn(
@@ -88,7 +87,7 @@ export function DisclosureRow({
               transition={disclosureTransition(reduceMotion)}
               className="overflow-hidden"
             >
-              <div className="measure space-y-2 pb-4 text-body text-soft">
+              <div className="measure space-y-s4 pb-s4 text-body text-soft">
                 {children}
               </div>
             </motion.div>

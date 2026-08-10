@@ -42,7 +42,7 @@ export function LessonNavigation({
                 aria-current={active ? "true" : undefined}
                 onClick={() => onSelect(lesson.id)}
                 className={cn(
-                  "relative flex min-h-11 w-full cursor-control items-start gap-3 py-2.5 pl-4 pr-1 text-left text-body",
+                  "relative flex min-h-11 w-full cursor-control items-start gap-s2 py-s2 pl-4 pr-1 text-left text-body",
                   "transition-colors duration-fast",
                   active ? "font-medium text-foreground" : "text-muted",
                   !active && !locked && "hover:text-foreground",
@@ -64,7 +64,7 @@ export function LessonNavigation({
                 <span className="min-w-0 flex-1">
                   <span className="block">{lesson.title}</span>
                   {locked || lesson.duration ? (
-                    <span className="mt-0.5 flex items-center gap-1.5 text-meta text-faint">
+                    <span className="mt-s1 flex items-center gap-s1 text-meta text-faint">
                       {locked ? (
                         <>
                           <IconLock className="size-3.5 shrink-0" aria-hidden />

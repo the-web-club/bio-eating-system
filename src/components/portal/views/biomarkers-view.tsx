@@ -37,7 +37,7 @@ export function BiomarkersViewContent({ markers }: { markers: BiomarkerEntry[] }
                       {marker.why ??
                         "A short purpose appears here once the entry is published."}
                       {marker.reference ? (
-                        <span className="mt-1 block text-meta tabular text-faint sm:hidden">
+                        <span className="mt-s1 block text-meta tabular text-faint sm:hidden">
                           {marker.reference}
                         </span>
                       ) : null}
@@ -57,23 +57,22 @@ export function BiomarkersViewContent({ markers }: { markers: BiomarkerEntry[] }
             </ul>
           </Section>
         ) : (
-          <PortalEmptyState tone="unpublished" title="No entries published yet">
-            Marker entries appear here after dietitian-reviewed content is added to
-            the catalogue. Nothing is generated in the meantime.
+          <PortalEmptyState tone="default" title="No entries published yet">
+            No biomarker entries are available on your account yet.
           </PortalEmptyState>
         )
       }
       aside={
-        <div className="space-y-group">
+        <div className="space-y-s5">
           <div>
             <Eyebrow>How to read this</Eyebrow>
-            <p className="mt-2.5 text-body text-soft">
+            <p className="mt-s2 text-body text-soft">
               Entries are reference-only. There is no target, no score and no pass
               or fail, the context is there to help you have a better conversation
               with your clinician.
             </p>
           </div>
-          <div className="border-t border-hairline pt-4">
+          <div className="border-t border-hairline pt-s4">
             <InlineNote>{BIOMARKER_DISCLAIMER}</InlineNote>
           </div>
         </div>

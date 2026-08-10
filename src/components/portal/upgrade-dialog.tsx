@@ -43,14 +43,14 @@ export function UpgradeDialog({
         </>
       }
     >
-      <ul className="space-y-2">
+      <ul className="space-y-s4">
         {includes.map((item) => (
           <li key={item} className="text-body text-foreground">
             {item}
           </li>
         ))}
       </ul>
-      <p className="mt-tight text-meta text-muted">
+      <p className="mt-s5 text-meta text-muted">
         Upgrades are completed on the website. Access appears here after purchase
         confirmation.
       </p>

@@ -22,7 +22,7 @@ export default function PreviewAccountPage() {
             {ROWS.map((row) => (
               <div
                 key={row.label}
-                className="grid grid-cols-[8rem_minmax(0,1fr)] items-baseline gap-4 py-3"
+                className="grid grid-cols-[8rem_minmax(0,1fr)] items-baseline gap-s4 py-s2"
               >
                 <dt className="text-meta text-muted">{row.label}</dt>
                 <dd className="min-w-0 break-words text-body text-foreground">
@@ -35,7 +35,7 @@ export default function PreviewAccountPage() {
 
         <Section ruled title="Privacy">
           <div className="space-y-group">
-            <div className="space-y-3">
+            <div className="space-y-s2">
               <Checkbox
                 id="preview-marketing"
                 label="Send me the weekly shopping list by email."
@@ -47,7 +47,7 @@ export default function PreviewAccountPage() {
                 Health data consent health-data-consent-v1, recorded 1 Jan 2026.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-s2">
               <Button
                 variant="secondary"
                 size="compact"

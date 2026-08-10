@@ -398,7 +398,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     />
                   ))}
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-s4 sm:grid-cols-2">
                   <MeasurementInput
                     label="Typical wake time"
                     name="wakeTime"
@@ -725,7 +725,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
               <div className="space-y-s5">
                 <Status role="neutral">
                   <p className="text-foreground">Important</p>
-                  <p className="mt-1">
+                  <p className="mt-s1">
                     These circumstances materially change whether this product is
                     appropriate. If you indicate something requiring professional
                     oversight, we will explain the limitation rather than adjust
@@ -759,7 +759,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     hint="Stored for a human reviewer. Never used to decide your foods automatically."
                   />
                 </fieldset>
-                <div className="border-t border-hairline pt-4">
+                <div className="border-t border-hairline pt-s4">
                   <ReviewGroup title="Basics" onEdit={() => setStepIndex(0)}>
                     <p>
                       {draft.displayName}, {draft.age} years, {draft.weightKg} kg ·{" "}
@@ -825,11 +825,11 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     This product cannot generate a plan for your current answers
                   </p>
                   {resultNotice?.map((line) => (
-                    <p key={line} className="mt-2">
+                    <p key={line} className="mt-s2">
                       {line}
                     </p>
                   ))}
-                  <p className="mt-3">
+                  <p className="mt-s4">
                     Please speak with a qualified clinician or dietitian for
                     personalised guidance.
                   </p>

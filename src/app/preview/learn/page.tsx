@@ -67,9 +67,9 @@ export default function PreviewLearnPage() {
           description="Short lessons on eating practices, to read alongside your plan."
         />
 
-        <div className="grid gap-group md:grid-cols-[16rem_minmax(0,1fr)] md:gap-10 xl:gap-12">
+        <div className="grid gap-group md:grid-cols-[16rem_minmax(0,1fr)] md:gap-s5 xl:gap-s6">
           <div className="min-w-0 md:order-first">
-            <Eyebrow className="mb-2.5">This course</Eyebrow>
+            <Eyebrow className="mb-s2">This course</Eyebrow>
             <LessonNavigation
               lessons={LESSONS}
               activeId={activeId}
@@ -82,20 +82,20 @@ export default function PreviewLearnPage() {
 
           <article className="min-w-0">
             <h2 className="text-section-serif text-foreground">{lesson.title}</h2>
-            <Prose className="mt-4">
+            <Prose className="mt-s4">
               {lesson.body.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </Prose>
 
-            <div className="mt-group border-l-2 border-accent pl-5">
+            <div className="mt-group border-l-2 border-accent pl-s4">
               <Eyebrow>This week’s practice</Eyebrow>
-              <p className="mt-1.5 measure text-body text-foreground">
+              <p className="mt-s2 measure text-body text-foreground">
                 {lesson.action}
               </p>
             </div>
 
-            <div className="mt-group flex flex-wrap gap-3 border-t border-hairline pt-group">
+            <div className="mt-group flex flex-wrap gap-s2 border-t border-hairline pt-group">
               <Button
                 variant="secondary"
                 size="compact"

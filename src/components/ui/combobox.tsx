@@ -35,15 +35,16 @@ export function Combobox({
   }, [options, query]);
 
   return (
-    <div className="flex w-full flex-col gap-2">
-      {label ? <span className="text-body text-foreground">{label}</span> : null}
+    <div className="flex w-full flex-col gap-s1">
+      {label ? <span className="text-meta text-soft">{label}</span> : null}
       <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
         <PopoverPrimitive.Trigger asChild>
           <button
             type="button"
             className={cn(
-              "inline-flex h-11 w-full items-center justify-between rounded-control border border-hairline-strong bg-surface px-3 text-body",
-              "cursor-[var(--cursor-control)] text-left",
+              "inline-flex h-11 w-full items-center justify-between border-0 border-b border-hairline-strong bg-transparent px-0 text-body",
+              "cursor-[var(--cursor-control)] text-left transition-colors duration-instant",
+              "hover:border-accent data-[state=open]:border-accent",
               selected ? "text-foreground" : "text-muted",
             )}
           >
@@ -64,13 +65,13 @@ export function Combobox({
               "data-[state=closed]:animate-[menu-out_var(--duration-exit)_var(--ease-exit)]",
             )}
           >
-            <div className="border-b border-hairline p-2">
+            <div className="border-b border-hairline p-s2">
               <input
                 autoFocus
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={placeholder}
-                className="h-9 w-full rounded-control border-0 bg-surface-inset px-3 text-body text-foreground outline-none focus-visible:outline-none"
+                className="h-9 w-full border-0 border-b border-hairline bg-transparent px-0 text-body text-foreground outline-none focus:border-accent focus:outline-none"
               />
             </div>
             <ScrollArea className="max-h-56">

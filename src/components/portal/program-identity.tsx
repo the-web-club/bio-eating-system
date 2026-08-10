@@ -35,12 +35,12 @@ export function ProgramIdentity({
         <p className="u-caps text-meta text-soft">{programLabel}</p>
       ) : null}
       {weekReading ? (
-        <p className="mt-0.5 text-meta tabular text-faint">
+        <p className="mt-s1 text-meta tabular text-faint">
           {weekReading}
         </p>
       ) : null}
       {hasRotation ? (
-        <div className="mt-3">
+        <div className="mt-s4">
           <ProgressLine
             value={rotationPosition}
             max={authoredWeeks}

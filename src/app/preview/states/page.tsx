@@ -50,21 +50,8 @@ export default function PreviewStatesPage() {
           title="Nothing published yet"
           description="An empty state uses a quiet eyebrow, a clear title, and one next action - never a dashed box."
         >
-          <PortalEmptyState
-            tone="unpublished"
-            title="No lessons published yet"
-            action={
-              <ActionLink
-                href={`${PREVIEW_BASE}/programs`}
-                variant="secondary"
-                size="compact"
-              >
-                View programs
-              </ActionLink>
-            }
-          >
-            When the first lessons are reviewed you will find the lesson list here,
-            with a reading view and previous and next controls.
+          <PortalEmptyState tone="default" title="No lessons published yet">
+            Lessons are not available on your account yet.
           </PortalEmptyState>
         </Section>
       </PageSections>
