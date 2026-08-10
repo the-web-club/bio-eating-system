@@ -24,7 +24,7 @@ export default async function MagicLinkSentPage({ searchParams }: SentPageProps)
       <div className="border-t border-hairline pt-tight">
         <p className="text-body text-muted">The link expires in 10 minutes.</p>
         <Link
-          href="/sign-in"
+          href="/"
           className="mt-2 inline-block cursor-[var(--cursor-link)] rounded-control text-body text-accent-text underline-offset-4 hover:underline"
         >
           Use a different email

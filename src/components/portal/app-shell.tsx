@@ -11,6 +11,8 @@ export function AppShell({
   title,
   weekLabel,
   programLabel,
+  rotationPosition,
+  authoredWeeks,
   children,
   basePath = "/portal",
   devBar,
@@ -19,6 +21,8 @@ export function AppShell({
   title: string;
   weekLabel?: string;
   programLabel?: string;
+  rotationPosition?: number;
+  authoredWeeks?: number;
   children: ReactNode;
   basePath?: string;
   /** Compact developer-only bar. Never used for customer-facing copy. */
@@ -31,12 +35,16 @@ export function AppShell({
         <PortalSidebar
           weekLabel={weekLabel}
           programLabel={programLabel}
+          rotationPosition={rotationPosition}
+          authoredWeeks={authoredWeeks}
           basePath={basePath}
         />
         <div className="flex min-h-dvh min-w-0 flex-1 flex-col pb-16 lg:pb-0">
           <MobileTopBar
             weekLabel={weekLabel}
             programLabel={programLabel}
+            rotationPosition={rotationPosition}
+            authoredWeeks={authoredWeeks}
             basePath={basePath}
           />
           <main aria-label={title} className="flex-1">

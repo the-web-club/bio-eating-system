@@ -5,6 +5,8 @@ import { nextCookies } from "better-auth/next-js";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { sendMagicLinkEmail } from "@/lib/mail";
+import { provisionAllowlistedUser } from "@/lib/provision-allowlisted-user";
+import { isSignupAllowlisted, normalizeEmail } from "@/lib/signup-allowlist";
 
 /**
  * Session length: 7 days.
@@ -66,11 +68,29 @@ export const auth = betterAuth({
   },
   plugins: [
     magicLink({
-      // Accounts are created by webhook or seed, never by open sign-up.
+      // Open sign-up stays off. Allowlisted addresses are provisioned below
+      // before the link is sent, so verify finds an existing user.
       disableSignUp: true,
       expiresIn: MAGIC_LINK_EXPIRES_IN_SECONDS,
       sendMagicLink: async ({ email, url }) => {
-        const result = await sendMagicLinkEmail({ to: email, url });
+        const normalized = normalizeEmail(email);
+        const existing = await db.user.findUnique({
+          where: { email: normalized },
+          select: { id: true },
+        });
+
+        if (!existing) {
+          if (!isSignupAllowlisted(normalized)) {
+            // Do not send a link that would fail at verify.
+            throw new Error("signup_not_allowed");
+          }
+          const provisioned = await provisionAllowlistedUser(normalized);
+          if (provisioned === "rejected") {
+            throw new Error("signup_not_allowed");
+          }
+        }
+
+        const result = await sendMagicLinkEmail({ to: normalized, url });
         if (!result.ok) {
           throw new Error(result.error ?? "magic link send failed");
         }

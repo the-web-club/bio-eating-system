@@ -26,7 +26,7 @@ const PAGES = [
   { name: "weekly", path: "/preview/weekly" },
   { name: "learn", path: "/preview/learn" },
   { name: "states", path: "/preview/states" },
-  { name: "sign-in", path: "/sign-in" },
+  { name: "sign-in", path: "/" },
 ];
 
 async function settle(page) {

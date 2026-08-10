@@ -1,6 +1,7 @@
 import { PageSections, PageShell, Section } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { PreviewShell } from "../preview-shell";
 
 const ROWS = [
@@ -15,7 +16,7 @@ export default function PreviewAccountPage() {
         <PageSections>
           <PageHeader
             title="Account"
-            description="Who you are signed in as, and how to sign out."
+            description="Your sign-in details, email preferences and data rights."
           />
 
           <Section title="Signed in as">
@@ -32,6 +33,41 @@ export default function PreviewAccountPage() {
                 </div>
               ))}
             </dl>
+          </Section>
+
+          <Section ruled title="Privacy">
+            <div className="space-y-group">
+              <div className="space-y-3">
+                <Checkbox
+                  id="preview-marketing"
+                  label="Send me the weekly shopping list by email."
+                  checked
+                  disabled
+                  disabledReason="Inactive in the design preview"
+                />
+                <p className="text-small text-faint">
+                  Health data consent health-data-consent-v1, recorded 1 Jan 2026.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  variant="secondary"
+                  size="compact"
+                  disabled
+                  disabledReason="Inactive in the design preview"
+                >
+                  Download my data
+                </Button>
+                <Button
+                  variant="danger"
+                  size="compact"
+                  disabled
+                  disabledReason="Inactive in the design preview"
+                >
+                  Delete account
+                </Button>
+              </div>
+            </div>
           </Section>
 
           <Section ruled title="Session">

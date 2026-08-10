@@ -34,14 +34,21 @@ export default async function ProgramsPage() {
   }
 
   const week = weekLabel(data.week);
+  const position = rotationPosition(data.week, data.authoredWeeks);
 
   return (
-    <AppShell title="Programs" weekLabel={week} programLabel="Core plan">
+    <AppShell
+      title="Programs"
+      weekLabel={week}
+      programLabel="Core plan"
+      rotationPosition={position}
+      authoredWeeks={data.authoredWeeks}
+    >
       <ProgramsView
         basePath="/portal"
         entitlements={data.entitlements}
         hasPlan={Boolean(data.plan)}
-        rotationPosition={rotationPosition(data.week, data.authoredWeeks)}
+        rotationPosition={position}
         authoredWeeks={data.authoredWeeks}
       />
     </AppShell>

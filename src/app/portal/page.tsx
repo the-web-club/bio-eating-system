@@ -15,6 +15,10 @@ import {
   rotationPosition,
   weekLabel,
 } from "@/lib/portal/format";
+import {
+  personalSubstitutionDetail,
+  personalSubstitutionNote,
+} from "@/lib/portal/portion-copy";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 
 const PROGRAM_NAME = "Core plan";
@@ -29,8 +33,9 @@ function toFocusItem(slot: PlanSlot) {
     name,
     amount,
     unit,
-    note:
-      slot.absorbedFrom.length > 0 ? "Personal substitution applied" : undefined,
+    note: personalSubstitutionNote(slot.absorbedFrom),
+    why: resolveContent(slot.guidanceKey),
+    adjustment: personalSubstitutionDetail(slot.absorbedFrom) ?? null,
   };
 }
 
@@ -85,9 +90,16 @@ export default async function TodayPage() {
 
   const plan = data.plan;
   const week = weekLabel(data.week);
+  const position = rotationPosition(data.week, data.authoredWeeks);
 
   return (
-    <AppShell title="Today" weekLabel={week} programLabel={PROGRAM_NAME}>
+    <AppShell
+      title="Today"
+      weekLabel={week}
+      programLabel={PROGRAM_NAME}
+      rotationPosition={position}
+      authoredWeeks={data.authoredWeeks}
+    >
       <TodayView
         basePath="/portal"
         firstName={data.user.name?.split(" ")[0] || "there"}
@@ -97,7 +109,7 @@ export default async function TodayPage() {
         focus={plan.slots.slice(0, FOCUS_COUNT).map(toFocusItem)}
         rest={plan.slots.slice(FOCUS_COUNT).map(toFocusItem)}
         energyKcal={plan.energyKcal}
-        rotationPosition={rotationPosition(data.week, data.authoredWeeks)}
+        rotationPosition={position}
         authoredWeeks={data.authoredWeeks}
         notices={plan.screeningReasons
           .map((code) => SCREENING_REASON_COPY[code])

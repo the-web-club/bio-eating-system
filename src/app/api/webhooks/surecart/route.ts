@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual, createHash } from "node:crypto";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
-import { sendTransactional } from "@/lib/mail";
+import { sendWelcomeEmail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -164,14 +164,9 @@ export async function POST(request: Request) {
   });
 
   if (isNewUser) {
-    const result = await sendTransactional({
+    const result = await sendWelcomeEmail({
       to: user.email,
-      subject: "Your account is ready",
-      html: `<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:520px;margin:0 auto;padding:32px">
-        <h1 style="font-size:20px;font-weight:600;margin:0 0 12px">Welcome, ${user.name}</h1>
-        <p style="font-size:15px;line-height:1.6;color:#3d3d3d;margin:0 0 24px">Your account is set up. Answer a few questions and we will put your plan together.</p>
-        <a href="${env.NEXT_PUBLIC_APP_URL}/portal/intake" style="display:inline-block;background:#3f6b4a;color:#ffffff;padding:14px 28px;border-radius:8px;font-size:15px;text-decoration:none">Start your intake</a>
-      </div>`,
+      name: user.name,
     });
     if (!result.ok) {
       // A failed welcome email must not fail the purchase.

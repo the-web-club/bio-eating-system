@@ -46,6 +46,8 @@ export async function POST(request: Request) {
   }
   const input = parsed.data;
 
+  const consentedAt = new Date();
+
   const profile = await db.intakeProfile.upsert({
     where: { userId: session.user.id },
     create: {
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
       swapRequests: input.swapRequests,
       screeningFlags: input.screeningFlags,
       notesForCoach: input.notesForCoach ?? null,
-      consentHealthDataAt: new Date(),
+      consentHealthDataAt: consentedAt,
       consentVersion: CONSENT_VERSION,
     },
     update: {
@@ -74,8 +76,18 @@ export async function POST(request: Request) {
       swapRequests: input.swapRequests,
       screeningFlags: input.screeningFlags,
       notesForCoach: input.notesForCoach ?? null,
+      // Consent re-confirmed on every successful submit of the intake payload.
+      consentHealthDataAt: consentedAt,
+      consentVersion: CONSENT_VERSION,
     },
     select: { id: true },
+  });
+
+  await db.user.update({
+    where: { id: session.user.id },
+    data: input.marketingOptIn
+      ? { marketingOptIn: true, unsubscribedAt: null }
+      : { marketingOptIn: false, unsubscribedAt: new Date() },
   });
 
   const engineInput = {

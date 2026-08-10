@@ -8,7 +8,7 @@ import { selectionTransition } from "@/lib/motion";
 import { BrandSignature } from "./brand-signature";
 import { getAccountNav, getPrimaryNav, isNavItemActive } from "./nav-config";
 import type { NavItem } from "./nav-config";
-import { ThemeControl } from "./theme-control";
+import { ProgramIdentity } from "./program-identity";
 
 function RailLink({
   item,
@@ -55,10 +55,14 @@ function RailLink({
 export function PortalSidebar({
   weekLabel,
   programLabel,
+  rotationPosition,
+  authoredWeeks,
   basePath = "/portal",
 }: {
   weekLabel?: string;
   programLabel?: string;
+  rotationPosition?: number;
+  authoredWeeks?: number;
   basePath?: string;
 }) {
   const pathname = usePathname();
@@ -72,18 +76,13 @@ export function PortalSidebar({
     <aside className="sticky top-0 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline lg:flex">
       <div className="px-5 pb-6 pt-8">
         <BrandSignature href={root} />
-        {programLabel || weekLabel ? (
-          <div className="mt-6 border-t border-hairline pt-4">
-            {programLabel ? (
-              <p className="text-small text-soft">{programLabel}</p>
-            ) : null}
-            {weekLabel ? (
-              <p className="mt-0.5 font-meta text-meta tabular text-faint">
-                {weekLabel}
-              </p>
-            ) : null}
-          </div>
-        ) : null}
+        <ProgramIdentity
+          className="mt-6 border-t border-hairline pt-4"
+          programLabel={programLabel}
+          weekLabel={weekLabel}
+          rotationPosition={rotationPosition}
+          authoredWeeks={authoredWeeks}
+        />
       </div>
 
       <nav aria-label="Primary" className="flex-1 px-2">
@@ -108,10 +107,6 @@ export function PortalSidebar({
           indicatorId={indicatorId}
           reduceMotion={reduceMotion}
         />
-        <div className="flex min-h-11 items-center justify-between gap-3 pl-4 pr-1">
-          <span className="text-small text-faint">Appearance</span>
-          <ThemeControl />
-        </div>
       </div>
     </aside>
   );

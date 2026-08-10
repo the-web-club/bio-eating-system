@@ -1,4 +1,8 @@
-import { DataRow, DataRows } from "../data-row";
+import { DisclosureRow } from "../disclosure-row";
+import {
+  hasPortionDetail,
+  PortionDetail,
+} from "../portion-detail";
 import { Eyebrow, PageSections, PageShell, Section, Split } from "../layout";
 import { MetricValue } from "../metric-value";
 import { PageHeader } from "../page-header";
@@ -9,9 +13,16 @@ import { Status } from "@/components/ui/status";
 export type TodayFocusItem = {
   id: string;
   name: string;
+  /** Always-visible supporting line (e.g. personal substitution). */
   note?: string;
+  /** Quiet secondary context (e.g. this week’s variety). */
+  context?: string;
   amount: string;
   unit: string;
+  /** Reviewed catalogue guidance. Null until authored. */
+  why: string | null;
+  /** Engine swap explanation. Null when no substitution applied. */
+  adjustment: string | null;
 };
 
 export type TodayVariety = {
@@ -46,19 +57,46 @@ function halves<T>(items: T[]): [T[], T[]] {
   return [items.slice(0, middle), items.slice(middle)];
 }
 
+function PortionSummary({
+  note,
+  context,
+}: {
+  note?: string;
+  context?: string;
+}) {
+  if (!note && !context) return null;
+  return (
+    <div className="space-y-0.5">
+      {note ? <p>{note}</p> : null}
+      {context ? <p className="text-small text-faint">{context}</p> : null}
+    </div>
+  );
+}
+
 function PortionList({ items }: { items: TodayFocusItem[] }) {
   return (
-    <DataRows>
-      {items.map((item) => (
-        <DataRow
-          key={item.id}
-          name={item.name}
-          note={item.note}
-          value={item.amount}
-          unit={item.unit}
-        />
-      ))}
-    </DataRows>
+    <ul className="divide-y divide-hairline border-t border-hairline">
+      {items.map((item) => {
+        const openable = hasPortionDetail(item.why, item.adjustment);
+        const summary =
+          item.note || item.context ? (
+            <PortionSummary note={item.note} context={item.context} />
+          ) : undefined;
+        return (
+          <DisclosureRow
+            key={item.id}
+            title={item.name}
+            detailLabel={`Why ${item.name} is in your plan`}
+            summary={summary}
+            value={<MetricValue value={item.amount} unit={item.unit} />}
+          >
+            {openable ? (
+              <PortionDetail why={item.why} adjustment={item.adjustment} />
+            ) : null}
+          </DisclosureRow>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -83,28 +121,31 @@ export function TodayView({
   basePath,
 }: TodayViewProps) {
   const [restLeft, restRight] = halves(rest);
+  const varietyLine = varieties.map((v) => v.name).join(" · ");
 
   return (
     <PageShell>
       <PageSections>
         <PageHeader
           title={`Welcome back, ${firstName}`}
-          description={`${portionCount} portions are set for today, built from your intake answers.`}
+          description={`${portionCount} food portions for today, set from your intake.`}
           meta={
             <p className="text-meta text-muted">
               {programName} · <span className="font-meta tabular">{weekLabel}</span>
             </p>
           }
           actions={
-            <ActionLink href={`${basePath}/plan`}>View today’s plan</ActionLink>
+            <ActionLink href={`${basePath}/plan`} variant="secondary">
+              View today’s plan
+            </ActionLink>
           }
         />
 
         <Split
           main={
             <Section
-              title="Today’s focus"
-              description="The portions to get right first. Quantities come from your own plan."
+              title="Your portions"
+              description="Open a portion to see personal adjustments and reviewed guidance."
             >
               <PortionList items={focus} />
               {maintenanceOnly || notices.length ? (
@@ -129,14 +170,24 @@ export function TodayView({
           aside={
             <div className="space-y-group">
               <div>
-                <Eyebrow>Week progress</Eyebrow>
-                <div className="mt-2.5">
+                <Eyebrow>Your week</Eyebrow>
+                <p className="mt-2 font-meta text-lead tabular text-foreground">
+                  {weekLabel}
+                </p>
+                <p className="mt-1 text-small text-muted">
+                  {rotationPosition} of {authoredWeeks} in your current rotation
+                </p>
+                <div className="mt-3">
                   <ProgressLine
                     value={rotationPosition}
                     max={authoredWeeks}
-                    label="Authored weeks in rotation"
+                    label="Rotation"
+                    reading={`${rotationPosition}/${authoredWeeks}`}
                   />
                 </div>
+                {varietyLine ? (
+                  <p className="mt-3 text-small text-soft">{varietyLine}</p>
+                ) : null}
               </div>
 
               <div>
@@ -159,7 +210,7 @@ export function TodayView({
                     </p>
                     <ActionLink
                       href={`${basePath}/weekly`}
-                      variant="secondary"
+                      variant="quiet"
                       size="compact"
                       className="mt-2.5"
                     >
@@ -173,7 +224,7 @@ export function TodayView({
                     </p>
                     <ActionLink
                       href={`${basePath}/programs`}
-                      variant="secondary"
+                      variant="quiet"
                       size="compact"
                       className="mt-2.5"
                     >
@@ -214,7 +265,7 @@ export function TodayView({
           <Section
             ruled
             title="This week’s varieties"
-            description={`Authored week ${rotationPosition} of ${authoredWeeks}, rotating so the same foods do not repeat every week.`}
+            description={`Week ${String(rotationPosition).padStart(2, "0")} of ${String(authoredWeeks).padStart(2, "0")} — varieties rotate so the same foods do not repeat every week.`}
             action={
               weeklyAvailable ? (
                 <ActionLink

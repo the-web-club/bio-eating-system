@@ -8,7 +8,7 @@ export default async function IntakePage() {
     headers: await headers(),
   });
   if (!session?.user) {
-    redirect("/sign-in?next=/portal/intake");
+    redirect("/?next=/portal/intake");
   }
 
   return <IntakeWizard initialName={session.user.name} />;

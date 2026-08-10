@@ -5,7 +5,7 @@ import { InlineNote } from "@/components/portal/inline-note";
 import { PageSections, PageShell } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
 import { ActionLink } from "@/components/ui/action-link";
-import { weekLabel } from "@/lib/portal/format";
+import { rotationPosition, weekLabel } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 
 export default async function LearnPage() {
@@ -35,9 +35,16 @@ export default async function LearnPage() {
   }
 
   const week = weekLabel(data.week);
+  const position = rotationPosition(data.week, data.authoredWeeks);
 
   return (
-    <AppShell title="Learn" weekLabel={week} programLabel="Core plan">
+    <AppShell
+      title="Learn"
+      weekLabel={week}
+      programLabel="Core plan"
+      rotationPosition={position}
+      authoredWeeks={data.authoredWeeks}
+    >
       <PageShell width="reading">
         <PageSections>
           <PageHeader

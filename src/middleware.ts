@@ -4,7 +4,7 @@ import { getSessionCookie } from "better-auth/cookies";
 export function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
   if (!sessionCookie) {
-    const signIn = new URL("/sign-in", request.url);
+    const signIn = new URL("/", request.url);
     signIn.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(signIn);
   }
@@ -12,5 +12,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/portal/:path*"],
+  matcher: ["/portal/:path*", "/admin/:path*"],
 };

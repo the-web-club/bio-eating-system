@@ -10,7 +10,7 @@ import {
 } from "@/components/portal/views/biomarkers-view";
 import { ActionLink } from "@/components/ui/action-link";
 import { resolveContent } from "@/lib/content/resolve";
-import { weekLabel } from "@/lib/portal/format";
+import { rotationPosition, weekLabel } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { BiomarkerUpgradeClient } from "./biomarker-upgrade-client";
 
@@ -52,10 +52,17 @@ export default async function BiomarkersPage() {
   }
 
   const week = weekLabel(data.week);
+  const position = rotationPosition(data.week, data.authoredWeeks);
 
   if (!data.entitlements.labReference) {
     return (
-      <AppShell title="Biomarkers" weekLabel={week} programLabel="Core plan">
+      <AppShell
+        title="Biomarkers"
+        weekLabel={week}
+        programLabel="Core plan"
+        rotationPosition={position}
+        authoredWeeks={data.authoredWeeks}
+      >
         <PageShell width="reading">
           <PageSections>
             <PageHeader
@@ -89,7 +96,13 @@ export default async function BiomarkersPage() {
   );
 
   return (
-    <AppShell title="Biomarkers" weekLabel={week} programLabel="Core plan">
+    <AppShell
+      title="Biomarkers"
+      weekLabel={week}
+      programLabel="Core plan"
+      rotationPosition={position}
+      authoredWeeks={data.authoredWeeks}
+    >
       <BiomarkersView markers={markers} />
     </AppShell>
   );

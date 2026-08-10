@@ -5,9 +5,9 @@ import { PageSections, PageShell } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
 import { WeeklyView } from "@/components/portal/views/weekly-view";
 import { ActionLink } from "@/components/ui/action-link";
-import { SLOT_LABELS, humanizeKey } from "@/lib/content/labels";
+import { SLOT_LABELS } from "@/lib/content/labels";
+import { formatVarietyKey, rotationPosition, weekLabel } from "@/lib/portal/format";
 import { resolveContent } from "@/lib/content/resolve";
-import { rotationPosition, weekLabel } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { WeeklyUpgradeClient } from "./weekly-upgrade-client";
 
@@ -42,7 +42,13 @@ export default async function WeeklyPlanPage() {
 
   if (!data.entitlements.weeklyRotation) {
     return (
-      <AppShell title="Weekly plan" weekLabel={week} programLabel="Core plan">
+      <AppShell
+        title="Weekly plan"
+        weekLabel={week}
+        programLabel="Core plan"
+        rotationPosition={position}
+        authoredWeeks={data.authoredWeeks}
+      >
         <PageShell width="reading">
           <PageSections>
             <PageHeader
@@ -64,7 +70,13 @@ export default async function WeeklyPlanPage() {
 
   if (!data.plan) {
     return (
-      <AppShell title="Weekly plan" weekLabel={week} programLabel="Core plan">
+      <AppShell
+        title="Weekly plan"
+        weekLabel={week}
+        programLabel="Core plan"
+        rotationPosition={position}
+        authoredWeeks={data.authoredWeeks}
+      >
         <PageShell width="reading">
           <PageSections>
             <PageHeader
@@ -85,7 +97,13 @@ export default async function WeeklyPlanPage() {
   }
 
   return (
-    <AppShell title="Weekly plan" weekLabel={week} programLabel="Core plan">
+    <AppShell
+      title="Weekly plan"
+      weekLabel={week}
+      programLabel="Core plan"
+      rotationPosition={position}
+      authoredWeeks={data.authoredWeeks}
+    >
       <WeeklyView
         basePath="/portal"
         position={position}
@@ -96,8 +114,8 @@ export default async function WeeklyPlanPage() {
             id: item.slot,
             name:
               resolveContent(item.labelKey) ??
-              SLOT_LABELS[item.slot] ??
-              humanizeKey(item.labelKey),
+              formatVarietyKey(item.labelKey) ??
+              SLOT_LABELS[item.slot],
             note: SLOT_LABELS[item.slot],
             value: hasGrams ? String(item.grams) : item.householdDisplay || "—",
             unit: hasGrams ? "g" : undefined,

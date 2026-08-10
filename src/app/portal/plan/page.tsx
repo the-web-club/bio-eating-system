@@ -9,7 +9,11 @@ import { ActionLink } from "@/components/ui/action-link";
 import { SCREENING_REASON_COPY } from "@/lib/content/labels";
 import { resolveContent } from "@/lib/content/resolve";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
-import { formatPlanSlot, weekLabel } from "@/lib/portal/format";
+import { formatPlanSlot, rotationPosition, weekLabel } from "@/lib/portal/format";
+import {
+  personalSubstitutionDetail,
+  personalSubstitutionNote,
+} from "@/lib/portal/portion-copy";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 
 const GROUPS: { title: string; slots: FoodSlot[] }[] = [
@@ -86,6 +90,7 @@ export default async function DailyPlanPage() {
 
   const plan = data.plan;
   const week = weekLabel(data.week);
+  const position = rotationPosition(data.week, data.authoredWeeks);
   const bySlot = new Map(plan.slots.map((slot) => [slot.slot, slot]));
   const groups = GROUPS.map((group) => ({
     title: group.title,
@@ -99,22 +104,27 @@ export default async function DailyPlanPage() {
           name,
           amount,
           unit,
-          note:
-            slot.absorbedFrom.length > 0
-              ? "Personal substitution applied"
-              : undefined,
+          note: personalSubstitutionNote(slot.absorbedFrom),
           why: resolveContent(slot.guidanceKey),
+          adjustment: personalSubstitutionDetail(slot.absorbedFrom) ?? null,
         };
       }),
   })).filter((group) => group.items.length > 0);
 
   return (
-    <AppShell title="Daily plan" weekLabel={week} programLabel="Core plan">
+    <AppShell
+      title="Daily plan"
+      weekLabel={week}
+      programLabel="Core plan"
+      rotationPosition={position}
+      authoredWeeks={data.authoredWeeks}
+    >
       <PlanView
         energyKcal={plan.energyKcal}
         groups={groups}
         weekLabel={week}
         programName="Core plan"
+        portionCount={plan.slots.length}
         notices={plan.screeningReasons
           .map((code) => SCREENING_REASON_COPY[code])
           .filter(Boolean)}

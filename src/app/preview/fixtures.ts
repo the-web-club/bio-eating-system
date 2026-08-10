@@ -23,76 +23,246 @@ export const FIXTURE_ENTITLEMENTS: PortalEntitlements = {
   coaching: false,
 };
 
+const PENDING_COPY =
+  "Reviewed guidance for this portion appears here once the catalogue entry is published.";
+
+/**
+ * All 13 daily portions in engine order. Focus is the first four; the rest fill
+ * the secondary list. Preview uses pending catalogue copy so disclosure can be
+ * reviewed; live portal leaves why null until content is authored.
+ */
 export const FIXTURE_TODAY: TodayFocusItem[] = [
-  { id: "eggs", name: "Eggs", amount: "2", unit: "pieces" },
+  {
+    id: "eggs",
+    name: "Eggs",
+    amount: "2",
+    unit: "pieces",
+    why: PENDING_COPY,
+    adjustment: null,
+  },
+  {
+    id: "organ_meat",
+    name: "Organ meat",
+    amount: "30",
+    unit: "g",
+    why: PENDING_COPY,
+    adjustment: null,
+  },
+  {
+    id: "small_fish",
+    name: "Small fish",
+    amount: "60",
+    unit: "g",
+    context: "Week 03 · Sockeye salmon",
+    why: PENDING_COPY,
+    adjustment: null,
+  },
+  {
+    id: "bivalves",
+    name: "Bivalves",
+    amount: "40",
+    unit: "g",
+    why: PENDING_COPY,
+    adjustment: null,
+  },
+];
+
+export const FIXTURE_TODAY_REST: TodayFocusItem[] = [
   {
     id: "muscle_meat",
     name: "Muscle meat",
     amount: "140",
     unit: "g",
-    note: "Personal substitution applied",
+    why: PENDING_COPY,
+    adjustment: null,
   },
-  { id: "berries", name: "Berries", amount: "1", unit: "cup" },
-  { id: "olive_oil", name: "Olive oil", amount: "1", unit: "tbsp" },
+  {
+    id: "tubers",
+    name: "Tubers",
+    amount: "180",
+    unit: "g",
+    why: null,
+    adjustment: null,
+  },
+  {
+    id: "cruciferous",
+    name: "Cruciferous vegetables",
+    amount: "80",
+    unit: "g",
+    context: "Week 03 · Broccoli sprouts",
+    why: null,
+    adjustment: null,
+  },
+  {
+    id: "berries",
+    name: "Berries",
+    amount: "1",
+    unit: "cup",
+    context: "Week 03 · Blueberries",
+    why: PENDING_COPY,
+    adjustment: null,
+  },
+  {
+    id: "olive_oil",
+    name: "Olive oil",
+    amount: "1",
+    unit: "tbsp",
+    why: null,
+    adjustment: null,
+  },
+  {
+    id: "fermented",
+    name: "Fermented foods",
+    amount: "1",
+    unit: "portion",
+    why: PENDING_COPY,
+    adjustment: null,
+  },
+  {
+    id: "kiwi",
+    name: "Kiwi",
+    amount: "1",
+    unit: "piece",
+    why: null,
+    adjustment: null,
+  },
+  {
+    id: "mushrooms",
+    name: "Mushrooms",
+    amount: "70",
+    unit: "g",
+    context: "Week 03 · Shiitake mushrooms",
+    why: null,
+    adjustment: null,
+  },
+  {
+    id: "aromatics",
+    name: "Aromatics",
+    amount: "10",
+    unit: "g",
+    why: null,
+    adjustment: null,
+  },
 ];
-
-export const FIXTURE_TODAY_REST: TodayFocusItem[] = [
-  { id: "small_fish", name: "Small fish", amount: "60", unit: "g" },
-  { id: "tubers", name: "Tubers", amount: "180", unit: "g" },
-  { id: "cruciferous", name: "Cruciferous vegetables", amount: "80", unit: "g" },
-  { id: "fermented", name: "Fermented foods", amount: "1", unit: "portion" },
-  { id: "mushrooms", name: "Mushrooms", amount: "70", unit: "g" },
-];
-
-const PENDING_COPY =
-  "Reviewed guidance for this portion appears here once the catalogue entry is published.";
 
 export const FIXTURE_PLAN_GROUPS: PlanViewGroup[] = [
   {
     title: "Protein",
     items: [
-      { id: "eggs", name: "Eggs", amount: "2", unit: "pieces", why: PENDING_COPY },
+      {
+        id: "eggs",
+        name: "Eggs",
+        amount: "2",
+        unit: "pieces",
+        why: PENDING_COPY,
+        adjustment: null,
+      },
+      {
+        id: "organ_meat",
+        name: "Organ meat",
+        amount: "30",
+        unit: "g",
+        why: PENDING_COPY,
+        adjustment: null,
+      },
+      {
+        id: "small_fish",
+        name: "Small fish",
+        amount: "60",
+        unit: "g",
+        why: PENDING_COPY,
+        adjustment: null,
+      },
+      {
+        id: "bivalves",
+        name: "Bivalves",
+        amount: "40",
+        unit: "g",
+        why: PENDING_COPY,
+        adjustment: null,
+      },
       {
         id: "muscle_meat",
         name: "Muscle meat",
         amount: "140",
         unit: "g",
-        note: "Personal substitution applied",
-        why: null,
+        why: PENDING_COPY,
+        adjustment: null,
       },
-      { id: "small_fish", name: "Small fish", amount: "60", unit: "g", why: null },
-      { id: "bivalves", name: "Bivalves", amount: "40", unit: "g", why: PENDING_COPY },
-      { id: "organ_meat", name: "Organ meat", amount: "30", unit: "g", why: null },
     ],
   },
   {
     title: "Plants and fibre",
     items: [
-      { id: "berries", name: "Berries", amount: "1", unit: "cup", why: PENDING_COPY },
+      {
+        id: "berries",
+        name: "Berries",
+        amount: "1",
+        unit: "cup",
+        why: PENDING_COPY,
+        adjustment: null,
+      },
       {
         id: "cruciferous",
         name: "Cruciferous vegetables",
         amount: "80",
         unit: "g",
         why: null,
+        adjustment: null,
       },
-      { id: "tubers", name: "Tubers", amount: "180", unit: "g", why: null },
-      { id: "mushrooms", name: "Mushrooms", amount: "70", unit: "g", why: null },
-      { id: "kiwi", name: "Kiwi", amount: "1", unit: "piece", why: null },
+      {
+        id: "tubers",
+        name: "Tubers",
+        amount: "180",
+        unit: "g",
+        why: null,
+        adjustment: null,
+      },
+      {
+        id: "mushrooms",
+        name: "Mushrooms",
+        amount: "70",
+        unit: "g",
+        why: null,
+        adjustment: null,
+      },
+      {
+        id: "kiwi",
+        name: "Kiwi",
+        amount: "1",
+        unit: "piece",
+        why: null,
+        adjustment: null,
+      },
       {
         id: "fermented",
         name: "Fermented foods",
         amount: "1",
         unit: "portion",
         why: PENDING_COPY,
+        adjustment: null,
       },
-      { id: "aromatics", name: "Aromatics", amount: "10", unit: "g", why: null },
+      {
+        id: "aromatics",
+        name: "Aromatics",
+        amount: "10",
+        unit: "g",
+        why: null,
+        adjustment: null,
+      },
     ],
   },
   {
     title: "Fats",
     items: [
-      { id: "olive_oil", name: "Olive oil", amount: "1", unit: "tbsp", why: null },
+      {
+        id: "olive_oil",
+        name: "Olive oil",
+        amount: "1",
+        unit: "tbsp",
+        why: null,
+        adjustment: null,
+      },
     ],
   },
 ];

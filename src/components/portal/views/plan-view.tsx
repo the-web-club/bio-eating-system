@@ -1,5 +1,9 @@
 import { DisclosureRow } from "../disclosure-row";
 import { InlineNote } from "../inline-note";
+import {
+  hasPortionDetail,
+  PortionDetail,
+} from "../portion-detail";
 import { Eyebrow, PageSections, PageShell, Section, Split } from "../layout";
 import { MetricValue } from "../metric-value";
 import { PageHeader } from "../page-header";
@@ -12,6 +16,7 @@ export type PlanViewItem = {
   amount: string;
   unit: string;
   why: string | null;
+  adjustment: string | null;
 };
 
 export type PlanViewGroup = {
@@ -26,6 +31,7 @@ export type PlanViewProps = {
   maintenanceOnly: boolean;
   weekLabel: string;
   programName: string;
+  portionCount: number;
 };
 
 /** Grouped portions on hairlines, each row able to explain itself in place. */
@@ -36,13 +42,14 @@ export function PlanView({
   maintenanceOnly,
   weekLabel,
   programName,
+  portionCount,
 }: PlanViewProps) {
   return (
     <PageShell>
       <PageSections>
         <PageHeader
           title="Daily plan"
-          description="Your portions for today. Open an item to see why it is there."
+          description={`${portionCount} food portions for today. Open an item for personal adjustments and reviewed guidance.`}
           meta={
             <p className="text-meta text-muted">
               {programName} ·{" "}
@@ -57,17 +64,33 @@ export function PlanView({
               {groups.map((group) => (
                 <Section key={group.title} title={group.title}>
                   <ul className="divide-y divide-hairline border-t border-hairline">
-                    {group.items.map((item) => (
-                      <DisclosureRow
-                        key={item.id}
-                        title={item.name}
-                        detailLabel={`Why ${item.name} is in your plan`}
-                        summary={item.note}
-                        value={<MetricValue value={item.amount} unit={item.unit} />}
-                      >
-                        {item.why ? <p>{item.why}</p> : null}
-                      </DisclosureRow>
-                    ))}
+                    {group.items.map((item) => {
+                      const openable = hasPortionDetail(
+                        item.why,
+                        item.adjustment,
+                      );
+                      return (
+                        <DisclosureRow
+                          key={item.id}
+                          title={item.name}
+                          detailLabel={`Why ${item.name} is in your plan`}
+                          summary={item.note}
+                          value={
+                            <MetricValue
+                              value={item.amount}
+                              unit={item.unit}
+                            />
+                          }
+                        >
+                          {openable ? (
+                            <PortionDetail
+                              why={item.why}
+                              adjustment={item.adjustment}
+                            />
+                          ) : null}
+                        </DisclosureRow>
+                      );
+                    })}
                   </ul>
                 </Section>
               ))}
@@ -78,7 +101,11 @@ export function PlanView({
               <div>
                 <Eyebrow>Energy target</Eyebrow>
                 <p className="mt-2">
-                  <MetricValue value={energyKcal} unit="kcal" className="text-lead" />
+                  <MetricValue
+                    value={energyKcal}
+                    unit="kcal"
+                    className="text-lead"
+                  />
                 </p>
               </div>
 

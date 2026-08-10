@@ -10,15 +10,19 @@ import { selectionTransition } from "@/lib/motion";
 import { BrandSignature } from "./brand-signature";
 import { getAccountNav, getPrimaryNav, isNavItemActive } from "./nav-config";
 import { IconClose, IconMenu } from "./icons";
-import { ThemeControl } from "./theme-control";
+import { ProgramIdentity } from "./program-identity";
 
 export function MobileTopBar({
   weekLabel,
   programLabel,
+  rotationPosition,
+  authoredWeeks,
   basePath = "/portal",
 }: {
   weekLabel?: string;
   programLabel?: string;
+  rotationPosition?: number;
+  authoredWeeks?: number;
   basePath?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -62,18 +66,13 @@ export function MobileTopBar({
               <Dialog.Description className="sr-only">
                 Move to another part of your program.
               </Dialog.Description>
-              {programLabel || weekLabel ? (
-                <div className="mx-5 border-t border-hairline pt-4">
-                  {programLabel ? (
-                    <p className="text-small text-soft">{programLabel}</p>
-                  ) : null}
-                  {weekLabel ? (
-                    <p className="mt-0.5 font-meta text-meta tabular text-faint">
-                      {weekLabel}
-                    </p>
-                  ) : null}
-                </div>
-              ) : null}
+              <ProgramIdentity
+                className="mx-5 border-t border-hairline pt-4"
+                programLabel={programLabel}
+                weekLabel={weekLabel}
+                rotationPosition={rotationPosition}
+                authoredWeeks={authoredWeeks}
+              />
               <nav className="mt-5 flex-1 px-3" aria-label="Mobile primary">
                 <ul>
                   {[...primary, account].map((item) => {
@@ -112,10 +111,6 @@ export function MobileTopBar({
                   })}
                 </ul>
               </nav>
-              <div className="flex min-h-14 items-center justify-between gap-3 border-t border-hairline px-6 py-3">
-                <span className="text-small text-faint">Appearance</span>
-                <ThemeControl />
-              </div>
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog.Root>

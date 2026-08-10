@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
-import { sendWithUnsubscribe } from "@/lib/mail";
+import { sendWeeklyListEmail } from "@/lib/mail";
+import type { PlanSlot } from "@/lib/nutrition/plan-engine";
 import { AUTHORED_WEEKS, getRotationWeek } from "@/lib/nutrition/rotation";
+import { buildWeeklyListRows } from "@/lib/nutrition/weekly-list";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,6 +20,9 @@ export const maxDuration = 60;
  *    cannot double-send
  *  - the week cursor advances only AFTER a confirmed send
  *  - unsubscribed recipients are excluded in the query, not after the send
+ *  - failed drops are reclaimed on a later run instead of skipped forever
+ *  - recipients with a successful drop for the current week are skipped
+ *  - item names use the same label fallbacks as the portal, not raw keys
  */
 
 const BATCH_SIZE = 50;
@@ -37,23 +42,33 @@ export async function GET(request: Request) {
 
   const cycleYear = new Date().getUTCFullYear();
 
+  // Prefer people who have never been sent (or were sent longest ago) so a
+  // stuck first page of ids cannot starve the rest of the list.
   const recipients = await db.user.findMany({
     where: {
       unsubscribedAt: null,
       marketingOptIn: true,
       entitlements: { weeklyRotation: true },
       schedule: { active: true },
-      profile: { isNot: null },
     },
     select: {
       id: true,
       email: true,
-      locale: true,
       unsubscribeToken: true,
       schedule: { select: { currentWeek: true } },
-      profile: { select: { unitSystem: true } },
+      profile: {
+        select: {
+          unitSystem: true,
+          plans: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+            select: { slots: true },
+          },
+        },
+      },
     },
-    orderBy: { id: "asc" },
+    // MariaDB sorts NULL first under ASC, so never-sent recipients lead the batch.
+    orderBy: [{ schedule: { lastSentAt: "asc" } }, { id: "asc" }],
     take: BATCH_SIZE,
   });
 
@@ -64,42 +79,51 @@ export async function GET(request: Request) {
   for (const user of recipients) {
     const week = user.schedule?.currentWeek ?? 1;
 
-    // Claim the slot first. The unique constraint means a concurrent or
-    // retried invocation loses the race and skips instead of double-sending.
-    try {
-      await db.emailDrop.create({
-        data: { userId: user.id, weekNumber: week, cycleYear },
-      });
-    } catch {
+    const existing = await db.emailDrop.findUnique({
+      where: {
+        userId_cycleYear_weekNumber: {
+          userId: user.id,
+          cycleYear,
+          weekNumber: week,
+        },
+      },
+      select: { id: true, sentAt: true, failedAt: true },
+    });
+
+    if (existing?.sentAt) {
       skipped += 1;
       continue;
     }
 
+    if (!existing) {
+      try {
+        await db.emailDrop.create({
+          data: { userId: user.id, weekNumber: week, cycleYear },
+        });
+      } catch {
+        skipped += 1;
+        continue;
+      }
+    } else if (existing.failedAt) {
+      await db.emailDrop.update({
+        where: { id: existing.id },
+        data: { failedAt: null, failure: null },
+      });
+    }
+
     const rotation = getRotationWeek(week);
     const unit = user.profile?.unitSystem ?? "HOUSEHOLD";
+    const planSlots = Array.isArray(user.profile?.plans[0]?.slots)
+      ? (user.profile!.plans[0]!.slots as unknown as PlanSlot[])
+      : null;
 
-    const rows = rotation.items
-      .map(
-        (item) => `<tr>
-          <td style="padding:10px 0;font-size:14px;border-bottom:1px solid #ececec">${item.labelKey}</td>
-          <td style="padding:10px 0;text-align:right;font-size:13px;color:#6b6b6b;border-bottom:1px solid #ececec">${
-            unit === "METRIC" ? `${item.grams} g` : item.householdDisplay
-          }</td>
-        </tr>`,
-      )
-      .join("");
+    const items = buildWeeklyListRows(rotation.items, planSlots, unit);
 
-    const result = await sendWithUnsubscribe({
+    const result = await sendWeeklyListEmail({
       to: user.email,
       unsubscribeToken: user.unsubscribeToken,
-      subject: `Your shopping list, week ${week}`,
-      html: `<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#1a1a1a">
-        <h1 style="font-size:20px;font-weight:600;margin:0 0 16px">Week ${week} shopping list</h1>
-        <table style="width:100%;border-collapse:collapse">${rows}</table>
-        <div style="text-align:center;margin-top:28px">
-          <a href="${env.NEXT_PUBLIC_APP_URL}/portal" style="display:inline-block;background:#3f6b4a;color:#ffffff;padding:12px 24px;border-radius:8px;font-size:14px;text-decoration:none">Open your plan</a>
-        </div>
-      </div>`,
+      week,
+      items,
     });
 
     if (!result.ok) {
@@ -114,7 +138,6 @@ export async function GET(request: Request) {
         },
         data: { failedAt: new Date(), failure: result.error ?? "unknown" },
       });
-      // Cursor is NOT advanced. The next run retries this week.
       continue;
     }
 
@@ -146,8 +169,6 @@ export async function GET(request: Request) {
     sent,
     skipped,
     failed,
-    // A full batch means more remain. Vercel cron will pick them up on the
-    // next tick; increase frequency or BATCH_SIZE as the list grows.
     moreLikely: recipients.length === BATCH_SIZE,
   });
 }

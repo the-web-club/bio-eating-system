@@ -25,6 +25,8 @@ export const intakeBodySchema = z.object({
   screeningFlags: z.array(z.enum(SCREENING_FLAGS)).max(6),
   notesForCoach: z.string().max(2000).optional(),
   consentHealthData: z.literal(true),
+  /** Separate from health consent. Required for weekly shopping-list email. */
+  marketingOptIn: z.boolean(),
 });
 
 export type IntakeBody = z.infer<typeof intakeBodySchema>;
@@ -50,4 +52,5 @@ export const defaultIntakeDraft = (): IntakeDraft => ({
   screeningFlags: [],
   notesForCoach: "",
   consentHealthData: false,
+  marketingOptIn: false,
 });

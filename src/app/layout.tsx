@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -23,10 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang={APP_LANG} className={inter.variable} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
-      </head>
+    <html lang={APP_LANG} className={inter.variable}>
       <body className="min-h-dvh bg-surface-canvas font-body text-foreground antialiased">
         <Providers>{children}</Providers>
       </body>

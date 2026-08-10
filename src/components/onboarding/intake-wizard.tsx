@@ -126,6 +126,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
       screeningFlags: draft.screeningFlags,
       notesForCoach: draft.notesForCoach || undefined,
       consentHealthData: true as const,
+      marketingOptIn: draft.marketingOptIn,
     };
 
     try {
@@ -141,7 +142,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
       };
 
       if (res.status === 401) {
-        router.push("/sign-in?next=/portal/intake");
+        router.push("/?next=/portal/intake");
         return;
       }
       if (res.status === 403) {
@@ -477,14 +478,24 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                   </p>
                 </ReviewGroup>
                 </div>
-                <Checkbox
-                  id="consent"
-                  label="I consent to processing of my health data to create my plan."
-                  checked={draft.consentHealthData}
-                  onCheckedChange={(checked) =>
-                    patch({ consentHealthData: checked })
-                  }
-                />
+                <div className="space-y-3">
+                  <Checkbox
+                    id="consent"
+                    label="I consent to processing of my health data to create my plan."
+                    checked={draft.consentHealthData}
+                    onCheckedChange={(checked) =>
+                      patch({ consentHealthData: checked })
+                    }
+                  />
+                  <Checkbox
+                    id="marketing"
+                    label="Send me the weekly shopping list by email."
+                    checked={draft.marketingOptIn}
+                    onCheckedChange={(checked) =>
+                      patch({ marketingOptIn: checked })
+                    }
+                  />
+                </div>
                 {errors.consent ? (
                   <p className="text-small text-status-danger-text">{errors.consent}</p>
                 ) : null}

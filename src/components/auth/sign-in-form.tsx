@@ -7,11 +7,28 @@ import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/input";
 import { Status } from "@/components/ui/status";
 
-export function SignInForm() {
+/** Only same-origin relative paths under the portal are accepted as return URLs. */
+function safeCallbackPath(next: string | undefined): string {
+  if (!next || !next.startsWith("/") || next.startsWith("//") || next.includes("://")) {
+    return "/portal";
+  }
+  return next;
+}
+
+export function SignInForm({
+  nextPath,
+  linkError,
+}: {
+  nextPath?: string;
+  linkError?: boolean;
+}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    linkError ? "That sign-in link is not valid. Request a new one." : null,
+  );
   const [pending, setPending] = useState(false);
+  const callbackURL = safeCallbackPath(nextPath);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -20,8 +37,8 @@ export function SignInForm() {
 
     const { error: signInError } = await authClient.signIn.magicLink({
       email: email.trim(),
-      callbackURL: "/portal",
-      errorCallbackURL: "/sign-in?error=link",
+      callbackURL,
+      errorCallbackURL: "/?error=link",
     });
 
     setPending(false);

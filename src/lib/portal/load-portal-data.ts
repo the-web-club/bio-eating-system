@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import type { PlanSlot } from "@/lib/nutrition/plan-engine";
 import { AUTHORED_WEEKS, getRotationWeek } from "@/lib/nutrition/rotation";
+import { mergeRotationWithPlan } from "@/lib/nutrition/weekly-list";
 
 export type PortalEntitlements = {
   corePlan: boolean;
@@ -35,7 +36,7 @@ export async function requirePortalUser() {
     headers: await headers(),
   });
   if (!session?.user) {
-    redirect("/sign-in?next=/portal");
+    redirect("/?next=/portal");
   }
   return session.user;
 }
@@ -79,23 +80,7 @@ export async function loadPortalData(): Promise<PortalData> {
 
   const week = schedule?.currentWeek ?? 1;
   const rotation = getRotationWeek(week);
-  const bySlot = plan
-    ? new Map(plan.slots.map((s) => [s.slot, s]))
-    : null;
-
-  const rotationItems = rotation.items.map((item) => {
-    const match = bySlot?.get(item.slot);
-    if (!match) return item;
-    const household =
-      match.householdCount != null && match.householdLabelKey
-        ? `${match.householdCount} ${match.householdLabelKey}`
-        : `${match.grams} g`;
-    return {
-      ...item,
-      grams: match.grams,
-      householdDisplay: household,
-    };
-  });
+  const rotationItems = mergeRotationWithPlan(rotation.items, plan?.slots ?? null);
 
   return {
     user: { id: user.id, email: user.email, name: user.name },

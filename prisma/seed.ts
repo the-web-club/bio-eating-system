@@ -2,18 +2,22 @@ import { PrismaClient } from "../src/generated/prisma/client";
 
 /**
  * Test accounts only. Invented addresses on a non-production domain.
- * No biometric or health values.
+ * No biometric or health values on these rows — intake stays empty so the
+ * portal empty states stay exercisable. full-access is marketing-ready so the
+ * weekly-drop cron path can be exercised without inventing Article 9 data.
  */
 const prisma = new PrismaClient();
 
 async function upsertUser(args: {
   email: string;
   name: string;
+  marketingOptIn?: boolean;
   entitlements?: {
     corePlan?: boolean;
     weeklyRotation?: boolean;
     labReference?: boolean;
   };
+  scheduleActive?: boolean;
 }) {
   const user = await prisma.user.upsert({
     where: { email: args.email },
@@ -22,11 +26,13 @@ async function upsertUser(args: {
       name: args.name,
       emailVerified: true,
       locale: "EN",
-      marketingOptIn: false,
+      marketingOptIn: args.marketingOptIn ?? false,
     },
     update: {
       name: args.name,
       emailVerified: true,
+      marketingOptIn: args.marketingOptIn ?? false,
+      unsubscribedAt: args.marketingOptIn ? null : undefined,
     },
   });
 
@@ -49,6 +55,21 @@ async function upsertUser(args: {
     await prisma.entitlement.deleteMany({ where: { userId: user.id } });
   }
 
+  if (args.scheduleActive) {
+    await prisma.rotationSchedule.upsert({
+      where: { userId: user.id },
+      create: {
+        userId: user.id,
+        currentWeek: 1,
+        active: true,
+      },
+      update: {
+        currentWeek: 1,
+        active: true,
+      },
+    });
+  }
+
   return user;
 }
 
@@ -62,11 +83,13 @@ async function main() {
   const fullAccess = await upsertUser({
     email: "full-access@seed.the-web-club.test",
     name: "Seed Full",
+    marketingOptIn: true,
     entitlements: {
       corePlan: true,
       weeklyRotation: true,
       labReference: true,
     },
+    scheduleActive: true,
   });
 
   const noEntitlements = await upsertUser({
