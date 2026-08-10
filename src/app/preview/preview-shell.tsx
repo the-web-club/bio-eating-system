@@ -6,7 +6,7 @@ export const PREVIEW_BASE = "/preview";
 export const PREVIEW_WEEK = "Week 03";
 export const PREVIEW_PROGRAM = "Core plan";
 
-/** Local copy — avoid importing portal/format (pulls the content catalogue / fs). */
+/** Local copy - avoid importing portal/format (pulls the content catalogue / fs). */
 function previewRotationPosition(week: number, authoredWeeks: number): number {
   if (authoredWeeks <= 0) return 1;
   return ((week - 1) % authoredWeeks) + 1;

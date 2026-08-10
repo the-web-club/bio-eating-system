@@ -32,7 +32,7 @@ export function Panel({
 
 /**
  * Elevation level 1: a warm inset surface for selected or actionable content.
- * No border, no shadow — the surface shift is the whole signal.
+ * No border, no shadow - the surface shift is the whole signal.
  */
 export function InsetPanel({
   children,

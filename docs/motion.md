@@ -1,13 +1,13 @@
 # Motion system
 
-Engineering reference for interaction timing. Content is static by default. Motion confirms interaction, state change, hierarchy, loading, or feedback — it never decorates.
+Engineering reference for interaction timing. Content is static by default. Motion confirms interaction, state change, hierarchy, loading, or feedback - it never decorates.
 
 Source of truth: `src/lib/motion.ts`. CSS custom properties in `src/app/globals.css` must match, and `src/lib/__tests__/motion-tokens.test.ts` fails the build if they drift.
 
 ## Principles
 
 1. **Page load:** almost no animation. The interface is immediately visible.
-2. **Navigation:** subtle active-state transition on the rail only — no page-wide crossfade.
+2. **Navigation:** subtle active-state transition on the rail only, no page-wide crossfade.
 3. **Cards and sections:** static. No floating, scaling, or continuous motion.
 4. **Buttons:** colour and an optional 1px hover lift. No scale on press.
 5. **Modals / popovers / menus:** opacity plus a 4px vertical settle. No scale.
@@ -23,7 +23,7 @@ Source of truth: `src/lib/motion.ts`. CSS custom properties in `src/app/globals.
 | `--duration-instant` | 80ms | Colour-only hover on dense rows |
 | `--duration-press` | 120ms | Legacy press alias |
 | `--duration-fast` / `--motion-fast` | 120ms | Hover, focus, menus, tooltips |
-| `--duration-exit` | 100ms | Matching exits (~60–70% of enter) |
+| `--duration-exit` | 100ms | Matching exits (~60-70% of enter) |
 | `--duration-selection` / `--motion-normal` | 180ms | Active navigation, checkbox, row state |
 | `--duration-disclosure` | 200ms | Disclosure, replace panel, toast |
 | `--duration-moderate` | 180ms | Wizard step, progress |
@@ -50,7 +50,7 @@ transition:
 | --- | --- | --- |
 | Product rail, mobile tabs, lesson index | Shared active indicator that travels between items | `selectionTransition` + framer `layoutId` |
 | Biomarker rationale, daily-plan detail | Height and opacity expansion in place | `disclosureVariants` / `disclosureTransition` |
-| Main content on navigation | Static — no entrance animation | `PageTransition` passthrough |
+| Main content on navigation | Static, no entrance animation | `PageTransition` passthrough |
 | Dialog, sheet, menu, popover | Opacity + 4px settle. Dialog uses emphasized easing | CSS keyframes |
 | Progress | Animates from the previous value, never from zero | `progressTransition` + `initial={false}` |
 | Buttons and action links | Colour + optional 1px hover lift | `actionClassName` |
@@ -64,8 +64,8 @@ No springs on utility controls.
 ## Hard rules
 
 1. Animate only `transform` and `opacity`, plus colour on interactive surfaces.
-2. Exits at ~60–70% of entrance duration.
-3. Every animation is interruptible — no queues on double-click.
+2. Exits at ~60-70% of entrance duration.
+3. Every animation is interruptible, no queues on double-click.
 4. Never CSS keywords `ease` or `ease-in-out` on product surfaces.
 
 ## Reduced motion

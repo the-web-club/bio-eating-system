@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { CheckInForm } from "@/components/portal/check-in-form";
-import { PageSections, PageShell, Section } from "@/components/portal/layout";
-import { PageHeader } from "@/components/portal/page-header";
+import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
+import { Section } from "@/components/portal/layout";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
+import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
 
-export default async function CheckInPage() {
+async function CheckInPageContent() {
   let data;
   try {
     data = await loadPortalData();
@@ -15,16 +16,16 @@ export default async function CheckInPage() {
   if (!data.plan) redirect("/portal/intake");
 
   return (
-    <PageShell width="reading">
-      <PageSections>
-        <PageHeader
-          title="How did this week feel?"
-          description="About two minutes. This shapes your next week."
-        />
-        <Section title="Your ratings">
-          <CheckInForm />
-        </Section>
-      </PageSections>
-    </PageShell>
+    <Section title="Your ratings">
+      <CheckInForm />
+    </Section>
+  );
+}
+
+export default function CheckInPage() {
+  return (
+    <PortalPageWithSuspense copy={PORTAL_PAGE_COPY.checkIn}>
+      <CheckInPageContent />
+    </PortalPageWithSuspense>
   );
 }

@@ -1,5 +1,6 @@
-import { ListSkeleton } from "@/components/portal/skeleton";
+import { pageLoadingFromCopy } from "@/components/portal/skeleton";
+import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
 
 export default function WeeklyLoading() {
-  return <ListSkeleton label="Loading your weekly plan" />;
+  return pageLoadingFromCopy(PORTAL_PAGE_COPY.weekly);
 }

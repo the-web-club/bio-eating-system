@@ -1,0 +1,45 @@
+---
+description: Use ASCII hyphens and commas only; never em or en dashes
+alwaysApply: true
+---
+
+# Punctuation: hyphens and commas only
+
+Never use em dashes (`—`, U+2014) or en dashes (`–`, U+2013). Use only the ASCII hyphen-minus (`-`, U+002D) and commas.
+
+This applies to user-facing copy, docs, comments, commit messages, and agent output for this repo.
+
+## Replacements
+
+| Instead of | Use |
+| --- | --- |
+| Em dash for a break or aside | Comma, or split into two sentences |
+| En dash in a numeric range | ASCII hyphen: `1-2`, `15-150` |
+| Em dash as empty or missing value | ASCII hyphen `-`, or plain words such as `None` or `Not set` |
+| En dash in compound modifiers | ASCII hyphen: `60-70%` |
+
+## Examples
+
+```
+❌ Motion confirms interaction — it never decorates.
+✅ Motion confirms interaction, it never decorates.
+
+❌ Replace breakfast — why are you replacing it?
+✅ Replace breakfast, why are you replacing it?
+
+❌ 1–2 sessions per week
+✅ 1-2 sessions per week
+
+❌ {value ?? "—"}
+✅ {value ?? "-"}
+```
+
+## Allowed
+
+- ASCII `-` in compound words, kebab-case identifiers, minus signs, and numeric ranges
+- Commas for lists, clauses, and pauses that would otherwise take an em dash
+
+## Not allowed
+
+- Pasting or typing `—` or `–`, including from smart punctuation or word processors
+- Unicode dash entities in HTML or email copy (`&mdash;`, `&ndash;`)

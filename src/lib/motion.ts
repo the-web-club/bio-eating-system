@@ -37,7 +37,7 @@ export const durationCss = {
 } as const;
 
 export const ease = {
-  /** Standard UI easing — entrances, state changes, exits. */
+  /** Standard UI easing - entrances, state changes, exits. */
   standard: [0.2, 0, 0, 1] as const,
   /** Modals and emphasized surfaces only. */
   emphasized: [0.2, 0.8, 0.2, 1] as const,
@@ -117,7 +117,7 @@ export function motionSafe<T>(reduced: boolean, animated: T, staticVariant: T): 
   return reduced ? staticVariant : animated;
 }
 
-/** Onboarding / wizard step change — opacity only. */
+/** Onboarding / wizard step change - opacity only. */
 export function wizardSlideVariants(
   reduced: boolean,
 ): VariantSet & { transition: MotionTransition } {

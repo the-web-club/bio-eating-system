@@ -69,7 +69,7 @@ export function isNavItemActive(pathname: string, href: string, basePath: string
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/** Biomarkers and legacy routes — linked from Profile, not primary nav. */
+/** Biomarkers and legacy routes - linked from Profile, not primary nav. */
 export function getProfileExtras(basePath = "/portal") {
   const root = rootOf(basePath);
   return {

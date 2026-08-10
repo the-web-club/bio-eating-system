@@ -69,7 +69,7 @@ export function Dialog({
   );
 }
 
-/** Prefer Dialog — kept for existing imports. */
+/** Prefer Dialog - kept for existing imports. */
 export function Modal({
   open,
   title,

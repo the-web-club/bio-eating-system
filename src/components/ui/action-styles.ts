@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Shared shape for actions so a button and a link that do the same job look
- * identical. Radius is modest and one of fill or border carries the control —
+ * identical. Radius is modest and one of fill or border carries the control,
  * never a fill plus a shadow, and never a pill for a primary action.
  */
 export type ActionVariant =

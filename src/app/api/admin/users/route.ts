@@ -22,7 +22,7 @@ const createSchema = z.object({
 });
 
 /**
- * Staff directory. Search is email/name contains only — never returns biometric fields.
+ * Staff directory. Search is email/name contains only - never returns biometric fields.
  */
 export async function GET(request: Request) {
   const { admin, response } = await requireAdminApiSession(request);

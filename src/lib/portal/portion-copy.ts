@@ -10,7 +10,7 @@ export function personalSubstitutionNote(
 }
 
 /**
- * Explains a swap in product language. Describes engine behaviour only — not
+ * Explains a swap in product language. Describes engine behaviour only - not
  * nutrient science, which must come from the reviewed catalogue.
  */
 export function personalSubstitutionDetail(

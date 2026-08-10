@@ -9,7 +9,7 @@ import { ScrollReset } from "./scroll-reset";
 
 /**
  * Product shell: a stable rail beside an open content canvas. The shell adds no
- * container around page content — pages compose their own sections.
+ * container around page content - pages compose their own sections.
  */
 export function AppShell({
   title,

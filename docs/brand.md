@@ -20,7 +20,7 @@ Tokens live in `src/app/globals.css` in three layers, and components reference l
 | 2 semantics | Role aliases: `--surface`, `--foreground-muted`, `--accent`, `--confirm-fill`. | yes, under `.dark` |
 | 3 `@theme inline` | Binds semantics to Tailwind utilities: `bg-surface`, `text-muted`, `rounded-button`. | n/a |
 
-Contrast is enforced by `src/lib/__tests__/palette-contrast.test.ts`, which parses this file, resolves the `var()` chain, composites translucent tokens over their backdrop and asserts **4.5:1** for text and **3:1** for marks and non-text UI in both themes. Change a colour and the test tells you whether it still holds — no table here needs manual upkeep.
+Contrast is enforced by `src/lib/__tests__/palette-contrast.test.ts`, which parses this file, resolves the `var()` chain, composites translucent tokens over their backdrop and asserts **4.5:1** for text and **3:1** for marks and non-text UI in both themes. Change a colour and the test tells you whether it still holds - no table here needs manual upkeep.
 
 ## Palette direction
 
@@ -56,10 +56,10 @@ Four levels. A level-2 object takes a hairline border **or** a minimal shadow, n
 |---|---|---|
 | 0 | Page canvas | No border, no shadow |
 | 1 | Separated section | Spacing, a surface shift (`bg-surface-inset`), or one hairline |
-| 2 | Interactive object | `Panel` — one border, or `shadow-object` |
-| 3 | Floating interface | Menus, popovers, dialogs, sheets — `shadow-floating` / `shadow-modal` |
+| 2 | Interactive object | `Panel`, one border, or `shadow-object` |
+| 3 | Floating interface | Menus, popovers, dialogs, sheets, `shadow-floating` / `shadow-modal` |
 
-Target roughly 70–80% flat canvas, 15–20% differentiated surface, and at most one visually dominant elevated surface per viewport. The one dominant surface is `ProgramPanel`, on `--surface-feature`.
+Target roughly 70-80% flat canvas, 15-20% differentiated surface, and at most one visually dominant elevated surface per viewport. The one dominant surface is `ProgramPanel`, on `--surface-feature`.
 
 Borders are low contrast, communicate separation or interaction, and usually appear on a single edge or as a divider rather than enclosing a group.
 
@@ -85,7 +85,7 @@ Inter via `next/font`, used as the primary hierarchy system. Sentence case throu
 
 | Token | Size | Use |
 |---|---|---|
-| `text-editorial` | 34px | Page title. Tight tracking, weight 500 — not `text-4xl font-bold`. |
+| `text-editorial` | 34px | Page title. Tight tracking, weight 500, not `text-4xl font-bold`. |
 | `text-display` | 24px | Section-level or panel title |
 | `text-section` | 17px | Section heading |
 | `text-title` | 15px | Row title |
@@ -111,7 +111,7 @@ Educational reading columns use `.measure` (64ch) or `.measure-narrow` (52ch). O
 | `spacing-gutter` | 20px | Mobile page padding |
 | `spacing-rail` | 240px | Product rail width |
 
-Desktop page padding steps to 32px, then 40px at `xl`. `PageShell` is wide (76rem) by default and `reading` (52rem) only where the content is educational — a narrow centred column is not the default.
+Desktop page padding steps to 32px, then 40px at `xl`. `PageShell` is wide (76rem) by default and `reading` (52rem) only where the content is educational - a narrow centred column is not the default.
 
 ## Status without badges
 
@@ -119,7 +119,7 @@ State is read from the composition, not from a badge on every module. See `Modul
 
 | State | Treatment |
 |---|---|
-| Active | Strong title, primary action, progress. No "ACTIVE" pill — `ProgramPanel` hierarchy says it. |
+| Active | Strong title, primary action, progress. No "ACTIVE" pill, `ProgramPanel` hierarchy says it. |
 | Included | Ordinary interactive row, quiet metadata such as "Available in your plan" |
 | Locked | Lock icon, full text contrast, an explicit action such as "View upgrade" or "Explore biomarker support". Emphasis is reduced by hierarchy, never by opacity. |
 | Coming soon | Editorial row, quiet metadata, no interactive affordance |

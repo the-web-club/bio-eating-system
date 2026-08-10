@@ -5,7 +5,7 @@ export const BRAND_NAME = "Well with Katarina";
 
 /**
  * The wordmark. Painted through an alpha mask so the artwork's indigo can be
- * replaced by an ink that survives dark mode — see .brand-mark in globals.css.
+ * replaced by an ink that survives dark mode - see .brand-mark in globals.css.
  * The height is set here; the artwork's ratio supplies the width, so the box is
  * reserved before the mask loads and nothing shifts.
  *

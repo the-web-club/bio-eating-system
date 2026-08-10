@@ -90,7 +90,7 @@ export function ProofShowcase() {
         </h2>
         <div className="space-y-3">
           <Status role="neutral">
-            Screening note — the product will not generate a deficit for this profile.
+            Screening note, the product will not generate a deficit for this profile.
             Neutral mark, no wash, not an error.
           </Status>
           <Status role="info">Something to notice. Accent mark only.</Status>

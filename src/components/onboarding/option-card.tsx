@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * A discrete interactive object, so a border is earned here. Selection is an
- * inset surface plus an accent edge — not a fill.
+ * inset surface plus an accent edge - not a fill.
  */
 export function OptionCard({
   selected,

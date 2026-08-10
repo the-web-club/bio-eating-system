@@ -3,7 +3,7 @@ description: Binding operating rules for bio-eating-system (stack, tokens, safet
 alwaysApply: true
 ---
 
-# rules.md — Cursor operating rules for `bio-eating-system`
+# rules.md - Cursor operating rules for `bio-eating-system`
 
 Repo: `github.com/the-web-club/bio-eating-system`
 
@@ -29,7 +29,7 @@ These rules are binding. If a rule blocks the task, stop and report the conflict
 6. Transactional email is Resend, via `src/lib/mail.ts` only. No route calls the Resend SDK directly.
 7. Hosting is Vercel. Every route must be serverless-safe: no long-lived connections, no in-process schedulers, no filesystem writes.
 
-## 3. Design tokens — hard rule
+## 3. Design tokens - hard rule
 
 1. No raw colour values in components. No hex, `rgb()`, `oklch()`, `hsl()`, or named colours in any `.tsx` file. Not in `className`, not in `style`, not in arbitrary values like `bg-[#007AFF]`.
 2. No Tailwind palette utilities. `bg-white`, `text-black`, `bg-neutral-50`, `text-neutral-400`, `border-neutral-100`, and every `-500`/`-600` variant are banned. Use semantic utilities only: `bg-surface`, `bg-surface-raised`, `text-foreground`, `text-muted`, `border-hairline`, `bg-accent`, `text-on-accent`, `text-accent-text`, `bg-confirm`, `text-danger`, `text-confirm`.
@@ -42,7 +42,7 @@ These rules are binding. If a rule blocks the task, stop and report the conflict
 5. Dark mode is a token override, never a conditional in a component.
 6. One exception: email HTML. Mail clients do not support custom properties, so inline hex is permitted inside `src/lib/mail.ts` and email templates only. Keep those values in a single exported constant per template so they stay auditable.
 
-## 4. Data and safety rules — do not relax
+## 4. Data and safety rules - do not relax
 
 1. **Allergens and exclusions are structured data only.** Exclusion is driven by the `declaredAllergens` enum and the `excludedSlots` enum. Free text is never parsed to decide what a person eats. Never reintroduce keyword or substring scanning of user text to drive a plan.
 2. **The screening gate is not bypassable.** `src/lib/nutrition/screening.ts` decides whether an energy deficit may be generated at all. No route, component, or admin flag may override its result. If it returns a refusal, the plan is generated at maintenance and the refusal reason is surfaced to the user.

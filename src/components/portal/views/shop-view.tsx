@@ -81,6 +81,30 @@ export type ShopViewProps = {
   basePath: string;
 };
 
+export function ShopViewContent({
+  items,
+  overBudget,
+  budgetEur,
+}: ShopViewProps) {
+  return (
+    <>
+      {overBudget && budgetEur != null ? (
+        <Status role="neutral">
+          Your current plan exceeds your €{budgetEur} weekly budget. Swap lower-cost
+          items using Replace on each line.
+        </Status>
+      ) : null}
+
+      <Section title="Already have">
+        <p className="mb-3 text-small text-muted">
+          Tick items you already have at home.
+        </p>
+        <WeeklyShopList items={items} />
+      </Section>
+    </>
+  );
+}
+
 export function ShopView({
   items,
   estimatedCostEur,
@@ -92,7 +116,7 @@ export function ShopView({
     <PageShell>
       <PageSections>
         <PageHeader
-          title="Shopping list"
+          title="Shop"
           description="What do I buy?"
           meta={
             <p className="text-meta text-muted">
@@ -106,20 +130,13 @@ export function ShopView({
             </ActionLink>
           }
         />
-
-        {overBudget && budgetEur != null ? (
-          <Status role="neutral">
-            Your current plan exceeds your €{budgetEur} weekly budget. Swap lower-cost
-            items using Replace on each line.
-          </Status>
-        ) : null}
-
-        <Section title="Already have">
-          <p className="mb-3 text-small text-muted">
-            Tick items you already have at home.
-          </p>
-          <WeeklyShopList items={items} />
-        </Section>
+        <ShopViewContent
+          items={items}
+          estimatedCostEur={estimatedCostEur}
+          budgetEur={budgetEur}
+          overBudget={overBudget}
+          basePath={basePath}
+        />
       </PageSections>
     </PageShell>
   );

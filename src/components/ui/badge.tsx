@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 /**
  * Small state indicator. Deliberately rare: state normally comes from the
  * composition, so reach for quiet metadata before reaching for this. Sentence
- * case, body face — a badge is not a place for decorative monospace.
+ * case, body face - a badge is not a place for decorative monospace.
  */
 export function Badge({
   children,

@@ -80,7 +80,7 @@ export function ReplaceMealButton({
   return (
     <ReplacePanel className={className}>
       <p className="text-small text-muted">
-        Replace {mealLabel} — why are you replacing it?
+        Replace {mealLabel}, why are you replacing it?
       </p>
       {step === "reason" ? (
         <div className="flex flex-wrap gap-2">

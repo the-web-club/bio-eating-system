@@ -26,6 +26,6 @@ export const GROCERY_CATEGORY_LABELS: Record<GroceryCategory, string> = {
 
 /** Human-friendly shopping line from grams/household display. */
 export function humanShoppingLine(name: string, amount: string): string {
-  if (!amount || amount === "—") return name;
+  if (!amount || amount === "-") return name;
   return `${amount} ${name}`.trim();
 }

@@ -50,7 +50,7 @@ function RailLink({
 
 /**
  * Narrow, stable product rail. The active destination is marked by a slim
- * accent rail and typographic weight — no large rounded block, no loud icons.
+ * accent rail and typographic weight - no large rounded block, no loud icons.
  */
 export function PortalSidebar({
   weekLabel,

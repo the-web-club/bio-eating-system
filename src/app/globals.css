@@ -9,7 +9,7 @@
 
    Components reference layer 3 only. Adding a colour means adding a token.
 
-   Motion durations/easings synced with src/lib/motion.ts — keep in lockstep.
+   Motion durations/easings synced with src/lib/motion.ts - keep in lockstep.
    See docs/brand.md, docs/motion.md, docs/status-colour.md.
    ========================================================================== */
 
@@ -18,17 +18,17 @@
 /* ---------- Layer 1: primitives ------------------------------------------ */
 
 :root {
-  /* Paper — warm near-white canvas and object surfaces */
+  /* Paper - warm near-white canvas and object surfaces */
   --paper-000: #ffffff;
   --paper-050: #fbfaf8;
   --paper-100: #f7f5f1;
 
-  /* Stone — warm secondary surfaces and dividers */
+  /* Stone - warm secondary surfaces and dividers */
   --stone-100: #f4f2ed;
   --stone-200: #eae6df;
   --stone-300: #d8d3c9;
 
-  /* Ink — deep warm neutrals for text and feature panels */
+  /* Ink - deep warm neutrals for text and feature panels */
   --ink-900: #1b1a18;
   --ink-800: #26251f;
   --ink-700: #3a3833;
@@ -36,7 +36,7 @@
   --ink-400: #8f8a80;
   --ink-300: #a8a29a;
 
-  /* Mineral — brand accent, derived from the product blue, deepened
+  /* Mineral - brand accent, derived from the product blue, deepened
      and desaturated so it reads as considered rather than default SaaS. */
   --mineral-800: #24486b;
   --mineral-700: #2c5a86;
@@ -48,7 +48,7 @@
   --mineral-shade: #1a2530;
   --mineral-950: #16212c;
 
-  /* Indigo — sampled from the supplied wordmark artwork. Used only by the mark. */
+  /* Indigo - sampled from the supplied wordmark artwork. Used only by the mark. */
   --indigo-900: #1a0e64;
 
   /* Dark-mode neutrals */
@@ -60,7 +60,7 @@
   --slate-300: #a6a19a;
   --slate-400: #7d7871;
 
-  /* Semantic feedback primitives — kept accessible, used sparingly.
+  /* Semantic feedback primitives - kept accessible, used sparingly.
      text = body copy (4.5:1), mark = glyph (3:1), 700 = fill under white. */
   --blue-text-dark: #8ab4e8;
   --blue-mark-dark: #6bb3ff;
@@ -77,7 +77,7 @@
   --red-text-dark: #e07a72;
   --red-mark-dark: #ff6b61;
 
-  /* Radii — restrained product shape language. Pills are opt-in only. */
+  /* Radii - restrained product shape language. Pills are opt-in only. */
   --radius-control: 6px;
   --radius-badge: 5px;
   --radius-input: 8px;
@@ -86,7 +86,7 @@
   --radius-dialog: 13px;
   --radius-pill: 9999px;
 
-  /* Motion — synced with src/lib/motion.ts */
+  /* Motion - synced with src/lib/motion.ts */
   --duration-instant: 80ms;
   --duration-press: 120ms;
   --duration-fast: 120ms;
@@ -118,7 +118,7 @@
     "Segoe UI", Roboto, sans-serif;
   --font-meta-stack: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
 
-  /* Reading measure for educational content, ~62–70 characters */
+  /* Reading measure for educational content, ~62-70 characters */
   --measure: 64ch;
   --measure-narrow: 52ch;
 
@@ -154,7 +154,7 @@
   --feature-fill: var(--paper-100);
   --on-feature-fill: var(--ink-900);
 
-  /* Warm, ink-tinted hairlines — composite over any surface */
+  /* Warm, ink-tinted hairlines - composite over any surface */
   --hairline: rgb(27 26 24 / 0.09);
   --hairline-strong: rgb(27 26 24 / 0.16);
 
@@ -187,7 +187,7 @@
 
   --focus-ring: var(--mineral-700);
 
-  /* Status roles — mark + text; wash reserved for blocking danger */
+  /* Status roles - mark + text; wash reserved for blocking danger */
   --status-neutral-text: var(--foreground);
   --status-neutral-mark: var(--foreground-muted);
   --status-neutral-line: var(--hairline-strong);
@@ -221,7 +221,7 @@
     0 12px 32px rgb(27 26 24 / 0.11),
     0 32px 64px rgb(27 26 24 / 0.08);
 
-  /* Auth screen — photograph dimmed by a base veil; radial lift keeps the form centre readable. */
+  /* Auth screen - photograph dimmed by a base veil; radial lift keeps the form centre readable. */
   --auth-veil-base: rgb(255 253 250 / 0.38);
   --auth-veil-core: rgb(255 253 250 / 0.92);
   --auth-veil-mid: rgb(255 253 250 / 0.68);
@@ -481,7 +481,7 @@
   }
 
   /* The outline follows the element's own radius, so the ring must not
-     redefine border-radius — doing so reshapes buttons on focus. */
+     redefine border-radius - doing so reshapes buttons on focus. */
   :focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
@@ -645,7 +645,7 @@
     scrollbar-gutter: auto;
   }
 
-  /* Sign-in / magic-link sent — wellness photograph with a clean veil and a protected centre. */
+  /* Sign-in / magic-link sent - wellness photograph with a clean veil and a protected centre. */
   .auth-bg {
     position: fixed;
     inset: 0;

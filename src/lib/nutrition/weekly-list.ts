@@ -74,7 +74,7 @@ export function buildWeeklyListRows(
       ? formatPlanAmount(match, unit)
       : item.grams > 0
         ? `${item.grams} g`
-        : item.householdDisplay || "—";
+        : item.householdDisplay || "-";
 
     return {
       slot: item.slot,

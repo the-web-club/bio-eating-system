@@ -1,54 +1,40 @@
 import { redirect } from "next/navigation";
 import { LifeHappenedButton } from "@/components/portal/life-happened-button";
-import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalErrorState } from "@/components/portal/error-state";
-import { PageShell } from "@/components/portal/layout";
-import { PageHeader } from "@/components/portal/page-header";
-import { TodayView } from "@/components/portal/views/today-view";
+import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
+import { TodayViewContent } from "@/components/portal/views/today-view-content";
 import { ActionLink } from "@/components/ui/action-link";
 import { SCREENING_REASON_COPY } from "@/lib/content/labels";
 import { assembleMeals, todaySummary } from "@/lib/portal/meal-assembly";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
+import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
 
-export default async function TodayPage() {
+async function TodayPageContent() {
   let data;
   try {
     data = await loadPortalData();
   } catch {
     return (
-      <PageShell width="reading">
-        <PageHeader title="Today" />
-        <div className="mt-group">
-          <PortalErrorState
-            title="Your plan did not load"
-            action={
-              <ActionLink href="/portal" variant="secondary" size="compact">
-                Try again
-              </ActionLink>
-            }
-          >
-            Check your connection, then try again.
-          </PortalErrorState>
-        </div>
-      </PageShell>
+      <PortalErrorState
+        title="Your plan did not load"
+        action={
+          <ActionLink href="/portal" variant="secondary" size="compact">
+            Try again
+          </ActionLink>
+        }
+      >
+        Check your connection, then try again.
+      </PortalErrorState>
     );
   }
 
   if (!data.entitlements.corePlan) {
     return (
-      <PageShell width="reading">
-        <PageHeader
-          title="Welcome"
-          description="Your account is signed in. The personal nutrition plan is not on it yet."
-        />
-        <div className="mt-group">
-          <PortalEmptyState title="Personal nutrition plan not on your account">
-            Add the plan on the website. Your setup and daily meals appear here once
-            the purchase is confirmed.
-          </PortalEmptyState>
-        </div>
-      </PageShell>
+      <PortalEmptyState title="Personal nutrition plan not on your account">
+        Add the plan on the website. Your setup and daily meals appear here once
+        the purchase is confirmed.
+      </PortalEmptyState>
     );
   }
 
@@ -65,7 +51,7 @@ export default async function TodayPage() {
 
   return (
     <>
-      <TodayView
+      <TodayViewContent
         basePath="/portal"
         firstName={data.user.name?.split(" ")[0] || "there"}
         meals={meals}
@@ -82,5 +68,20 @@ export default async function TodayPage() {
         <LifeHappenedButton basePath="/portal" />
       </div>
     </>
+  );
+}
+
+export default function TodayPage() {
+  return (
+    <PortalPageWithSuspense
+      copy={PORTAL_PAGE_COPY.today}
+      actions={
+        <ActionLink href="/portal/plan" variant="secondary">
+          View full plan
+        </ActionLink>
+      }
+    >
+      <TodayPageContent />
+    </PortalPageWithSuspense>
   );
 }

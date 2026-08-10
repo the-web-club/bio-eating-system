@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Composition primitives. Structure comes from typography, spacing, alignment
- * and hairline rules — not from nested containers. A surface change or a border
+ * and hairline rules - not from nested containers. A surface change or a border
  * is opt-in and only earned by genuinely interactive objects.
  */
 
@@ -47,7 +47,7 @@ export function PageSections({
 
 /**
  * A major page section. Separated by spacing, with an optional single hairline
- * on the top edge — never enclosed in a container.
+ * on the top edge - never enclosed in a container.
  */
 export function Section({
   title,
@@ -160,7 +160,7 @@ export function Meta({
 }
 
 /**
- * Uppercase eyebrow. Capped at a few words per the typographic rule — never a
+ * Uppercase eyebrow. Capped at a few words per the typographic rule - never a
  * sentence. Used for stable structural labels such as a program context.
  */
 export function Eyebrow({

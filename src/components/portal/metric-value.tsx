@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Structured value. Monospace is reserved for quantities, units, lab values and
- * week indices so numbers align in a column — never for labels or descriptions.
+ * week indices so numbers align in a column - never for labels or descriptions.
  */
 export function MetricValue({
   value,

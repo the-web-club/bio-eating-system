@@ -5,7 +5,7 @@ import { ProgressLine } from "./progress-line";
 
 /**
  * The one visually dominant surface allowed per viewport: a high-contrast panel
- * for the program the reader is actually in. It replaces an "active" badge —
+ * for the program the reader is actually in. It replaces an "active" badge,
  * the hierarchy says which program is current.
  */
 export function ProgramPanel({

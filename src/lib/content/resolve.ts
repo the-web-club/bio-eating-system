@@ -1,6 +1,6 @@
 /**
  * Content catalogue resolver. Reviewed copy lives under content/ when authored.
- * Missing keys return null — never invent science or lesson prose. rules.md §4.5.
+ * Missing keys return null - never invent science or lesson prose. rules.md §4.5.
  */
 
 import "server-only";

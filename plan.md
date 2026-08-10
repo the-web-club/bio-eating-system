@@ -1,4 +1,4 @@
-# plan.md — `bio-eating-system` MVP
+# plan.md - `bio-eating-system` MVP
 
 Repo: `github.com/the-web-club/bio-eating-system`
 Stack: Next.js App Router, TypeScript strict, Tailwind v4 tokens, Prisma on MariaDB Cloud Serverless, Better Auth, Resend, Vercel, pnpm.
@@ -48,7 +48,7 @@ None of these are engineering tasks and all of them block launch.
 
 Each phase ends with a green `pnpm build`, a deployed preview, and a manual walkthrough. Do not start a phase before the previous one is walked through.
 
-### Phase 1 — Foundation
+### Phase 1 - Foundation
 1. `create-next-app` with TypeScript strict, App Router, pnpm.
 2. `src/app/globals.css` with the full three-layer token system. This lands before any component, so there is never a hex to migrate later.
 3. Validated env module. Every secret required at boot, no silent fallbacks.
@@ -57,7 +57,7 @@ Each phase ends with a green `pnpm build`, a deployed preview, and a manual walk
 
 Done when: an empty page renders from tokens only, dark mode flips with a class, and a deliberate `bg-[#007AFF]` fails lint.
 
-### Phase 2 — Schema and auth
+### Phase 2 - Schema and auth
 1. `prisma/schema.prisma` as supplied, reviewed, then `prisma migrate diff` to SQL, hand-reviewed, `prisma migrate deploy`.
 2. Better Auth with email and magic link. No passwords for MVP, which removes a whole class of storage risk.
 3. Route protection on `/portal/*` and `/api/portal/*`, server-side session resolution, 401 without one.
@@ -65,7 +65,7 @@ Done when: an empty page renders from tokens only, dark mode flips with a class,
 
 Done when: an unauthenticated request to a portal route returns 401 and a magic link logs in.
 
-### Phase 3 — Intake and plan engine
+### Phase 3 - Intake and plan engine
 1. Zod schemas for the intake payload, shared client and server.
 2. `POST /api/portal/biometrics`, session-guarded, validated, upserts the profile.
 3. Multi-step intake form. Allergens and exclusions are checkbox enums covering the EU 14 plus the slot list. The free-text field is stored and shown to a human reviewer, and never parsed by code.
@@ -73,7 +73,7 @@ Done when: an unauthenticated request to a portal route returns 401 and a magic 
 
 Done when: the fixtures pass, and a profile declaring a shellfish allergy provably cannot receive a bivalve slot in any code path.
 
-### Phase 4 — Portal
+### Phase 4 - Portal
 1. Plan view, current week, per-slot portions.
 2. Weekly list view.
 3. Locked-tier states as real empty states, not `alert()`.
@@ -82,7 +82,7 @@ Done when: the fixtures pass, and a profile declaring a shellfish allergy provab
 
 Done when: every entitlement combination renders without a crash, and a missing content key shows an empty state rather than throwing.
 
-### Phase 5 — Automation
+### Phase 5 - Automation
 1. `POST /api/webhooks/surecart` with HMAC over raw body, timestamp window, event-id idempotency, entitlement mapping from SKU.
 2. `src/lib/mail.ts`, the only Resend caller. Unsubscribe token in every marketing send, `List-Unsubscribe` headers.
 3. `GET /api/cron/weekly-drop`, batched, capped per invocation, one `EmailDrop` row per user per week with a unique constraint, cursor advanced only after a confirmed send.
@@ -90,7 +90,7 @@ Done when: every entitlement combination renders without a crash, and a missing 
 
 Done when: replaying a webhook is a no-op, an unsigned webhook is rejected, and a cron re-run sends zero duplicates.
 
-### Phase 6 — Localisation
+### Phase 6 - Localisation
 1. `next-intl`, message catalogues per locale, EN and FI.
 2. Every string comes from a catalogue. A missing key falls back to EN and logs, it never renders `undefined`.
 

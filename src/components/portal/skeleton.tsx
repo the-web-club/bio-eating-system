@@ -1,4 +1,7 @@
+import type { ReactNode } from "react";
+import type { PortalPageCopy, PortalPageSkeleton } from "@/lib/portal/page-copy";
 import { cn } from "@/lib/cn";
+import { PageHeader } from "./page-header";
 import { PageShell, PageSections, Split } from "./layout";
 
 /**
@@ -29,19 +32,6 @@ function RowSkeleton({ tall = false }: { tall?: boolean }) {
   );
 }
 
-function HeaderSkeleton({ action = true }: { action?: boolean }) {
-  return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
-      <div className="space-y-3">
-        <Skeleton className="h-9 w-64" />
-        <Skeleton className="h-4 w-80 max-w-full" />
-        <Skeleton className="h-3 w-32" />
-      </div>
-      {action ? <Skeleton className="h-11 w-40 rounded-button sm:mt-1.5" /> : null}
-    </div>
-  );
-}
-
 function AsideSkeleton() {
   return (
     <div className="space-y-group">
@@ -62,27 +52,10 @@ function AsideSkeleton() {
   );
 }
 
-function Frame({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+/** Mirrors the Today body: focus list and side column below the page header. */
+export function TodayBodySkeleton() {
   return (
-    <PageShell>
-      <div aria-busy="true" aria-label={label}>
-        <PageSections>{children}</PageSections>
-      </div>
-    </PageShell>
-  );
-}
-
-/** Mirrors the Today composition: editorial header, focus list, side column. */
-export function PortalSkeleton() {
-  return (
-    <Frame label="Loading your program">
-      <HeaderSkeleton />
+    <>
       <Split
         main={
           <div>
@@ -112,72 +85,202 @@ export function PortalSkeleton() {
           </div>
         </div>
       </div>
-    </Frame>
+    </>
   );
 }
 
-/** Mirrors the grouped daily plan. */
-export function PlanSkeleton() {
+/** Mirrors the grouped daily plan below the page header. */
+export function PlanBodySkeleton() {
   return (
-    <Frame label="Loading your daily plan">
-      <HeaderSkeleton action={false} />
-      <Split
-        main={
-          <div className="space-y-section">
-            {[0, 1].map((group) => (
-              <div key={group}>
-                <Skeleton className="mb-tight h-4 w-28" />
-                <RowSkeleton tall />
-                <RowSkeleton tall />
-                <RowSkeleton tall />
-              </div>
-            ))}
-          </div>
-        }
-        aside={<AsideSkeleton />}
-      />
-    </Frame>
+    <Split
+      main={
+        <div className="space-y-section">
+          {[0, 1].map((group) => (
+            <div key={group}>
+              <Skeleton className="mb-tight h-4 w-28" />
+              <RowSkeleton tall />
+              <RowSkeleton tall />
+              <RowSkeleton tall />
+            </div>
+          ))}
+        </div>
+      }
+      aside={<AsideSkeleton />}
+    />
   );
 }
 
-/** Mirrors a single wide list, such as the weekly plan or marker index. */
-export function ListSkeleton({ label }: { label: string }) {
+/** Mirrors a single wide list below the page header. */
+export function ListBodySkeleton() {
   return (
-    <Frame label={label}>
-      <HeaderSkeleton />
-      <Split
-        main={
-          <div>
-            <Skeleton className="mb-tight h-4 w-32" />
-            {[0, 1, 2, 3, 4, 5].map((row) => (
-              <RowSkeleton key={row} tall />
-            ))}
-          </div>
-        }
-        aside={<AsideSkeleton />}
-      />
-    </Frame>
-  );
-}
-
-/** Mirrors the programs hub: one feature panel, then grouped rows. */
-export function ProgramsSkeleton() {
-  return (
-    <Frame label="Loading your programs">
-      <HeaderSkeleton action={false} />
-      <div>
-        <Skeleton className="h-48 w-full rounded-panel sm:h-40" />
-        <div className="mt-section">
+    <Split
+      main={
+        <div>
           <Skeleton className="mb-tight h-4 w-32" />
-          <RowSkeleton tall />
-          <RowSkeleton tall />
+          {[0, 1, 2, 3, 4, 5].map((row) => (
+            <RowSkeleton key={row} tall />
+          ))}
         </div>
-        <div className="mt-section border-t border-hairline pt-group">
-          <Skeleton className="mb-tight h-4 w-28" />
-          <RowSkeleton tall />
-          <RowSkeleton tall />
-        </div>
-      </div>
-    </Frame>
+      }
+      aside={<AsideSkeleton />}
+    />
   );
+}
+
+/** Mirrors the programs hub below the page header. */
+export function ProgramsBodySkeleton() {
+  return (
+    <div>
+      <Skeleton className="h-48 w-full rounded-panel sm:h-40" />
+      <div className="mt-section">
+        <Skeleton className="mb-tight h-4 w-32" />
+        <RowSkeleton tall />
+        <RowSkeleton tall />
+      </div>
+      <div className="mt-section border-t border-hairline pt-group">
+        <Skeleton className="mb-tight h-4 w-28" />
+        <RowSkeleton tall />
+        <RowSkeleton tall />
+      </div>
+    </div>
+  );
+}
+
+/** Mirrors a reading-width page body with stacked blocks. */
+export function ReadingBodySkeleton() {
+  return (
+    <div className="space-y-group">
+      <Skeleton className="h-24 w-full rounded-panel" />
+      <Skeleton className="h-16 w-full rounded-panel" />
+      <Skeleton className="h-16 w-full rounded-panel" />
+    </div>
+  );
+}
+
+/** Mirrors the progress charts and suggestions below the page header. */
+export function ProgressBodySkeleton() {
+  return (
+    <>
+      <div className="space-y-3 border-t border-hairline pt-group">
+        <Skeleton className="h-4 w-28" />
+        <Skeleton className="h-40 w-full rounded-panel" />
+      </div>
+      <div className="space-y-3 border-t border-hairline pt-group">
+        <Skeleton className="h-4 w-32" />
+        <RowSkeleton tall />
+        <RowSkeleton tall />
+      </div>
+    </>
+  );
+}
+
+/** Mirrors the check-in form below the page header. */
+export function CheckInBodySkeleton() {
+  return (
+    <div className="space-y-4 border-t border-hairline pt-group">
+      <Skeleton className="h-4 w-28" />
+      {[0, 1, 2, 3].map((row) => (
+        <div key={row} className="space-y-2">
+          <Skeleton className="h-3 w-36" />
+          <Skeleton className="h-11 w-full rounded-input" />
+        </div>
+      ))}
+      <Skeleton className="h-11 w-32 rounded-button" />
+    </div>
+  );
+}
+
+export function portalBodySkeleton(kind: PortalPageSkeleton) {
+  switch (kind) {
+    case "today":
+      return <TodayBodySkeleton />;
+    case "plan":
+      return <PlanBodySkeleton />;
+    case "list":
+      return <ListBodySkeleton />;
+    case "programs":
+      return <ProgramsBodySkeleton />;
+    case "reading":
+      return <ReadingBodySkeleton />;
+    case "progress":
+      return <ProgressBodySkeleton />;
+    case "check-in":
+      return <CheckInBodySkeleton />;
+  }
+}
+
+/**
+ * Route loading UI: real title and description, skeleton body only. Used in
+ * loading.tsx and as a Suspense fallback when it matches the page frame.
+ */
+export function PageLoadingState({
+  title,
+  description,
+  meta,
+  actions,
+  width = "wide",
+  body,
+  loadingLabel,
+}: PortalPageCopy & { body: ReactNode }) {
+  return (
+    <PageShell width={width}>
+      <div aria-busy="true" aria-label={loadingLabel}>
+        <PageSections>
+          <PageHeader
+            title={title}
+            description={description}
+            meta={meta}
+            actions={actions}
+          />
+          {body}
+        </PageSections>
+      </div>
+    </PageShell>
+  );
+}
+
+export function pageLoadingFromCopy(copy: PortalPageCopy) {
+  return (
+    <PageLoadingState {...copy} body={portalBodySkeleton(copy.skeleton)} />
+  );
+}
+
+/** @deprecated Use PageLoadingState with TodayBodySkeleton. */
+export function PortalSkeleton() {
+  return pageLoadingFromCopy({
+    title: "Today",
+    description: "Today's plan",
+    skeleton: "today",
+    loadingLabel: "Loading your program",
+  });
+}
+
+/** @deprecated Use PageLoadingState with PlanBodySkeleton. */
+export function PlanSkeleton() {
+  return pageLoadingFromCopy({
+    title: "Plan",
+    description: "My week.",
+    skeleton: "plan",
+    loadingLabel: "Loading your daily plan",
+  });
+}
+
+/** @deprecated Use PageLoadingState with ListBodySkeleton. */
+export function ListSkeleton({ label }: { label: string }) {
+  return pageLoadingFromCopy({
+    title: "Shop",
+    description: "What do I buy?",
+    skeleton: "list",
+    loadingLabel: label,
+  });
+}
+
+/** @deprecated Use PageLoadingState with ProgramsBodySkeleton. */
+export function ProgramsSkeleton() {
+  return pageLoadingFromCopy({
+    title: "Programs",
+    description: "What you are working through now, and what you could add.",
+    skeleton: "programs",
+    loadingLabel: "Loading your programs",
+  });
 }

@@ -2,7 +2,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 
 /**
  * Test accounts only. Invented addresses on a non-production domain.
- * No biometric or health values on these rows — intake stays empty so the
+ * No biometric or health values on these rows - intake stays empty so the
  * portal empty states stay exercisable. full-access is marketing-ready so the
  * weekly-drop cron path can be exercised without inventing Article 9 data.
  */
@@ -97,7 +97,7 @@ async function main() {
     name: "Seed None",
   });
 
-  // Field names only — never print secrets or health data.
+  // Field names only - never print secrets or health data.
   console.log("Seeded users:", {
     coreOnly: coreOnly.email,
     fullAccess: fullAccess.email,

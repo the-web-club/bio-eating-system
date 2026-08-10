@@ -86,7 +86,7 @@ export const FIXTURE_MARKERS: BiomarkerEntry[] = [
   {
     id: "ferritin",
     name: "Ferritin",
-    reference: "15–150 µg/L",
+    reference: "15-150 µg/L",
     why: "Describes how much iron the body has in storage.",
     rationale:
       "Reviewed rationale appears here once the catalogue entry is published. Reference context is not a personal target.",

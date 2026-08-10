@@ -2,18 +2,19 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { YourPlanSection } from "@/components/portal/your-plan-section";
-import { PageSections, PageShell, Section } from "@/components/portal/layout";
-import { PageHeader } from "@/components/portal/page-header";
+import { Section } from "@/components/portal/layout";
+import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
 import { getProfileExtras } from "@/components/portal/nav-config";
 import { isAdminEmail } from "@/lib/admin-allowlist";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
+import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
 import { PrivacyControls } from "./privacy-controls";
 import { SignOutButton } from "./sign-out-button";
 import { ActionLink } from "@/components/ui/action-link";
 
-export default async function ProfilePage() {
+async function ProfilePageContent() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) redirect("/?next=/portal/account");
 
@@ -39,78 +40,79 @@ export default async function ProfilePage() {
   const staff = isAdminEmail(session.user.email);
 
   return (
-    <PageShell width="reading">
-      <PageSections>
-        <PageHeader
-          title="Profile"
-          description="My preferences and settings."
+    <>
+      {data ? (
+        <YourPlanSection
+          entitlements={data.entitlements}
+          hasPlan={Boolean(data.plan)}
         />
+      ) : null}
 
-        {data ? (
-          <YourPlanSection
-            entitlements={data.entitlements}
-            hasPlan={Boolean(data.plan)}
-          />
-        ) : null}
+      <Section ruled title="Signed in as">
+        <dl className="divide-y divide-hairline border-t border-hairline">
+          <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+            <dt className="text-small text-muted">Name</dt>
+            <dd className="text-body text-foreground">{session.user.name}</dd>
+          </div>
+          <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+            <dt className="text-small text-muted">Email</dt>
+            <dd className="break-words text-body text-foreground">
+              {session.user.email}
+            </dd>
+          </div>
+        </dl>
+      </Section>
 
-        <Section ruled title="Signed in as">
-          <dl className="divide-y divide-hairline border-t border-hairline">
-            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-              <dt className="text-small text-muted">Name</dt>
-              <dd className="text-body text-foreground">{session.user.name}</dd>
-            </div>
-            <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
-              <dt className="text-small text-muted">Email</dt>
-              <dd className="break-words text-body text-foreground">
-                {session.user.email}
-              </dd>
-            </div>
-          </dl>
+      {data?.entitlements.labReference ? (
+        <Section ruled title="Advanced tracking">
+          <ActionLink href={extras.biomarkers} variant="quiet">
+            Open biomarker reference
+          </ActionLink>
         </Section>
+      ) : null}
 
-        {data?.entitlements.labReference ? (
-          <Section ruled title="Advanced tracking">
-            <ActionLink href={extras.biomarkers} variant="quiet">
-              Open biomarker reference
-            </ActionLink>
-          </Section>
-        ) : null}
-
-        {data?.plan ? (
-          <Section ruled title="Plan maintenance">
-            <ActionLink href={extras.recalibrate} variant="quiet">
-              Update my plan
-            </ActionLink>
-          </Section>
-        ) : null}
-
-        {staff ? (
-          <Section ruled title="Staff">
-            <Link
-              href="/admin"
-              className="inline-block text-body text-accent-text underline-offset-4 hover:underline"
-            >
-              Open staff tools
-            </Link>
-          </Section>
-        ) : null}
-
-        <Section ruled title="Privacy">
-          <PrivacyControls
-            marketingOptIn={user.marketingOptIn}
-            consentVersion={profile?.consentVersion ?? null}
-            consentHealthDataAt={
-              profile?.consentHealthDataAt
-                ? profile.consentHealthDataAt.toISOString()
-                : null
-            }
-          />
+      {data?.plan ? (
+        <Section ruled title="Plan maintenance">
+          <ActionLink href={extras.recalibrate} variant="quiet">
+            Update my plan
+          </ActionLink>
         </Section>
+      ) : null}
 
-        <Section ruled title="Session">
-          <SignOutButton />
+      {staff ? (
+        <Section ruled title="Staff">
+          <Link
+            href="/admin"
+            className="inline-block text-body text-accent-text underline-offset-4 hover:underline"
+          >
+            Open staff tools
+          </Link>
         </Section>
-      </PageSections>
-    </PageShell>
+      ) : null}
+
+      <Section ruled title="Privacy">
+        <PrivacyControls
+          marketingOptIn={user.marketingOptIn}
+          consentVersion={profile?.consentVersion ?? null}
+          consentHealthDataAt={
+            profile?.consentHealthDataAt
+              ? profile.consentHealthDataAt.toISOString()
+              : null
+          }
+        />
+      </Section>
+
+      <Section ruled title="Session">
+        <SignOutButton />
+      </Section>
+    </>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <PortalPageWithSuspense copy={PORTAL_PAGE_COPY.account}>
+      <ProfilePageContent />
+    </PortalPageWithSuspense>
   );
 }

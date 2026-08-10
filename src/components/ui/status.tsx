@@ -86,7 +86,7 @@ export type StatusProps = {
 /**
  * Feedback about the outcome of an action or the state of a plan: mark + text
  * on a single left hairline. Colour is never the only signal, and there is no
- * enclosing box — use InlineNote for persistent guidance instead.
+ * enclosing box - use InlineNote for persistent guidance instead.
  *
  * Screening refusal / maintenance-only / allergen exclusions → role="neutral".
  */

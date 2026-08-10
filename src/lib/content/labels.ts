@@ -1,7 +1,7 @@
 import type { Allergen, FoodSlot } from "@/lib/nutrition/plan-engine";
 import type { ScreeningFlag } from "@/lib/nutrition/screening";
 
-/** Short UI labels for enums. Not science copy — catalogue keys hold that. */
+/** Short UI labels for enums. Not science copy - catalogue keys hold that. */
 export const SLOT_LABELS: Record<FoodSlot, string> = {
   eggs: "Eggs",
   organ_meat: "Organ meat",
@@ -49,8 +49,8 @@ export const GOAL_APPROACH_LABELS = {
 
 export const TRAINING_LABELS = {
   none: "No structured training",
-  one_two: "1–2 sessions per week",
-  three_four: "3–4 sessions per week",
+  one_two: "1-2 sessions per week",
+  three_four: "3-4 sessions per week",
   five_plus: "5 or more sessions per week",
 } as const;
 
@@ -86,7 +86,7 @@ export const COOKING_ABILITY_LABELS = {
 export const EAT_OUT_LABELS = {
   rarely: "Rarely",
   once_week: "About once a week",
-  two_three_week: "2–3 times per week",
+  two_three_week: "2-3 times per week",
   most_days: "Most days",
 } as const;
 

@@ -15,7 +15,7 @@ Colour is a signal carried by a small mark, not a tinted surface. Hierarchy star
 
 Screening refusal and maintenance-only are **not** errors. Style as **neutral**: foreground text, mono informational mark, generous spacing, no wash, no red, no warning triangle.
 
-Same for “left out of your plan” allergen lists — confirmation, not warning.
+Same for “left out of your plan” allergen lists - confirmation, not warning.
 
 ## Tokens (four per role)
 
@@ -45,7 +45,7 @@ Filled destructive and confirm buttons do not use these text colours. They use `
 
 ## Hard rules
 
-1. Colour is never the only signal — icon + text. Greyscale playground must stay legible.
+1. Colour is never the only signal - icon + text. Greyscale playground must stay legible.
 2. No full-width coloured banners. Status = icon + text + optional 1px left rule. Wash only for blocking danger.
 3. No coloured input borders at rest. Error may take line colour on the input; never success colour on the input.
 4. No green checkmarks decorating every row.
@@ -54,4 +54,4 @@ Filled destructive and confirm buttons do not use these text colours. They use `
 
 ## Component
 
-`Status` in `src/components/ui/status.tsx` — `role: neutral | info | success | danger`, optional `wash` (honoured only for danger).
+`Status` in `src/components/ui/status.tsx` - `role: neutral | info | success | danger`, optional `wash` (honoured only for danger).

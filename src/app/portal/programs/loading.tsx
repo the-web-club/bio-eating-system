@@ -1,5 +1,6 @@
-import { ProgramsSkeleton } from "@/components/portal/skeleton";
+import { pageLoadingFromCopy } from "@/components/portal/skeleton";
+import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
 
 export default function ProgramsLoading() {
-  return <ProgramsSkeleton />;
+  return pageLoadingFromCopy(PORTAL_PAGE_COPY.programs);
 }

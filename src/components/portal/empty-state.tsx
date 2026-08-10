@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Empty states explain the next action. They are separated by one hairline and
- * spacing — not framed in a dashed box, and not centred in an oversized well.
+ * spacing - not framed in a dashed box, and not centred in an oversized well.
  */
 export function PortalEmptyState({
   title,
