@@ -59,7 +59,7 @@ export function AccessEditor({
     <div className="flex flex-col gap-tight">
       <ul className="divide-y divide-hairline border-t border-hairline">
         {ACCESS_FLAG_LABELS.map((flag) => (
-          <li key={flag.key} className="py-3">
+          <li key={flag.key} className="py-s2">
             <Checkbox
               id={`access-${flag.key}`}
               label={flag.label}
@@ -68,7 +68,7 @@ export function AccessEditor({
                 setAccess((prev) => ({ ...prev, [flag.key]: checked }))
               }
             />
-            <p className="mt-1 pl-8 text-meta text-muted">{flag.hint}</p>
+            <p className="mt-s1 pl-8 text-meta text-muted">{flag.hint}</p>
           </li>
         ))}
       </ul>
@@ -81,7 +81,7 @@ export function AccessEditor({
         maxLength={500}
       />
 
-      <div aria-live="polite" className="space-y-2">
+      <div aria-live="polite" className="space-y-s1">
         {error ? <Status role="danger">{error}</Status> : null}
         {saved ? <Status role="success">Access saved.</Status> : null}
       </div>

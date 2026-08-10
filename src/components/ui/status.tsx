@@ -104,10 +104,10 @@ export function Status({
     <div
       role="status"
       className={cn(
-        "flex gap-2.5 border-l border-solid py-1 pl-3",
+        "flex gap-s2 border-l border-solid py-s1 pl-s2",
         tokens.line,
         tokens.text,
-        useWash && cn(tokens.wash, "rounded-r-control py-2 pr-3"),
+        useWash && cn(tokens.wash, "rounded-r-control py-s2 pr-s2"),
         className,
       )}
     >

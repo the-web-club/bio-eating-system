@@ -40,7 +40,7 @@ export function Tabs({
               key={item.id}
               value={item.id}
               className={cn(
-                "relative -mb-px cursor-[var(--cursor-control)] px-0.5 py-2.5 text-body",
+                "relative -mb-px cursor-[var(--cursor-control)] px-s1 py-s2 text-body",
                 "transition-colors [transition-duration:var(--duration-fast)]",
                 selected
                   ? "font-medium text-foreground"

@@ -77,7 +77,7 @@ export function Button({
     >
       <span
         className={cn(
-          "col-start-1 row-start-1 inline-flex items-center gap-2",
+          "col-start-1 row-start-1 inline-flex items-center gap-s1",
           loading && "invisible",
         )}
       >
@@ -85,7 +85,7 @@ export function Button({
       </span>
       {loading ? (
         <span
-          className="col-start-1 row-start-1 inline-flex items-center gap-2 opacity-0 [animation:fade-in_1ms_linear_forwards] [animation-delay:var(--loading-threshold)]"
+          className="col-start-1 row-start-1 inline-flex items-center gap-s1 opacity-0 [animation:fade-in_1ms_linear_forwards] [animation-delay:var(--loading-threshold)]"
           aria-live="polite"
         >
           <span

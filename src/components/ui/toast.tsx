@@ -53,7 +53,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={value}>
       {children}
       <div
-        className="pointer-events-none fixed bottom-6 right-6 z-[60] flex w-full max-w-sm flex-col-reverse gap-1"
+        className="pointer-events-none fixed bottom-s4 right-s4 z-[60] flex w-full max-w-sm flex-col-reverse gap-s1"
         onMouseEnter={() => {
           paused.current = true;
         }}
@@ -128,7 +128,7 @@ function ToastCard({
         ease: motionTransition.ease as "linear" | [number, number, number, number],
       }}
     >
-      <div className={cn("rounded-surface bg-surface py-2.5 pl-1 pr-4 shadow-floating")}>
+      <div className={cn("rounded-surface bg-surface py-s2 pl-s1 pr-s4 shadow-floating")}>
         <Status role={item.role}>{item.message}</Status>
       </div>
     </motion.div>

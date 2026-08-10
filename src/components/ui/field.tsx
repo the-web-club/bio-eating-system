@@ -50,7 +50,7 @@ export function Field({
         aria-invalid={error ? true : undefined}
         aria-describedby={[hintId, errorId].filter(Boolean).join(" ") || undefined}
         className={cn(
-          "w-full min-h-11 border-0 border-b border-hairline-strong bg-transparent px-0 py-2 text-body text-foreground",
+          "w-full min-h-11 border-0 border-b border-hairline-strong bg-transparent px-0 py-s2 text-body text-foreground",
           "placeholder:text-disabled",
           "transition-colors [transition-duration:var(--duration-fast)]",
           "focus:border-accent focus:outline-none",

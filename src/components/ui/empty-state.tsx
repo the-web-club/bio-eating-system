@@ -20,15 +20,15 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn("border-t border-hairline pt-tight", className)}>
+    <div className={cn("border-t border-hairline pt-s4", className)}>
       {eyebrow ? (
-        <span className="mb-2 block text-label text-faint u-caps">{eyebrow}</span>
+        <span className="mb-s1 block text-label text-faint u-caps">{eyebrow}</span>
       ) : null}
       <p className="text-body-lg font-semibold text-foreground">{title}</p>
       {children ? (
-        <div className="mt-1.5 measure text-body text-muted">{children}</div>
+        <div className="mt-s2 measure text-body text-muted">{children}</div>
       ) : null}
-      {action ? <div className="mt-tight flex flex-wrap gap-3">{action}</div> : null}
+      {action ? <div className="mt-s4 flex flex-wrap gap-s2">{action}</div> : null}
     </div>
   );
 }

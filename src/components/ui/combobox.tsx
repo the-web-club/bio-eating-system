@@ -75,7 +75,7 @@ export function Combobox({
               />
             </div>
             <ScrollArea className="max-h-56">
-              <ul role="listbox" className="p-1">
+              <ul role="listbox" className="p-s1">
                 {filtered.map((option) => {
                   const active = option.value === value;
                   return (
@@ -85,7 +85,7 @@ export function Combobox({
                         role="option"
                         aria-selected={active}
                         className={cn(
-                          "relative flex h-9 w-full items-center rounded-control py-2 pl-8 pr-3 text-left text-body text-foreground",
+                          "relative flex h-9 w-full items-center rounded-control py-s2 pl-8 pr-s2 text-left text-body text-foreground",
                           "cursor-[var(--cursor-control)] hover:bg-surface-inset",
                         )}
                         onClick={() => {
@@ -109,7 +109,7 @@ export function Combobox({
                   );
                 })}
                 {filtered.length === 0 ? (
-                  <li className="px-3 py-2 text-body text-muted">No matches</li>
+                  <li className="px-s2 py-s2 text-body text-muted">No matches</li>
                 ) : null}
               </ul>
             </ScrollArea>

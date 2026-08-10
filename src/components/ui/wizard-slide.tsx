@@ -18,11 +18,11 @@ export function WizardSlideDemo() {
   const { variants, transition } = wizardSlideVariants(!!reduceMotion);
 
   return (
-    <div className="overflow-hidden rounded-surface border border-hairline bg-surface p-5 sm:p-6">
+    <div className="overflow-hidden rounded-surface border border-hairline bg-surface p-s4 sm:p-s5">
       <p className="text-label text-faint u-caps">
         Step {index + 1} of {STEPS.length}
       </p>
-      <div className="relative mt-4 min-h-28">
+      <div className="relative mt-s4 min-h-28">
         <AnimatePresence mode="wait">
           <motion.div
             key={step.id}
@@ -33,11 +33,11 @@ export function WizardSlideDemo() {
             transition={transition}
           >
             <h3 className="text-section-serif text-foreground">{step.title}</h3>
-            <p className="mt-2 measure text-body text-muted">{step.body}</p>
+            <p className="mt-s1 measure text-body text-muted">{step.body}</p>
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="mt-6 flex flex-wrap items-center gap-3">
+      <div className="mt-s4 flex flex-wrap items-center gap-s2">
         <Button
           variant="quiet"
           disabled={index === 0}

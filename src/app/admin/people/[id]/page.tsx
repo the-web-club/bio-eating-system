@@ -64,7 +64,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
             {facts.map((row) => (
               <div
                 key={row.label}
-                className="grid grid-cols-[9rem_minmax(0,1fr)] items-baseline gap-4 py-3"
+                className="grid grid-cols-[9rem_minmax(0,1fr)] items-baseline gap-s4 py-s2"
               >
                 <dt className="text-meta text-muted">{row.label}</dt>
                 <dd className="min-w-0 break-words text-body text-foreground">
@@ -86,17 +86,17 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
         <Section ruled title="Weekly schedule">
           {member.schedule ? (
             <dl className="divide-y divide-hairline border-t border-hairline">
-              <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
+              <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-s4 py-s2">
                 <dt className="text-meta text-muted">Active</dt>
                 <dd className="text-body text-foreground">
                   {member.schedule.active ? "Yes" : "No"}
                 </dd>
               </div>
-              <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
+              <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-s4 py-s2">
                 <dt className="text-meta text-muted">Current week</dt>
                 <dd className="text-body text-foreground">{member.schedule.currentWeek}</dd>
               </div>
-              <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
+              <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-s4 py-s2">
                 <dt className="text-meta text-muted">Last sent</dt>
                 <dd className="text-body text-foreground">
                   {member.schedule.lastSentAt
@@ -118,17 +118,17 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
           {!member.intake ? (
             <p className="text-body text-muted">Intake not started.</p>
           ) : (
-            <div className="space-y-tight">
+            <div className="space-y-s4">
               <dl className="divide-y divide-hairline border-t border-hairline">
-                <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
+                <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-s4 py-s2">
                   <dt className="text-meta text-muted">Goal</dt>
                   <dd className="text-body text-foreground">{member.intake.goal}</dd>
                 </div>
-                <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
+                <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-s4 py-s2">
                   <dt className="text-meta text-muted">Units</dt>
                   <dd className="text-body text-foreground">{member.intake.unitSystem}</dd>
                 </div>
-                <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-4 py-3">
+                <div className="grid grid-cols-[9rem_minmax(0,1fr)] gap-s4 py-s2">
                   <dt className="text-meta text-muted">Consent</dt>
                   <dd className="text-body text-foreground">
                     {member.intake.consentVersion} ·{" "}
@@ -138,9 +138,9 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
               </dl>
 
               {member.intake.notesForCoach ? (
-                <div className="border-t border-hairline pt-tight">
+                <div className="border-t border-hairline pt-s4">
                   <p className="text-meta text-muted">Notes for coach</p>
-                  <p className="mt-1 whitespace-pre-wrap text-body text-foreground">
+                  <p className="mt-s1 whitespace-pre-wrap text-body text-foreground">
                     {member.intake.notesForCoach}
                   </p>
                 </div>
@@ -151,7 +151,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                   {member.intake.plans.map((plan) => (
                     <li
                       key={plan.id}
-                      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"
+                      className="flex flex-wrap items-baseline justify-between gap-x-s4 gap-y-s1 py-s2"
                     >
                       <div>
                         <p className="text-body text-foreground">
@@ -178,7 +178,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
           ) : (
             <ul className="divide-y divide-hairline border-t border-hairline">
               {member.emailDrops.map((drop) => (
-                <li key={drop.id} className="py-3">
+                <li key={drop.id} className="py-s2">
                   <p className="text-body text-foreground">
                     Week {drop.weekNumber} · {drop.cycleYear}
                   </p>
@@ -190,7 +190,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
                         : "Pending"}
                   </p>
                   {drop.failure ? (
-                    <p className="mt-1 text-meta text-danger">{drop.failure}</p>
+                    <p className="mt-s1 text-meta text-danger">{drop.failure}</p>
                   ) : null}
                 </li>
               ))}
@@ -206,7 +206,7 @@ export default async function AdminMemberPage({ params }: MemberPageProps) {
               {member.auditLog.map((event) => (
                 <li
                   key={event.id}
-                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"
+                  className="flex flex-wrap items-baseline justify-between gap-x-s4 gap-y-s1 py-s2"
                 >
                   <div className="min-w-0">
                     <p className="text-body text-foreground">{event.action}</p>

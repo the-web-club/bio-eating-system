@@ -86,7 +86,7 @@ export function CreateMemberForm() {
         onChange={(event) => setName(event.target.value)}
       />
 
-      <fieldset className="space-y-2 border-t border-hairline pt-tight">
+      <fieldset className="space-y-s1 border-t border-hairline pt-s4">
         <legend className="text-meta text-soft">Starting access</legend>
         <CheckboxGroup>
           <Checkbox

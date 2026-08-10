@@ -80,7 +80,7 @@ export default async function AdminPeoplePage({ searchParams }: PeoplePageProps)
                 <li key={user.id}>
                   <Link
                     href={`/admin/people/${user.id}`}
-                    className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 hover:bg-surface-inset"
+                    className="flex flex-wrap items-baseline justify-between gap-x-s4 gap-y-s1 py-s2 hover:bg-surface-inset"
                   >
                     <div className="min-w-0">
                       <p className="text-body text-foreground">{user.email}</p>

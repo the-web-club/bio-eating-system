@@ -80,7 +80,7 @@ export function Select({
             style={menuSurfaceReducedMotionStyle(reduceMotion)}
           >
             <ScrollArea className="max-h-[min(var(--max-height-menu),var(--radix-select-content-available-height))]">
-              <SelectPrimitive.Viewport className="p-1">
+              <SelectPrimitive.Viewport className="p-s1">
                 {options.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -106,7 +106,7 @@ function SelectItem({
     <SelectPrimitive.Item
       value={value}
       className={cn(
-        "relative flex h-9 cursor-control select-none items-center rounded-control py-2 pl-8 pr-3 text-body text-foreground outline-none",
+        "relative flex h-9 cursor-control select-none items-center rounded-control py-s2 pl-8 pr-s2 text-body text-foreground outline-none",
         "data-[disabled]:pointer-events-none data-[disabled]:text-disabled",
         "data-[highlighted]:bg-surface-inset",
       )}

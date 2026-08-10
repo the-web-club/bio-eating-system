@@ -37,11 +37,11 @@ export default async function AdminOverviewPage() {
         />
 
         <Section title="At a glance">
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-x-s5 gap-y-s4 sm:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label}>
                 <dt className="text-meta text-muted">{stat.label}</dt>
-                <dd className="mt-1 text-body-lg tabular font-medium text-foreground">
+                <dd className="mt-s1 text-body-lg tabular font-medium text-foreground">
                   {stat.value}
                 </dd>
               </div>
@@ -57,7 +57,7 @@ export default async function AdminOverviewPage() {
               {data.recentEvents.map((event) => (
                 <li
                   key={event.id}
-                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"
+                  className="flex flex-wrap items-baseline justify-between gap-x-s4 gap-y-s1 py-s2"
                 >
                   <div className="min-w-0">
                     <p className="text-body text-foreground">{event.action}</p>
@@ -70,7 +70,7 @@ export default async function AdminOverviewPage() {
               ))}
             </ul>
           )}
-          <p className="mt-tight">
+          <p className="mt-s4">
             <Link
               href="/admin/activity"
               className="text-body text-accent-text underline-offset-4 hover:underline"
@@ -86,14 +86,14 @@ export default async function AdminOverviewPage() {
           ) : (
             <ul className="divide-y divide-hairline border-t border-hairline">
               {data.failedDrops.map((drop) => (
-                <li key={drop.id} className="py-3">
+                <li key={drop.id} className="py-s2">
                   <p className="text-body text-foreground">{drop.user.email}</p>
                   <p className="text-meta text-muted">
                     Week {drop.weekNumber} · {drop.cycleYear}
                     {drop.failedAt ? ` · ${formatWhen(drop.failedAt)}` : ""}
                   </p>
                   {drop.failure ? (
-                    <p className="mt-1 text-meta text-danger">{drop.failure}</p>
+                    <p className="mt-s1 text-meta text-danger">{drop.failure}</p>
                   ) : null}
                 </li>
               ))}
@@ -107,13 +107,13 @@ export default async function AdminOverviewPage() {
           ) : (
             <ul className="divide-y divide-hairline border-t border-hairline">
               {data.webhookErrors.map((event) => (
-                <li key={event.id} className="py-3">
+                <li key={event.id} className="py-s2">
                   <p className="text-body text-foreground">
                     {event.provider} · {event.providerEventId}
                   </p>
                   <p className="text-meta text-muted">{formatWhen(event.receivedAt)}</p>
                   {event.error ? (
-                    <p className="mt-1 text-meta text-danger">{event.error}</p>
+                    <p className="mt-s1 text-meta text-danger">{event.error}</p>
                   ) : null}
                 </li>
               ))}

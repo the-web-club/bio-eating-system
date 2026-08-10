@@ -30,7 +30,7 @@ export function OptionCard({
     >
       <input
         type="radio"
-        className="mt-0.5 size-4 shrink-0 accent-accent"
+        className="mt-s1 size-4 shrink-0 accent-accent"
         name={name}
         value={value}
         checked={selected}

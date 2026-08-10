@@ -43,18 +43,18 @@ export function Dialog({
         <DialogPrimitive.Content
           className={cn(
             "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2",
-            "rounded-sheet bg-surface px-6 py-6 shadow-modal sm:px-7 sm:py-7",
+            "rounded-sheet bg-surface px-s5 py-s5 shadow-modal sm:px-s6 sm:py-s6",
             "focus:outline-none",
             "data-[state=open]:animate-[dialog-in_var(--duration-disclosure)_var(--ease-emphasized)]",
             "data-[state=closed]:animate-[dialog-out_var(--duration-exit)_var(--ease-exit)]",
           )}
         >
-          <div className={cn(showCornerClose && "pr-8")}>
+          <div className={cn(showCornerClose && "pr-s6")}>
             <DialogPrimitive.Title className="text-body-lg font-semibold text-foreground">
               {title}
             </DialogPrimitive.Title>
             {description ? (
-              <DialogPrimitive.Description className="mt-1.5 measure text-body text-muted">
+              <DialogPrimitive.Description className="mt-s2 measure text-body text-muted">
                 {description}
               </DialogPrimitive.Description>
             ) : (
@@ -64,10 +64,10 @@ export function Dialog({
             )}
           </div>
 
-          {children ? <div className="mt-group">{children}</div> : null}
+          {children ? <div className="mt-s5">{children}</div> : null}
 
           {hasFooter ? (
-            <div className="mt-group flex flex-wrap items-center justify-end gap-3 border-t border-hairline pt-tight">
+            <div className="mt-s5 flex flex-wrap items-center justify-end gap-s2 border-t border-hairline pt-s4">
               {footer}
             </div>
           ) : null}
@@ -77,7 +77,7 @@ export function Dialog({
               <button
                 type="button"
                 className={cn(
-                  "absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-control",
+                  "absolute right-s4 top-s4 inline-flex size-8 items-center justify-center rounded-control",
                   "text-faint transition-[color,background-color] duration-[var(--duration-fast)] ease-[var(--ease-standard)]",
                   "hover:bg-surface-inset hover:text-muted",
                   "focus-visible:outline-none focus-visible:bg-surface-inset focus-visible:text-muted",

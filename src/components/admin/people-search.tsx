@@ -21,7 +21,7 @@ export function PeopleSearch({ initialQuery }: { initialQuery: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex max-w-lg flex-wrap items-end gap-3">
+    <form onSubmit={onSubmit} className="flex max-w-lg flex-wrap items-end gap-s2">
       <div className="min-w-[16rem] flex-1">
         <TextField
           label="Search by email or name"

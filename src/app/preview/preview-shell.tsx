@@ -36,7 +36,7 @@ export function PreviewShell({
       authoredWeeks={FIXTURE_AUTHORED_WEEKS}
       basePath={PREVIEW_BASE}
       devBar={
-        <div className="flex items-center gap-2 border-b border-hairline bg-surface-inset px-gutter py-1.5 sm:px-8">
+        <div className="flex items-center gap-s1 border-b border-hairline bg-surface-inset px-gutter py-s2 sm:px-8">
           <span className="size-1.5 shrink-0 rounded-pill bg-accent" aria-hidden />
           <p className="text-label text-muted">Design preview · fixture data</p>
         </div>
