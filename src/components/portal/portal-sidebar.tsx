@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/cn";
 import { selectionTransition } from "@/lib/motion";
+import { useSurfaceScrolled } from "@/hooks/use-surface-scrolled";
 import { BrandSignature } from "./brand-signature";
 import { getAccountNav, getPrimaryNav, isNavItemActive } from "./nav-config";
 import type { NavItem } from "./nav-config";
@@ -71,9 +72,13 @@ export function PortalSidebar({
   const account = getAccountNav(basePath);
   const root = basePath.replace(/\/$/, "") || "/portal";
   const indicatorId = `nav-rail-${root}`;
+  const scrolled = useSurfaceScrolled();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline bg-surface-canvas lg:flex">
+    <aside
+      className="surface-rail fixed inset-y-0 left-0 z-30 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline bg-surface-canvas lg:flex"
+      data-scrolled={scrolled ? "true" : undefined}
+    >
       <div className="px-s4 pb-s6 pt-s6">
         <BrandSignature href={root} />
         <ProgramIdentity

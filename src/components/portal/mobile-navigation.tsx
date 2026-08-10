@@ -7,6 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/cn";
 import { selectionTransition } from "@/lib/motion";
+import { useSurfaceScrolled } from "@/hooks/use-surface-scrolled";
 import { BrandSignature } from "./brand-signature";
 import { getAccountNav, getPrimaryNav, isNavItemActive } from "./nav-config";
 import { IconClose, IconMenu } from "./icons";
@@ -30,9 +31,13 @@ export function MobileTopBar({
   const primary = getPrimaryNav(basePath);
   const account = getAccountNav(basePath);
   const root = basePath.replace(/\/$/, "") || "/portal";
+  const scrolled = useSurfaceScrolled();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-hairline bg-surface-canvas lg:hidden">
+    <header
+      className="surface-header sticky top-0 z-40 border-b border-hairline bg-surface-canvas lg:hidden"
+      data-scrolled={scrolled ? "true" : undefined}
+    >
       <div className="flex min-h-14 items-center gap-s1 px-s1">
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger asChild>
@@ -46,7 +51,7 @@ export function MobileTopBar({
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 z-50 bg-surface-overlay data-[state=open]:animate-[overlay-in_var(--duration-disclosure)_var(--ease-emphasized)] data-[state=closed]:animate-[overlay-out_var(--duration-exit)_var(--ease-exit)]" />
-            <Dialog.Content className="fixed inset-y-0 left-0 z-50 flex w-[min(19rem,86vw)] flex-col rounded-r-dialog border-r border-hairline bg-surface-canvas shadow-floating focus:outline-none data-[state=open]:animate-[sheet-in_var(--duration-disclosure)_var(--ease-emphasized)]">
+            <Dialog.Content className="surface-modal fixed inset-y-0 left-0 z-50 flex w-[min(19rem,86vw)] flex-col border-r border-hairline bg-surface-canvas focus:outline-none data-[state=open]:animate-[sheet-in_var(--duration-disclosure)_var(--ease-emphasized)]">
               <div className="flex items-start justify-between gap-s2 px-s4 pb-s5 pt-s6">
                 <Dialog.Title asChild>
                   <div>

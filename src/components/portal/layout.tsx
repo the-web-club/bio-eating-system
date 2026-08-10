@@ -1,5 +1,6 @@
 import type { ElementType, ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { SurfaceRailAside } from "./surface-rail-aside";
 
 /**
  * Composition primitives. Structure comes from typography, spacing, alignment
@@ -139,9 +140,7 @@ export function Split({
       )}
     >
       <div className="min-w-0">{main}</div>
-      <div className="min-w-0 space-y-s5 border-t border-hairline pt-s5 md:border-t-0 md:border-l md:pl-s5 md:pt-0">
-        {aside}
-      </div>
+      <SurfaceRailAside>{aside}</SurfaceRailAside>
     </div>
   );
 }
