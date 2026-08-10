@@ -627,6 +627,11 @@
     }
   }
 
+  /* Full-bleed auth backgrounds must not stop short of a reserved scrollbar gutter. */
+  html:has(.auth-screen) {
+    scrollbar-gutter: auto;
+  }
+
   /* Sign-in / magic-link sent — wellness photograph with a protected centre. */
   .auth-screen__photo {
     position: fixed;
