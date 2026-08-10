@@ -10,7 +10,6 @@ import {
   size,
   useDismiss,
   useFloating,
-  useFocus,
   useInteractions,
   useMergeRefs,
   useRole,
@@ -136,8 +135,7 @@ export function MealReplacePopover({
 
   const dismiss = useDismiss(context, { outsidePressEvent: "pointerdown" });
   const role = useRole(context, { role: "dialog" });
-  const focus = useFocus(context);
-  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss, role, focus]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss, role]);
   const referenceRef = useMergeRefs([refs.setReference, triggerRef]);
 
   useEffect(() => {
@@ -152,18 +150,40 @@ export function MealReplacePopover({
 
   useEffect(() => {
     if (!open || !mounted) return;
-    const timer = window.setTimeout(() => {
-      firstChipRef.current?.focus();
-    }, 0);
-    return () => window.clearTimeout(timer);
+    let cancelled = false;
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!cancelled) {
+          firstChipRef.current?.focus({ preventScroll: true });
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+    };
   }, [open, mounted, step]);
 
   useEffect(() => {
     if (!open || !isMobile) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+    const previous = {
+      position: style.position,
+      top: style.top,
+      width: style.width,
+      overflow: style.overflow,
+    };
+    style.position = "fixed";
+    style.top = `-${scrollY}px`;
+    style.width = "100%";
+    style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = previous;
+      style.position = previous.position;
+      style.top = previous.top;
+      style.width = previous.width;
+      style.overflow = previous.overflow;
+      window.scrollTo(0, scrollY);
     };
   }, [open, isMobile]);
 
@@ -191,7 +211,9 @@ export function MealReplacePopover({
 
   function closeAndReset() {
     setOpen(false);
-    requestAnimationFrame(() => triggerRef.current?.focus());
+    requestAnimationFrame(() => {
+      triggerRef.current?.focus({ preventScroll: true });
+    });
   }
 
   function confirmReplace(replacementSlot?: FoodSlot) {
@@ -237,8 +259,7 @@ export function MealReplacePopover({
         aria-controls={panelId}
         aria-label={`Replace ${mealLabel}`}
         {...getReferenceProps({
-          onClick(event) {
-            event.preventDefault();
+          onClick() {
             setOpen(!open);
           },
         })}
@@ -250,7 +271,15 @@ export function MealReplacePopover({
         <FloatingPortal>
           <AnimatePresence mode="popLayout">
             {open && !isMobile ? (
-              <FloatingFocusManager key="popover" context={context} modal={false} returnFocus>
+              <FloatingFocusManager
+                key="popover"
+                context={context}
+                modal={false}
+                returnFocus={triggerRef}
+                initialFocus={-1}
+                guards={false}
+                closeOnFocusOut
+              >
                 <div
                   ref={refs.setFloating}
                   id={panelId}
@@ -417,7 +446,7 @@ function ReplaceStepPanel({
               <div className="flex flex-wrap gap-2">
                 {options.map((opt, index) => (
                   <motion.div
-                    key={opt.slot}
+                    key={`${opt.tier}-${opt.slot}`}
                     variants={replaceChipEnterVariants(reduceMotion)}
                     transition={replaceChipEnterTransition(reduceMotion)}
                   >
