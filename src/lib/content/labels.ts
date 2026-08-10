@@ -36,9 +36,105 @@ export const ALLERGEN_LABELS: Record<Allergen, string> = {
 };
 
 export const GOAL_LABELS = {
-  REDUCE: "Reduce energy intake",
+  REDUCE: "Fat loss",
   MAINTAIN: "Maintain",
-  INCREASE: "Increase energy intake",
+  INCREASE: "Build energy intake",
+} as const;
+
+export const GOAL_APPROACH_LABELS = {
+  REDUCE: "Moderate calorie deficit",
+  MAINTAIN: "Maintenance energy",
+  INCREASE: "Gradual energy increase",
+} as const;
+
+export const TRAINING_LABELS = {
+  none: "No structured training",
+  one_two: "1–2 sessions per week",
+  three_four: "3–4 sessions per week",
+  five_plus: "5 or more sessions per week",
+} as const;
+
+export const WORK_SCHEDULE_LABELS = {
+  regular_day: "Regular daytime hours",
+  shift_work: "Shift work",
+  flexible: "Flexible hours",
+  remote: "Mostly remote",
+} as const;
+
+export const INTOLERANCE_LABELS = {
+  lactose: "Lactose",
+  fructose: "Fructose",
+  histamine: "Histamine",
+  fodmap: "FODMAP",
+  gluten_sensitivity: "Gluten sensitivity",
+} as const;
+
+export const DIETARY_PATTERN_LABELS = {
+  omnivore: "Omnivore",
+  vegetarian: "Vegetarian",
+  vegan: "Vegan",
+  pescatarian: "Pescatarian",
+  other: "Other",
+} as const;
+
+export const COOKING_ABILITY_LABELS = {
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  confident: "Confident cook",
+} as const;
+
+export const EAT_OUT_LABELS = {
+  rarely: "Rarely",
+  once_week: "About once a week",
+  two_three_week: "2–3 times per week",
+  most_days: "Most days",
+} as const;
+
+export const UNIT_LABELS = {
+  METRIC: "Grams",
+  HOUSEHOLD: "Household measurements",
+  SIMPLE: "Simple portions",
+} as const;
+
+export const REPLACE_REASON_LABELS = {
+  dont_like: "Don't like it",
+  dont_have: "Don't have it",
+  too_expensive: "Too expensive",
+  eating_out: "Eating out",
+  traveling: "Traveling",
+  not_hungry: "Not hungry",
+  need_faster: "Need something faster",
+} as const;
+
+export const LIFE_HAPPENED_LABELS = {
+  ate_different: "I ate something different",
+  skipped_meal: "I skipped a meal",
+  restaurant: "I'm eating at a restaurant",
+  traveling: "I'm traveling",
+  missing_ingredients: "I don't have the ingredients",
+  overate: "I overate",
+  still_hungry: "I'm still hungry",
+} as const;
+
+export const LIFE_HAPPENED_NEXT = {
+  ate_different: "You don't need to compensate. Continue with your next planned meal.",
+  skipped_meal: "You don't need to compensate. Continue with your next planned meal.",
+  restaurant: "Choose what fits your plan as closely as you can. Continue tomorrow as usual.",
+  traveling: "Do your best with what's available. Your plan will adapt when you're back.",
+  missing_ingredients: "Use Replace on the affected meal to find an alternative.",
+  overate: "You don't need to compensate. Continue with your next planned meal.",
+  still_hungry: "Add a small protein-rich snack if needed. Continue with your plan tomorrow.",
+} as const;
+
+export const CHECK_IN_BARRIER_LABELS = {
+  time: "Time",
+  cost: "Cost",
+  food_preferences: "Food preferences",
+  social_events: "Social events",
+  travel: "Travel",
+  hunger: "Hunger",
+  preparation: "Preparation",
+  nothing: "Nothing",
 } as const;
 
 export const ACTIVITY_LABELS = {

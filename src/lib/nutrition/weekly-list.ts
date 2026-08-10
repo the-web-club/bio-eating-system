@@ -4,7 +4,7 @@ import { formatVarietyKey } from "@/lib/portal/format";
 import type { FoodSlot, PlanSlot } from "./plan-engine";
 import type { RotationItem } from "./rotation";
 
-export type WeeklyListUnit = "METRIC" | "HOUSEHOLD";
+export type WeeklyListUnit = "METRIC" | "HOUSEHOLD" | "SIMPLE";
 
 export type WeeklyListRow = {
   slot: FoodSlot;

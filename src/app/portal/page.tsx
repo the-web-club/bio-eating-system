@@ -1,43 +1,16 @@
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/portal/app-shell";
+import { LifeHappenedButton } from "@/components/portal/life-happened-button";
+import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalErrorState } from "@/components/portal/error-state";
 import { PageShell } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
 import { TodayView } from "@/components/portal/views/today-view";
 import { ActionLink } from "@/components/ui/action-link";
-import { SCREENING_REASON_COPY, SLOT_LABELS } from "@/lib/content/labels";
-import { resolveContent } from "@/lib/content/resolve";
-import type { PlanSlot } from "@/lib/nutrition/plan-engine";
-import {
-  formatPlanSlot,
-  formatVarietyKey,
-  rotationPosition,
-  weekLabel,
-} from "@/lib/portal/format";
-import {
-  personalSubstitutionDetail,
-  personalSubstitutionNote,
-} from "@/lib/portal/portion-copy";
+import { SCREENING_REASON_COPY } from "@/lib/content/labels";
+import { assembleMeals, todaySummary } from "@/lib/portal/meal-assembly";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
-
-const PROGRAM_NAME = "Core plan";
-
-/** How many portions lead the composition before the remainder is listed. */
-const FOCUS_COUNT = 4;
-
-function toFocusItem(slot: PlanSlot) {
-  const { name, amount, unit } = formatPlanSlot(slot);
-  return {
-    id: slot.slot,
-    name,
-    amount,
-    unit,
-    note: personalSubstitutionNote(slot.absorbedFrom),
-    why: resolveContent(slot.guidanceKey),
-    adjustment: personalSubstitutionDetail(slot.absorbedFrom) ?? null,
-  };
-}
 
 export default async function TodayPage() {
   let data;
@@ -50,7 +23,7 @@ export default async function TodayPage() {
           <PageHeader title="Today" />
           <div className="mt-group">
             <PortalErrorState
-              title="Your program did not load"
+              title="Your plan did not load"
               action={
                 <ActionLink href="/portal" variant="secondary" size="compact">
                   Try again
@@ -71,12 +44,12 @@ export default async function TodayPage() {
         <PageShell width="reading">
           <PageHeader
             title="Welcome"
-            description="Your account is signed in. The core plan is not on it yet."
+            description="Your account is signed in. The personal nutrition plan is not on it yet."
           />
           <div className="mt-group">
-            <PortalEmptyState title="Core plan not on your account">
-              Add the core plan on the website. Your intake and daily portions appear
-              here once the purchase is confirmed.
+            <PortalEmptyState title="Personal nutrition plan not on your account">
+              Add the plan on the website. Your setup and daily meals appear here once
+              the purchase is confirmed.
             </PortalEmptyState>
           </div>
         </PageShell>
@@ -89,39 +62,30 @@ export default async function TodayPage() {
   }
 
   const plan = data.plan;
-  const week = weekLabel(data.week);
-  const position = rotationPosition(data.week, data.authoredWeeks);
+  const meals = assembleMeals(plan.slots);
+  const summary = todaySummary(meals, {
+    groceryTasks: data.entitlements.weeklyRotation ? 1 : 0,
+    decisions: Math.max(0, 0),
+  });
 
   return (
-    <AppShell
-      title="Today"
-      weekLabel={week}
-      programLabel={PROGRAM_NAME}
-      rotationPosition={position}
-      authoredWeeks={data.authoredWeeks}
-    >
+    <AppShell title="Today">
       <TodayView
         basePath="/portal"
         firstName={data.user.name?.split(" ")[0] || "there"}
-        weekLabel={week}
-        programName={PROGRAM_NAME}
-        portionCount={plan.slots.length}
-        focus={plan.slots.slice(0, FOCUS_COUNT).map(toFocusItem)}
-        rest={plan.slots.slice(FOCUS_COUNT).map(toFocusItem)}
-        energyKcal={plan.energyKcal}
-        rotationPosition={position}
-        authoredWeeks={data.authoredWeeks}
+        meals={meals}
+        summary={summary}
         notices={plan.screeningReasons
           .map((code) => SCREENING_REASON_COPY[code])
           .filter(Boolean)}
         maintenanceOnly={plan.screeningOutcome === "maintenance_only"}
-        varieties={data.rotationItems.slice(0, 4).map((item) => ({
-          id: item.slot,
-          name: resolveContent(item.labelKey) ?? formatVarietyKey(item.labelKey),
-          group: SLOT_LABELS[item.slot] ?? item.slot,
-        }))}
         weeklyAvailable={data.entitlements.weeklyRotation}
+        showRecalibration={data.recalibrationDue}
+        showCheckIn={data.pendingCheckIn}
       />
+      <div className="mx-auto max-w-content px-page pb-group">
+        <LifeHappenedButton basePath="/portal" />
+      </div>
     </AppShell>
   );
 }

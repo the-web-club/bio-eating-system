@@ -1,135 +1,113 @@
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/portal/app-shell";
+import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
 import { PortalEmptyState } from "@/components/portal/empty-state";
-import { PortalErrorState } from "@/components/portal/error-state";
-import { PageShell } from "@/components/portal/layout";
+import { PageSections, PageShell, Section } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
-import { PlanView } from "@/components/portal/views/plan-view";
-import { ActionLink } from "@/components/ui/action-link";
-import { SCREENING_REASON_COPY } from "@/lib/content/labels";
-import { resolveContent } from "@/lib/content/resolve";
-import type { FoodSlot } from "@/lib/nutrition/plan-engine";
-import { formatPlanSlot, rotationPosition, weekLabel } from "@/lib/portal/format";
 import {
-  personalSubstitutionDetail,
-  personalSubstitutionNote,
-} from "@/lib/portal/portion-copy";
+  WeeklyBriefing,
+  estimateCookingHours,
+  estimateWeeklyCostEur,
+} from "@/components/portal/views/shop-view";
+import { ActionLink } from "@/components/ui/action-link";
+import { SCREENING_REASON_COPY, GOAL_LABELS } from "@/lib/content/labels";
+import { assembleMeals } from "@/lib/portal/meal-assembly";
+import { rotationPosition, weekLabel } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
+import { Status } from "@/components/ui/status";
 
-const GROUPS: { title: string; slots: FoodSlot[] }[] = [
-  {
-    title: "Protein",
-    slots: ["eggs", "organ_meat", "small_fish", "bivalves", "muscle_meat"],
-  },
-  {
-    title: "Plants and fibre",
-    slots: [
-      "tubers",
-      "cruciferous",
-      "berries",
-      "kiwi",
-      "mushrooms",
-      "aromatics",
-      "fermented",
-    ],
-  },
-  { title: "Fats", slots: ["olive_oil"] },
-];
-
-export default async function DailyPlanPage() {
+export default async function PlanPage() {
   let data;
   try {
     data = await loadPortalData();
   } catch {
-    return (
-      <AppShell title="Daily plan">
-        <PageShell width="reading">
-          <PageHeader title="Daily plan" />
-          <div className="mt-group">
-            <PortalErrorState
-              title="Your daily plan did not load"
-              action={
-                <ActionLink href="/portal/plan" variant="secondary" size="compact">
-                  Try again
-                </ActionLink>
-              }
-            >
-              Check your connection, then try again.
-            </PortalErrorState>
-          </div>
-        </PageShell>
-      </AppShell>
-    );
+    redirect("/portal");
   }
 
   if (!data.entitlements.corePlan) {
     return (
-      <AppShell title="Daily plan">
+      <AppShell title="Plan">
         <PageShell width="reading">
-          <PageHeader title="Daily plan" />
-          <div className="mt-group">
-            <PortalEmptyState
-              title="Not on your account yet"
-              action={
-                <ActionLink href="/portal/programs" variant="secondary" size="compact">
-                  View upgrade
-                </ActionLink>
-              }
-            >
-              The core plan sets your daily portions. Add it to see them here.
-            </PortalEmptyState>
-          </div>
+          <PortalEmptyState title="Personal nutrition plan not on your account">
+            Add the plan on the website to see your weekly meals here.
+          </PortalEmptyState>
         </PageShell>
       </AppShell>
     );
   }
 
-  if (!data.plan) {
+  if (!data.plan || !data.profile) {
     redirect("/portal/intake");
   }
 
   const plan = data.plan;
   const week = weekLabel(data.week);
   const position = rotationPosition(data.week, data.authoredWeeks);
-  const bySlot = new Map(plan.slots.map((slot) => [slot.slot, slot]));
-  const groups = GROUPS.map((group) => ({
-    title: group.title,
-    items: group.slots
-      .map((slot) => bySlot.get(slot))
-      .filter((slot): slot is NonNullable<typeof slot> => Boolean(slot))
-      .map((slot) => {
-        const { name, amount, unit } = formatPlanSlot(slot);
-        return {
-          id: slot.slot,
-          name,
-          amount,
-          unit,
-          note: personalSubstitutionNote(slot.absorbedFrom),
-          why: resolveContent(slot.guidanceKey),
-          adjustment: personalSubstitutionDetail(slot.absorbedFrom) ?? null,
-        };
-      }),
-  })).filter((group) => group.items.length > 0);
+  const meals = assembleMeals(plan.slots);
+  const estimatedCost = estimateWeeklyCostEur(plan.slots);
+  const budget = data.profile.weeklyBudgetEur;
+  const overBudget = budget != null && estimatedCost > budget;
+  const cookingHours = estimateCookingHours(data.profile.practical);
+  const goalLabel =
+    data.profile.goal in GOAL_LABELS
+      ? GOAL_LABELS[data.profile.goal as keyof typeof GOAL_LABELS]
+      : data.profile.goal;
 
   return (
-    <AppShell
-      title="Daily plan"
-      weekLabel={week}
-      programLabel="Core plan"
-      rotationPosition={position}
-      authoredWeeks={data.authoredWeeks}
-    >
-      <PlanView
-        energyKcal={plan.energyKcal}
-        groups={groups}
-        weekLabel={week}
-        programName="Core plan"
-        portionCount={plan.slots.length}
-        notices={plan.screeningReasons
-          .map((code) => SCREENING_REASON_COPY[code])
-          .filter(Boolean)}
-        maintenanceOnly={plan.screeningOutcome === "maintenance_only"}
-      />
+    <AppShell title="Plan" weekLabel={week}>
+      <PageShell>
+        <PageSections>
+          <PageHeader
+            title="Plan"
+            description="My week."
+            meta={
+              <p className="text-meta text-muted">
+                <span className="font-meta tabular">{week}</span>
+              </p>
+            }
+            actions={
+              data.entitlements.weeklyRotation ? (
+                <ActionLink href="/portal/weekly" variant="secondary">
+                  Shopping list
+                </ActionLink>
+              ) : null
+            }
+          />
+
+          <WeeklyBriefing
+            weekNumber={position}
+            goal={data.profile.goal}
+            estimatedCostEur={estimatedCost}
+            cookingHours={cookingHours}
+            mealCount={21}
+            budgetEur={budget}
+            overBudget={overBudget}
+            basePath="/portal"
+          />
+
+          <Section title="This week">
+            <p className="mb-3 text-body text-muted">
+              Goal: {goalLabel} · Focus: simple high-protein meals
+            </p>
+            <MealListWithReplace meals={meals} />
+          </Section>
+
+          {plan.screeningOutcome === "maintenance_only" ||
+          plan.screeningReasons.length ? (
+            <Status role="neutral">
+              {plan.screeningOutcome === "maintenance_only" ? (
+                <p>Your plan stays at maintenance energy.</p>
+              ) : null}
+              {plan.screeningReasons
+                .map((code) => SCREENING_REASON_COPY[code])
+                .filter(Boolean)
+                .map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+            </Status>
+          ) : null}
+        </PageSections>
+      </PageShell>
     </AppShell>
   );
 }

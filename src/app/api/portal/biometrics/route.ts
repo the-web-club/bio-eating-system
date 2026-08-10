@@ -15,11 +15,6 @@ import {
 
 export const runtime = "nodejs";
 
-/**
- * The route the intake form posts to.
- * Exclusions are enums. Free-text is stored for a human reviewer only. rules.md §4.1.
- */
-
 export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: request.headers });
   if (!session?.user) {
@@ -47,47 +42,44 @@ export async function POST(request: Request) {
   const input = parsed.data;
 
   const consentedAt = new Date();
+  const activityLevel = input.lifestyle.activityLevel;
+
+  const profileData = {
+    age: input.age,
+    heightCm: input.heightCm,
+    weightKg: input.weightKg,
+    sex: input.sex,
+    goal: input.goal,
+    unitSystem: input.unitSystem,
+    declaredAllergens: input.declaredAllergens,
+    excludedSlots: input.excludedSlots,
+    swapRequests: input.swapRequests,
+    lifestyle: input.lifestyle as Prisma.InputJsonValue,
+    foodPreferences: input.foodPreferences as Prisma.InputJsonValue,
+    practical: input.practical as Prisma.InputJsonValue,
+    household: input.household as Prisma.InputJsonValue,
+    weeklyBudgetEur: input.practical.weeklyBudgetEur ?? null,
+    screeningFlags: input.screeningFlags,
+    notesForCoach: input.notesForCoach ?? null,
+    consentHealthDataAt: consentedAt,
+    consentVersion: CONSENT_VERSION,
+  };
 
   const profile = await db.intakeProfile.upsert({
     where: { userId: session.user.id },
-    create: {
-      userId: session.user.id,
-      age: input.age,
-      heightCm: input.heightCm,
-      weightKg: input.weightKg,
-      goal: input.goal,
-      unitSystem: input.unitSystem,
-      declaredAllergens: input.declaredAllergens,
-      excludedSlots: input.excludedSlots,
-      swapRequests: input.swapRequests,
-      screeningFlags: input.screeningFlags,
-      notesForCoach: input.notesForCoach ?? null,
-      consentHealthDataAt: consentedAt,
-      consentVersion: CONSENT_VERSION,
-    },
-    update: {
-      age: input.age,
-      heightCm: input.heightCm,
-      weightKg: input.weightKg,
-      goal: input.goal,
-      unitSystem: input.unitSystem,
-      declaredAllergens: input.declaredAllergens,
-      excludedSlots: input.excludedSlots,
-      swapRequests: input.swapRequests,
-      screeningFlags: input.screeningFlags,
-      notesForCoach: input.notesForCoach ?? null,
-      // Consent re-confirmed on every successful submit of the intake payload.
-      consentHealthDataAt: consentedAt,
-      consentVersion: CONSENT_VERSION,
-    },
+    create: { userId: session.user.id, ...profileData },
+    update: profileData,
     select: { id: true },
   });
 
   await db.user.update({
     where: { id: session.user.id },
-    data: input.marketingOptIn
-      ? { marketingOptIn: true, unsubscribedAt: null }
-      : { marketingOptIn: false, unsubscribedAt: new Date() },
+    data: {
+      ...(input.displayName ? { name: input.displayName.trim() } : {}),
+      ...(input.marketingOptIn
+        ? { marketingOptIn: true, unsubscribedAt: null }
+        : { marketingOptIn: false, unsubscribedAt: new Date() }),
+    },
   });
 
   const engineInput = {
@@ -95,13 +87,16 @@ export async function POST(request: Request) {
     heightCm: input.heightCm,
     weightKg: input.weightKg,
     sex: input.sex,
-    activityFactor: ACTIVITY_FACTORS[input.activityLevel],
+    activityFactor: ACTIVITY_FACTORS[activityLevel],
     goal: input.goal,
     unitSystem: input.unitSystem,
     declaredAllergens: input.declaredAllergens,
     excludedSlots: input.excludedSlots,
     swapRequests: input.swapRequests,
     screeningFlags: input.screeningFlags,
+    foodPreferences: input.foodPreferences,
+    practical: input.practical,
+    household: input.household,
   };
 
   const plan = generatePlan(engineInput);
@@ -144,7 +139,6 @@ export async function POST(request: Request) {
     outcome: plan.screening.outcome,
     reasonCodes: plan.screening.reasons,
     energyKcal: plan.energyKcal,
-    slots: plan.slots,
-    removed: plan.removed,
+    planId: profile.id,
   });
 }

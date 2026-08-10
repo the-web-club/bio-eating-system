@@ -100,7 +100,7 @@ const ALLERGEN_TO_SLOTS: Partial<Record<Allergen, FoodSlot[]>> = {
  * Preferred substitute per slot, used only for voluntary swaps. A swap never
  * routes into a slot the person has excluded or is allergic to.
  */
-const SWAP_TARGET: Partial<Record<FoodSlot, FoodSlot>> = {
+export const SWAP_TARGET: Partial<Record<FoodSlot, FoodSlot>> = {
   eggs: "muscle_meat",
   organ_meat: "bivalves",
   small_fish: "muscle_meat",
@@ -116,7 +116,42 @@ const SWAP_CARRYOVER = 0.8;
 // Units
 // ---------------------------------------------------------------------------
 
-export type UnitSystem = "METRIC" | "HOUSEHOLD";
+export type UnitSystem = "METRIC" | "HOUSEHOLD" | "SIMPLE";
+
+export type DietaryPattern =
+  | "omnivore"
+  | "vegetarian"
+  | "vegan"
+  | "pescatarian"
+  | "other";
+
+export type FoodPreferencesInput = {
+  dietaryPattern?: DietaryPattern;
+  intolerances?: string[];
+};
+
+export type PracticalInput = {
+  weeklyBudgetEur?: number;
+  cookingTimeMinutes?: number;
+};
+
+export interface PlanInput {
+  age: number;
+  heightCm: number;
+  weightKg: number;
+  /** Biological sex is required for the Mifflin-St Jeor constant. */
+  sex: "female" | "male";
+  activityFactor: number;
+  goal: "REDUCE" | "MAINTAIN" | "INCREASE";
+  unitSystem: UnitSystem;
+  declaredAllergens: Allergen[];
+  excludedSlots: FoodSlot[];
+  swapRequests: FoodSlot[];
+  screeningFlags: ScreeningFlag[];
+  /** Optional preferences. Free-text fields are never parsed. */
+  foodPreferences?: FoodPreferencesInput;
+  practical?: PracticalInput;
+}
 
 interface HouseholdUnit {
   /** grams -> household count */
@@ -145,20 +180,12 @@ const HOUSEHOLD_UNITS: Record<FoodSlot, HouseholdUnit> = {
 // Input and output
 // ---------------------------------------------------------------------------
 
-export interface PlanInput {
-  age: number;
-  heightCm: number;
-  weightKg: number;
-  /** Biological sex is required for the Mifflin-St Jeor constant. */
-  sex: "female" | "male";
-  activityFactor: number;
-  goal: "REDUCE" | "MAINTAIN" | "INCREASE";
-  unitSystem: UnitSystem;
-  declaredAllergens: Allergen[];
-  excludedSlots: FoodSlot[];
-  swapRequests: FoodSlot[];
-  screeningFlags: ScreeningFlag[];
-}
+/** Structured dietary pattern exclusions. Enum-driven only. */
+const DIETARY_EXCLUSIONS: Partial<Record<DietaryPattern, FoodSlot[]>> = {
+  vegetarian: ["organ_meat", "muscle_meat", "small_fish", "bivalves"],
+  vegan: ["eggs", "organ_meat", "muscle_meat", "small_fish", "bivalves"],
+  pescatarian: ["organ_meat", "muscle_meat"],
+};
 
 export interface PlanSlot {
   slot: FoodSlot;
@@ -252,6 +279,15 @@ export function generatePlan(input: PlanInput): PlanResult {
       removed.push({ slot, reasonCode: "excluded_by_user" });
     }
   }
+  const pattern = input.foodPreferences?.dietaryPattern;
+  if (pattern && pattern !== "omnivore" && pattern !== "other") {
+    for (const slot of DIETARY_EXCLUSIONS[pattern] ?? []) {
+      if (!blocked.has(slot)) {
+        blocked.add(slot);
+        removed.push({ slot, reasonCode: `dietary:${pattern}` });
+      }
+    }
+  }
 
   const available = FOOD_SLOTS.filter((s) => !blocked.has(s));
 
@@ -288,10 +324,14 @@ export function generatePlan(input: PlanInput): PlanResult {
     (slot) => {
       const g = Math.round(grams.get(slot) as number);
       const unit = HOUSEHOLD_UNITS[slot];
-      const useHousehold = input.unitSystem === "HOUSEHOLD";
-      const count = useHousehold
+      const useHousehold =
+        input.unitSystem === "HOUSEHOLD" || input.unitSystem === "SIMPLE";
+      let count = useHousehold
         ? Math.round(g * unit.factor * 10) / 10
         : null;
+      if (input.unitSystem === "SIMPLE" && count != null) {
+        count = Math.max(1, Math.round(count));
+      }
 
       return {
         slot,

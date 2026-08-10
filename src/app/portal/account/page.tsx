@@ -2,30 +2,31 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/portal/app-shell";
+import { YourPlanSection } from "@/components/portal/your-plan-section";
 import { PageSections, PageShell, Section } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
+import { getProfileExtras } from "@/components/portal/nav-config";
 import { isAdminEmail } from "@/lib/admin-allowlist";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { rotationPosition, weekLabel } from "@/lib/portal/format";
+import { weekLabel } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { PrivacyControls } from "./privacy-controls";
 import { SignOutButton } from "./sign-out-button";
+import { ActionLink } from "@/components/ui/action-link";
 
-export default async function AccountPage() {
+export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) redirect("/?next=/portal/account");
 
+  const extras = getProfileExtras("/portal");
   let week: string | undefined;
-  let position: number | undefined;
-  let authoredWeeks: number | undefined;
+  let data;
   try {
-    const data = await loadPortalData();
+    data = await loadPortalData();
     week = weekLabel(data.week);
-    position = rotationPosition(data.week, data.authoredWeeks);
-    authoredWeeks = data.authoredWeeks;
   } catch {
-    week = undefined;
+    data = null;
   }
 
   const [user, profile] = await Promise.all([
@@ -39,49 +40,57 @@ export default async function AccountPage() {
     }),
   ]);
 
-  const rows = [
-    { label: "Name", value: session.user.name },
-    { label: "Email", value: session.user.email },
-  ];
   const staff = isAdminEmail(session.user.email);
 
   return (
-    <AppShell
-      title="Account"
-      weekLabel={week}
-      programLabel="Core plan"
-      rotationPosition={position}
-      authoredWeeks={authoredWeeks}
-    >
+    <AppShell title="Profile" weekLabel={week}>
       <PageShell width="reading">
         <PageSections>
           <PageHeader
-            title="Account"
-            description="Your sign-in details, email preferences and data rights."
+            title="Profile"
+            description="My preferences and settings."
           />
 
-          <Section title="Signed in as">
+          {data ? (
+            <YourPlanSection
+              entitlements={data.entitlements}
+              hasPlan={Boolean(data.plan)}
+            />
+          ) : null}
+
+          <Section ruled title="Signed in as">
             <dl className="divide-y divide-hairline border-t border-hairline">
-              {rows.map((row) => (
-                <div
-                  key={row.label}
-                  className="grid grid-cols-[8rem_minmax(0,1fr)] items-baseline gap-4 py-3"
-                >
-                  <dt className="text-small text-muted">{row.label}</dt>
-                  <dd className="min-w-0 break-words text-body text-foreground">
-                    {row.value}
-                  </dd>
-                </div>
-              ))}
+              <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+                <dt className="text-small text-muted">Name</dt>
+                <dd className="text-body text-foreground">{session.user.name}</dd>
+              </div>
+              <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+                <dt className="text-small text-muted">Email</dt>
+                <dd className="break-words text-body text-foreground">
+                  {session.user.email}
+                </dd>
+              </div>
             </dl>
           </Section>
 
+          {data?.entitlements.labReference ? (
+            <Section ruled title="Advanced tracking">
+              <ActionLink href={extras.biomarkers} variant="quiet">
+                Open biomarker reference
+              </ActionLink>
+            </Section>
+          ) : null}
+
+          {data?.plan ? (
+            <Section ruled title="Plan maintenance">
+              <ActionLink href={extras.recalibrate} variant="quiet">
+                Update my plan
+              </ActionLink>
+            </Section>
+          ) : null}
+
           {staff ? (
-            <Section
-              ruled
-              title="Staff"
-              description="Member records, access and the activity log."
-            >
+            <Section ruled title="Staff">
               <Link
                 href="/admin"
                 className="inline-block text-body text-accent-text underline-offset-4 hover:underline"

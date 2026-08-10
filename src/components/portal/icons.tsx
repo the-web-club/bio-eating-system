@@ -46,6 +46,18 @@ export function IconWeek(props: IconProps) {
   );
 }
 
+export function IconShop(props: IconProps) {
+  return IconWeek(props);
+}
+
+export function IconProgress(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 14.5V12M10 14.5V8M16 14.5V5.5" {...stroke} />
+    </svg>
+  );
+}
+
 export function IconLab(props: IconProps) {
   return (
     <svg {...base} {...props}>

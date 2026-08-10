@@ -44,8 +44,11 @@ model User {
   unsubscribedAt   DateTime?
   unsubscribeToken String    @unique @default(uuid())
 
-  emailDrops EmailDrop[]
-  auditLog   AuditEvent[]
+  emailDrops        EmailDrop[]
+  auditLog          AuditEvent[]
+  adaptationEvents  AdaptationEvent[]
+  preferenceRecords PreferenceRecord[]
+  weeklyCheckIns    WeeklyCheckIn[]
 
   @@index([unsubscribedAt])
   @@map("user")
@@ -135,6 +138,7 @@ model IntakeProfile {
   age         Int
   heightCm    Float
   weightKg    Float
+  sex         Sex    @default(female)
   goal        Goal
   unitSystem  UnitSystem @default(HOUSEHOLD)
 
@@ -143,11 +147,19 @@ model IntakeProfile {
   excludedSlots     Json @default("[]") // FoodSlot[]
   swapRequests      Json @default("[]") // FoodSlot[]
 
+  // Extended setup sections. Free-text food prefs are coach-only. rules.md §4.1.
+  lifestyle       Json @default("{}")
+  foodPreferences Json @default("{}")
+  practical       Json @default("{}")
+  household       Json @default("{}")
+
   // Stored for a human reviewer. Code must not parse this. rules.md §4.1.
   notesForCoach String? @db.Text
 
   // Screening answers. Drive the deficit gate. rules.md §4.2.
   screeningFlags Json @default("[]") // ScreeningFlag[]
+
+  weeklyBudgetEur Int?
 
   consentHealthDataAt DateTime
   consentVersion      String
@@ -167,6 +179,58 @@ enum Goal {
 enum UnitSystem {
   METRIC
   HOUSEHOLD
+  SIMPLE
+}
+
+enum Sex {
+  female
+  male
+}
+
+// ---------------------------------------------------------------------------
+// Adaptation and learning loop.
+// ---------------------------------------------------------------------------
+
+model AdaptationEvent {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  reason    String
+  context   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model PreferenceRecord {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key    String
+  tier   String
+  value  Json   @default("{}")
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, key])
+}
+
+model WeeklyCheckIn {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekNumber    Int
+  cycleYear     Int
+  energy        Int
+  hunger        Int
+  satisfaction  Int
+  adherence     Int
+  difficulty    Int
+  barriers      Json     @default("[]")
+  weightKg      Float?
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, cycleYear, weekNumber])
 }
 
 // ---------------------------------------------------------------------------

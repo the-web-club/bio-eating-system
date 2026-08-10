@@ -3,6 +3,8 @@
  * Missing keys return null — never invent science or lesson prose. rules.md §4.5.
  */
 
+import "server-only";
+
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 

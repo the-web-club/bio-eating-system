@@ -1,17 +1,9 @@
 import type { BiomarkerEntry } from "@/components/portal/views/biomarkers-view";
 import type { PlanViewGroup } from "@/components/portal/views/plan-view";
-import type {
-  TodayFocusItem,
-  TodayVariety,
-} from "@/components/portal/views/today-view";
 import type { WeeklyViewItem } from "@/components/portal/views/weekly-view";
 import type { PortalEntitlements } from "@/lib/portal/load-portal-data";
-
-/**
- * Fixture data for the internal preview route. It exists so the real views can
- * be reviewed at every breakpoint without a live account. Never rendered in the
- * customer portal.
- */
+import type { PlanSlot } from "@/lib/nutrition/plan-engine";
+import { assembleMeals, todaySummary } from "@/lib/portal/meal-assembly";
 
 export const FIXTURE_WEEK = 3;
 export const FIXTURE_AUTHORED_WEEKS = 4;
@@ -26,124 +18,39 @@ export const FIXTURE_ENTITLEMENTS: PortalEntitlements = {
 const PENDING_COPY =
   "Reviewed guidance for this portion appears here once the catalogue entry is published.";
 
-/**
- * All 13 daily portions in engine order. Focus is the first four; the rest fill
- * the secondary list. Preview uses pending catalogue copy so disclosure can be
- * reviewed; live portal leaves why null until content is authored.
- */
-export const FIXTURE_TODAY: TodayFocusItem[] = [
-  {
-    id: "eggs",
-    name: "Eggs",
-    amount: "2",
-    unit: "pieces",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
-  {
-    id: "organ_meat",
-    name: "Organ meat",
-    amount: "30",
-    unit: "g",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
-  {
-    id: "small_fish",
-    name: "Small fish",
-    amount: "60",
-    unit: "g",
-    context: "Week 03 · Sockeye salmon",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
-  {
-    id: "bivalves",
-    name: "Bivalves",
-    amount: "40",
-    unit: "g",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
+function previewSlot(slot: PlanSlot["slot"], grams: number): PlanSlot {
+  return {
+    slot,
+    grams,
+    householdCount: null,
+    householdLabelKey: null,
+    nameKey: `slot.${slot}.name`,
+    guidanceKey: `slot.${slot}.guidance`,
+    absorbedFrom: [],
+  };
+}
+
+export const FIXTURE_PLAN_SLOTS: PlanSlot[] = [
+  previewSlot("eggs", 100),
+  previewSlot("organ_meat", 30),
+  previewSlot("small_fish", 60),
+  previewSlot("bivalves", 40),
+  previewSlot("muscle_meat", 140),
+  previewSlot("tubers", 180),
+  previewSlot("cruciferous", 80),
+  previewSlot("berries", 100),
+  previewSlot("olive_oil", 15),
+  previewSlot("fermented", 30),
+  previewSlot("kiwi", 75),
+  previewSlot("mushrooms", 70),
+  previewSlot("aromatics", 10),
 ];
 
-export const FIXTURE_TODAY_REST: TodayFocusItem[] = [
-  {
-    id: "muscle_meat",
-    name: "Muscle meat",
-    amount: "140",
-    unit: "g",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
-  {
-    id: "tubers",
-    name: "Tubers",
-    amount: "180",
-    unit: "g",
-    why: null,
-    adjustment: null,
-  },
-  {
-    id: "cruciferous",
-    name: "Cruciferous vegetables",
-    amount: "80",
-    unit: "g",
-    context: "Week 03 · Broccoli sprouts",
-    why: null,
-    adjustment: null,
-  },
-  {
-    id: "berries",
-    name: "Berries",
-    amount: "1",
-    unit: "cup",
-    context: "Week 03 · Blueberries",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
-  {
-    id: "olive_oil",
-    name: "Olive oil",
-    amount: "1",
-    unit: "tbsp",
-    why: null,
-    adjustment: null,
-  },
-  {
-    id: "fermented",
-    name: "Fermented foods",
-    amount: "1",
-    unit: "portion",
-    why: PENDING_COPY,
-    adjustment: null,
-  },
-  {
-    id: "kiwi",
-    name: "Kiwi",
-    amount: "1",
-    unit: "piece",
-    why: null,
-    adjustment: null,
-  },
-  {
-    id: "mushrooms",
-    name: "Mushrooms",
-    amount: "70",
-    unit: "g",
-    context: "Week 03 · Shiitake mushrooms",
-    why: null,
-    adjustment: null,
-  },
-  {
-    id: "aromatics",
-    name: "Aromatics",
-    amount: "10",
-    unit: "g",
-    why: null,
-    adjustment: null,
-  },
-];
+export const FIXTURE_MEALS = assembleMeals(FIXTURE_PLAN_SLOTS);
+export const FIXTURE_TODAY_SUMMARY = todaySummary(FIXTURE_MEALS, {
+  groceryTasks: 1,
+  decisions: 0,
+});
 
 export const FIXTURE_PLAN_GROUPS: PlanViewGroup[] = [
   {
@@ -158,30 +65,6 @@ export const FIXTURE_PLAN_GROUPS: PlanViewGroup[] = [
         adjustment: null,
       },
       {
-        id: "organ_meat",
-        name: "Organ meat",
-        amount: "30",
-        unit: "g",
-        why: PENDING_COPY,
-        adjustment: null,
-      },
-      {
-        id: "small_fish",
-        name: "Small fish",
-        amount: "60",
-        unit: "g",
-        why: PENDING_COPY,
-        adjustment: null,
-      },
-      {
-        id: "bivalves",
-        name: "Bivalves",
-        amount: "40",
-        unit: "g",
-        why: PENDING_COPY,
-        adjustment: null,
-      },
-      {
         id: "muscle_meat",
         name: "Muscle meat",
         amount: "140",
@@ -191,114 +74,12 @@ export const FIXTURE_PLAN_GROUPS: PlanViewGroup[] = [
       },
     ],
   },
-  {
-    title: "Plants and fibre",
-    items: [
-      {
-        id: "berries",
-        name: "Berries",
-        amount: "1",
-        unit: "cup",
-        why: PENDING_COPY,
-        adjustment: null,
-      },
-      {
-        id: "cruciferous",
-        name: "Cruciferous vegetables",
-        amount: "80",
-        unit: "g",
-        why: null,
-        adjustment: null,
-      },
-      {
-        id: "tubers",
-        name: "Tubers",
-        amount: "180",
-        unit: "g",
-        why: null,
-        adjustment: null,
-      },
-      {
-        id: "mushrooms",
-        name: "Mushrooms",
-        amount: "70",
-        unit: "g",
-        why: null,
-        adjustment: null,
-      },
-      {
-        id: "kiwi",
-        name: "Kiwi",
-        amount: "1",
-        unit: "piece",
-        why: null,
-        adjustment: null,
-      },
-      {
-        id: "fermented",
-        name: "Fermented foods",
-        amount: "1",
-        unit: "portion",
-        why: PENDING_COPY,
-        adjustment: null,
-      },
-      {
-        id: "aromatics",
-        name: "Aromatics",
-        amount: "10",
-        unit: "g",
-        why: null,
-        adjustment: null,
-      },
-    ],
-  },
-  {
-    title: "Fats",
-    items: [
-      {
-        id: "olive_oil",
-        name: "Olive oil",
-        amount: "1",
-        unit: "tbsp",
-        why: null,
-        adjustment: null,
-      },
-    ],
-  },
 ];
 
 export const FIXTURE_WEEKLY: WeeklyViewItem[] = [
   { id: "eggs", name: "Free-range eggs", note: "Eggs", value: "14", unit: "pieces" },
   { id: "muscle_meat", name: "Beef sirloin", note: "Muscle meat", value: "980", unit: "g" },
-  { id: "organ_meat", name: "Calf liver", note: "Organ meat", value: "210", unit: "g" },
   { id: "small_fish", name: "Sockeye salmon", note: "Small fish", value: "420", unit: "g" },
-  { id: "bivalves", name: "Blue mussels", note: "Bivalves", value: "280", unit: "g" },
-  { id: "tubers", name: "Sweet potato", note: "Tubers", value: "840", unit: "g" },
-  {
-    id: "cruciferous",
-    name: "Broccoli sprouts",
-    note: "Cruciferous vegetables",
-    value: "560",
-    unit: "g",
-  },
-  { id: "berries", name: "Blueberries", note: "Berries", value: "700", unit: "g" },
-  { id: "kiwi", name: "Gold kiwi", note: "Kiwi", value: "7", unit: "pieces" },
-  {
-    id: "mushrooms",
-    name: "Shiitake mushrooms",
-    note: "Mushrooms",
-    value: "490",
-    unit: "g",
-  },
-  {
-    id: "fermented",
-    name: "Sauerkraut",
-    note: "Fermented foods",
-    value: "7",
-    unit: "portions",
-  },
-  { id: "aromatics", name: "Garlic and parsley", note: "Aromatics", value: "70", unit: "g" },
-  { id: "olive_oil", name: "Olive oil", note: "Fats", value: "—" },
 ];
 
 export const FIXTURE_MARKERS: BiomarkerEntry[] = [
@@ -310,26 +91,4 @@ export const FIXTURE_MARKERS: BiomarkerEntry[] = [
     rationale:
       "Reviewed rationale appears here once the catalogue entry is published. Reference context is not a personal target.",
   },
-  {
-    id: "vitamin_d",
-    name: "Vitamin D",
-    reference: "50–125 nmol/L",
-    why: "Used as context for bone and muscle function.",
-    rationale:
-      "Reviewed rationale appears here once the catalogue entry is published. Reference context is not a personal target.",
-  },
-  {
-    id: "b12",
-    name: "Vitamin B12",
-    reference: null,
-    why: null,
-    rationale: null,
-  },
-];
-
-export const FIXTURE_VARIETIES: TodayVariety[] = [
-  { id: "small_fish", name: "Sockeye salmon", group: "Small fish" },
-  { id: "cruciferous", name: "Broccoli sprouts", group: "Cruciferous vegetables" },
-  { id: "berries", name: "Blueberries", group: "Berries" },
-  { id: "mushrooms", name: "Shiitake mushrooms", group: "Mushrooms" },
 ];

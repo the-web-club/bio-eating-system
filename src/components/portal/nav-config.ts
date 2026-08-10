@@ -1,18 +1,16 @@
 import type { ComponentType, SVGProps } from "react";
 import {
   IconAccount,
-  IconLab,
   IconLearn,
   IconPlan,
-  IconPrograms,
+  IconProgress,
+  IconShop,
   IconToday,
-  IconWeek,
 } from "./icons";
 
 export type NavItem = {
   href: string;
   label: string;
-  /** Used where horizontal room is tight, such as the mobile tab bar. */
   shortLabel: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   mobilePrimary?: boolean;
@@ -23,42 +21,21 @@ type NavDef = {
   label: string;
   short: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
-  /** Shown in the mobile tab bar; the rest stay in the menu. */
   mobilePrimary?: boolean;
 };
 
-/** Labels describe the customer's intent, in sentence case. */
 const NAV_DEFS: NavDef[] = [
   { path: "", label: "Today", short: "Today", icon: IconToday, mobilePrimary: true },
+  { path: "/plan", label: "Plan", short: "Plan", icon: IconPlan, mobilePrimary: true },
+  { path: "/weekly", label: "Shop", short: "Shop", icon: IconShop, mobilePrimary: true },
   {
-    path: "/plan",
-    label: "Daily plan",
-    short: "Plan",
-    icon: IconPlan,
-    mobilePrimary: true,
-  },
-  {
-    path: "/weekly",
-    label: "Weekly plan",
-    short: "Week",
-    icon: IconWeek,
-    mobilePrimary: true,
-  },
-  {
-    path: "/biomarkers",
-    label: "Biomarkers",
-    short: "Markers",
-    icon: IconLab,
+    path: "/progress",
+    label: "Progress",
+    short: "Progress",
+    icon: IconProgress,
     mobilePrimary: true,
   },
   { path: "/learn", label: "Learn", short: "Learn", icon: IconLearn },
-  {
-    path: "/programs",
-    label: "Programs",
-    short: "Programs",
-    icon: IconPrograms,
-    mobilePrimary: true,
-  },
 ];
 
 function rootOf(basePath: string) {
@@ -80,15 +57,24 @@ export function getAccountNav(basePath = "/portal"): NavItem {
   const root = rootOf(basePath);
   return {
     href: `${root}/account`,
-    label: "Account",
-    shortLabel: "Account",
+    label: "Profile",
+    shortLabel: "Profile",
     icon: IconAccount,
   };
 }
 
-/** True when the item represents the current location. */
 export function isNavItemActive(pathname: string, href: string, basePath: string) {
   const root = rootOf(basePath);
   if (href === root) return pathname === root || pathname === `${root}/`;
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** Biomarkers and legacy routes — linked from Profile, not primary nav. */
+export function getProfileExtras(basePath = "/portal") {
+  const root = rootOf(basePath);
+  return {
+    biomarkers: `${root}/biomarkers`,
+    recalibrate: `${root}/recalibrate`,
+    checkIn: `${root}/check-in`,
+  };
 }

@@ -16,7 +16,7 @@ export function OnboardingProgress({
       <ProgressLine
         value={step}
         max={total}
-        label={`Step ${step} of ${total}`}
+        label={`${step} / ${total} completed`}
         reading={`${step}/${total}`}
       />
     </div>
