@@ -17,13 +17,13 @@ export function Skeleton({ className }: { className?: string }) {
   );
 }
 
-/** Matches DataRow / DisclosureRow height and hairline. */
-function RowSkeleton({ tall = false }: { tall?: boolean }) {
+/** Matches meal row height and hairline. */
+function MealRowSkeleton({ optional = false }: { optional?: boolean }) {
   return (
     <div
       className={cn(
-        "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-6 border-t border-hairline",
-        tall ? "py-4" : "py-3",
+        "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-s4 border-t border-hairline py-s4",
+        optional && "opacity-80",
       )}
     >
       <Skeleton className="h-4 w-40" />
@@ -34,75 +34,30 @@ function RowSkeleton({ tall = false }: { tall?: boolean }) {
 
 function AsideSkeleton() {
   return (
-    <div className="space-y-group">
-      <div className="space-y-2.5">
+    <div className="space-y-s5">
+      <div className="space-y-s2">
         <Skeleton className="h-3 w-24" />
-        <Skeleton className="h-0.5 w-full" />
+        <Skeleton className="h-4 w-44 max-w-full" />
       </div>
-      <div className="space-y-2">
+      <div className="space-y-s2">
         <Skeleton className="h-3 w-20" />
         <Skeleton className="h-4 w-28" />
       </div>
-      <div className="space-y-2">
-        <Skeleton className="h-3 w-16" />
-        <Skeleton className="h-4 w-44 max-w-full" />
-        <Skeleton className="h-9 w-36 rounded-control" />
-      </div>
+      <Skeleton className="h-4 w-36" />
     </div>
   );
 }
 
-/** Mirrors the Today body: focus list and side column below the page header. */
+/** Mirrors the Today body: meal list and supporting rail. */
 export function TodayBodySkeleton() {
-  return (
-    <>
-      <Split
-        main={
-          <div>
-            <Skeleton className="mb-tight h-4 w-32" />
-            <RowSkeleton />
-            <RowSkeleton />
-            <RowSkeleton />
-            <RowSkeleton />
-          </div>
-        }
-        aside={<AsideSkeleton />}
-      />
-      <div className="border-t border-hairline pt-group">
-        <div className="mb-tight space-y-2">
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-3 w-64 max-w-full" />
-        </div>
-        <div className="grid gap-x-12 xl:grid-cols-2">
-          <div>
-            <RowSkeleton />
-            <RowSkeleton />
-            <RowSkeleton />
-          </div>
-          <div className="hidden xl:block">
-            <RowSkeleton />
-            <RowSkeleton />
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
-/** Mirrors the grouped daily plan below the page header. */
-export function PlanBodySkeleton() {
   return (
     <Split
       main={
-        <div className="space-y-section">
-          {[0, 1].map((group) => (
-            <div key={group}>
-              <Skeleton className="mb-tight h-4 w-28" />
-              <RowSkeleton tall />
-              <RowSkeleton tall />
-              <RowSkeleton tall />
-            </div>
-          ))}
+        <div>
+          <MealRowSkeleton />
+          <MealRowSkeleton />
+          <MealRowSkeleton />
+          <MealRowSkeleton optional />
         </div>
       }
       aside={<AsideSkeleton />}
@@ -110,15 +65,38 @@ export function PlanBodySkeleton() {
   );
 }
 
-/** Mirrors a single wide list below the page header. */
+/** Mirrors the plan body: meal list and week rail. */
+export function PlanBodySkeleton() {
+  return (
+    <Split
+      main={
+        <div>
+          <MealRowSkeleton />
+          <MealRowSkeleton />
+          <MealRowSkeleton />
+          <MealRowSkeleton optional />
+        </div>
+      }
+      aside={<AsideSkeleton />}
+    />
+  );
+}
+
+/** Mirrors the weekly shop list and cost rail. */
 export function ListBodySkeleton() {
   return (
     <Split
       main={
         <div>
-          <Skeleton className="mb-tight h-4 w-32" />
+          <Skeleton className="mb-s2 h-4 w-32" />
           {[0, 1, 2, 3, 4, 5].map((row) => (
-            <RowSkeleton key={row} tall />
+            <div
+              key={row}
+              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-s4 border-t border-hairline py-s4"
+            >
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-3 w-12" />
+            </div>
           ))}
         </div>
       }
@@ -130,62 +108,74 @@ export function ListBodySkeleton() {
 /** Mirrors the programs hub below the page header. */
 export function ProgramsBodySkeleton() {
   return (
-    <div>
+    <div className="space-y-s6">
       <Skeleton className="h-48 w-full rounded-surface sm:h-40" />
-      <div className="mt-section">
-        <Skeleton className="mb-tight h-4 w-32" />
-        <RowSkeleton tall />
-        <RowSkeleton tall />
+      <div>
+        <Skeleton className="mb-s2 h-4 w-32" />
+        <MealRowSkeleton />
+        <MealRowSkeleton />
       </div>
-      <div className="mt-section border-t border-hairline pt-group">
-        <Skeleton className="mb-tight h-4 w-28" />
-        <RowSkeleton tall />
-        <RowSkeleton tall />
+      <div className="border-t border-hairline pt-s5">
+        <Skeleton className="mb-s2 h-4 w-28" />
+        <MealRowSkeleton />
+        <MealRowSkeleton />
       </div>
     </div>
   );
 }
 
-/** Mirrors a reading-width page body with stacked blocks. */
+/** Mirrors profile sections at reading width. */
 export function ReadingBodySkeleton() {
   return (
-    <div className="space-y-group">
-      <Skeleton className="h-24 w-full rounded-surface" />
-      <Skeleton className="h-16 w-full rounded-surface" />
-      <Skeleton className="h-16 w-full rounded-surface" />
+    <div className="space-y-s6">
+      <div>
+        <Skeleton className="mb-s2 h-4 w-24" />
+        <MealRowSkeleton />
+        <MealRowSkeleton />
+      </div>
+      <div className="border-t border-hairline pt-s5">
+        <Skeleton className="mb-s2 h-4 w-28" />
+        <MealRowSkeleton />
+        <MealRowSkeleton />
+      </div>
+      <div className="border-t border-hairline pt-s5">
+        <Skeleton className="mb-s2 h-4 w-20" />
+        <Skeleton className="mt-s2 h-11 w-40" />
+      </div>
     </div>
   );
 }
 
-/** Mirrors the progress charts and suggestions below the page header. */
+/** Mirrors progress sections below the page header. */
 export function ProgressBodySkeleton() {
   return (
-    <>
-      <div className="space-y-3 border-t border-hairline pt-group">
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-40 w-full rounded-surface" />
+    <div className="space-y-s6">
+      <div>
+        <Skeleton className="mb-s2 h-4 w-28" />
+        <MealRowSkeleton />
+        <MealRowSkeleton />
+        <MealRowSkeleton />
       </div>
-      <div className="space-y-3 border-t border-hairline pt-group">
-        <Skeleton className="h-4 w-32" />
-        <RowSkeleton tall />
-        <RowSkeleton tall />
+      <div className="border-t border-hairline pt-s5">
+        <Skeleton className="mb-s2 h-4 w-32" />
+        <Skeleton className="h-16 w-full" />
       </div>
-    </>
+    </div>
   );
 }
 
 /** Mirrors the check-in form below the page header. */
 export function CheckInBodySkeleton() {
   return (
-    <div className="space-y-4 border-t border-hairline pt-group">
+    <div className="space-y-s5 border-t border-hairline pt-s5">
       <Skeleton className="h-4 w-28" />
       {[0, 1, 2, 3].map((row) => (
-        <div key={row} className="space-y-2">
+        <div key={row} className="space-y-s2">
           <Skeleton className="h-3 w-36" />
-          <Skeleton className="h-11 w-full rounded-control" />
+          <Skeleton className="h-11 w-full" />
         </div>
       ))}
-      <Skeleton className="h-11 w-32 rounded-control" />
+      <Skeleton className="h-11 w-32" />
     </div>
   );
 }

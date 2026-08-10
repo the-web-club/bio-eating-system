@@ -1,6 +1,6 @@
 import { PageSections, PageShell } from "../layout";
 import { PageHeader } from "../page-header";
-import { ButtonLink } from "@/components/ui/button-link";
+import { ActionLink } from "@/components/ui/action-link";
 import {
   TodayViewContent,
   type TodayViewProps,
@@ -9,14 +9,22 @@ import {
 export type { TodayViewProps } from "./today-view-content";
 
 /** Full Today page for previews and other callers that render their own shell. */
-export function TodayView(props: TodayViewProps) {
+export function TodayView({
+  firstName,
+  ...props
+}: TodayViewProps) {
   return (
     <PageShell>
       <PageSections>
         <PageHeader
           title="Today"
+          meta={
+            <p className="text-body-lg text-foreground">Good morning, {firstName}</p>
+          }
           actions={
-            <ButtonLink href={`${props.basePath}/plan`}>View full plan</ButtonLink>
+            <ActionLink href={`${props.basePath}/plan`} variant="quiet" size="compact">
+              View full plan
+            </ActionLink>
           }
         />
         <TodayViewContent {...props} />

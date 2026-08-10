@@ -1,14 +1,13 @@
 import { redirect } from "next/navigation";
+import { ContentMeasure, PageBody, Split } from "@/components/portal/layout";
 import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
+import { PlanAside } from "@/components/portal/plan-aside";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
-import { MealListMeta } from "@/components/portal/meal-list-section";
 import {
-  WeeklyBriefing,
   estimateCookingHours,
   estimateWeeklyCostEur,
 } from "@/components/portal/views/shop-view";
-import { ActionLink } from "@/components/ui/action-link";
 import { SCREENING_REASON_COPY, GOAL_LABELS } from "@/lib/content/labels";
 import { assembleMeals } from "@/lib/portal/meal-assembly";
 import { rotationPosition, weekLabel } from "@/lib/portal/format";
@@ -44,39 +43,28 @@ async function PlanPageContent() {
   const budget = data.profile.weeklyBudgetEur;
   const overBudget = budget != null && estimatedCost > budget;
   const cookingHours = estimateCookingHours(data.profile.practical);
-  const goalLabel =
-    data.profile.goal in GOAL_LABELS
-      ? GOAL_LABELS[data.profile.goal as keyof typeof GOAL_LABELS]
-      : data.profile.goal;
 
   return (
-    <>
-      <p className="text-meta text-muted">
-        <span className="tabular text-meta">{week}</span>
-      </p>
-      {data.entitlements.weeklyRotation ? (
-        <div className="flex flex-wrap gap-3">
-          <ActionLink href="/portal/weekly" variant="secondary">
-            Shopping list
-          </ActionLink>
-        </div>
-      ) : null}
-
-      <WeeklyBriefing
-        weekNumber={position}
-        goal={data.profile.goal}
-        estimatedCostEur={estimatedCost}
-        cookingHours={cookingHours}
-        mealCount={21}
-        budgetEur={budget}
-        overBudget={overBudget}
-        basePath="/portal"
-      />
-
-      <MealListWithReplace
-        meals={meals}
-        meta={
-          <MealListMeta goal={goalLabel} focus="simple high-protein meals" />
+    <PageBody>
+      <Split
+        main={
+          <ContentMeasure>
+            <MealListWithReplace meals={meals} />
+          </ContentMeasure>
+        }
+        aside={
+          <PlanAside
+            weekLabel={week}
+            weekNumber={position}
+            goal={data.profile.goal}
+            estimatedCostEur={estimatedCost}
+            cookingHours={cookingHours}
+            mealCount={21}
+            budgetEur={budget}
+            overBudget={overBudget}
+            weeklyAvailable={data.entitlements.weeklyRotation}
+            basePath="/portal"
+          />
         }
       />
 
@@ -94,7 +82,7 @@ async function PlanPageContent() {
             ))}
         </Status>
       ) : null}
-    </>
+    </PageBody>
   );
 }
 

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Eyebrow, Split } from "@/components/portal/layout";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalErrorState } from "@/components/portal/error-state";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
@@ -14,7 +15,7 @@ import {
   SLOT_GROCERY_CATEGORY,
   humanShoppingLine,
 } from "@/lib/nutrition/grocery-categories";
-import { formatVarietyKey } from "@/lib/portal/format";
+import { formatVarietyKey, rotationPosition } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
 import { WeeklyUpgradeClient } from "./weekly-upgrade-client";
@@ -57,6 +58,8 @@ async function ShopPageContent() {
   const estimatedCost = estimateWeeklyCostEur(data.plan.slots);
   const budget = data.profile?.weeklyBudgetEur ?? null;
   const overBudget = budget != null && estimatedCost > budget;
+  const position = rotationPosition(data.week, data.authoredWeeks);
+  const authoredWeeks = data.authoredWeeks;
 
   const items = data.rotationItems.map((item) => {
     const name =
@@ -78,24 +81,42 @@ async function ShopPageContent() {
   });
 
   return (
-    <>
-      <p className="text-meta text-muted">
-        Estimated weekly cost: €{estimatedCost}
-        {budget != null ? ` · Budget: €${budget}` : ""}
-      </p>
-      <div className="flex flex-wrap gap-3">
-        <ActionLink href="/portal/plan" variant="secondary">
-          View plan
-        </ActionLink>
-      </div>
-      <ShopViewContent
-        basePath="/portal"
-        items={items}
-        estimatedCostEur={estimatedCost}
-        budgetEur={budget}
-        overBudget={overBudget}
-      />
-    </>
+    <Split
+      main={
+        <ShopViewContent
+          basePath="/portal"
+          items={items}
+          estimatedCostEur={estimatedCost}
+          budgetEur={budget}
+          overBudget={overBudget}
+        />
+      }
+      aside={
+        <>
+          <div>
+            <Eyebrow>Estimated cost</Eyebrow>
+            <p className="mt-s2 text-body text-foreground">
+              €{estimatedCost}
+              {budget != null ? (
+                <span className="text-muted">
+                  <span className="text-faint"> · </span>
+                  Budget €{budget}
+                </span>
+              ) : null}
+            </p>
+          </div>
+          <div>
+            <Eyebrow>Rotation</Eyebrow>
+            <p className="mt-s2 text-body text-soft">
+              You are on week {position} of {authoredWeeks} reviewed weeks.
+            </p>
+          </div>
+          <ActionLink href="/portal/plan" variant="quiet" size="compact">
+            View daily plan
+          </ActionLink>
+        </>
+      }
+    />
   );
 }
 

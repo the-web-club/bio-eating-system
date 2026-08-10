@@ -18,11 +18,11 @@ export function MealListSection({
         <h2 className="text-body-lg font-semibold text-foreground">{title}</h2>
       ) : null}
       {meta ? (
-        <div className={cn("text-meta text-muted", title ? "mt-2" : undefined)}>
+        <div className={cn("text-meta text-muted", title ? "mt-s2" : undefined)}>
           {meta}
         </div>
       ) : null}
-      <div className={title || meta ? "mt-4" : undefined}>{children}</div>
+      <div className={title || meta ? "mt-s2" : undefined}>{children}</div>
     </section>
   );
 }

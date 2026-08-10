@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { IconCheck } from "@/components/portal/icons";
+import { ContentMeasure } from "@/components/portal/layout";
 import { SLOT_LABELS } from "@/lib/content/labels";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
 import { cn } from "@/lib/cn";
@@ -38,6 +39,7 @@ export function MealRow({
   showDivider: boolean;
 }) {
   const reduceMotion = useReducedMotion() ?? false;
+  const optional = meal.kind === "optional";
   const mealContentRef = useRef<HTMLDivElement>(null);
   const swapHoldActive = useRef(false);
   const [items, setItems] = useState<AssembledMealItem[]>(() => [...meal.items]);
@@ -128,63 +130,75 @@ export function MealRow({
   return (
     <li
       className={cn(
-        "py-5",
+        "py-s4",
         showDivider && "border-t border-hairline",
+        optional && "opacity-80",
       )}
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <p className="mb-1.5 text-label text-muted">{meal.label}</p>
-        <MealReplacePopover
-          slot={primarySlot}
-          mealLabel={meal.label}
-          open={open}
-          onOpenChange={onOpenChange}
-          onReplace={handleReplace}
-        />
-      </div>
-
-      <div
-        ref={mealContentRef}
-        className="flex items-start gap-2"
-        style={
-          swapHeightHold !== undefined ? { minHeight: swapHeightHold } : undefined
-        }
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={formatMealIngredientNames(items)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={mealSwapVariants(reduceMotion)}
-            transition={mealSwapTransition(reduceMotion)}
-            className="min-w-0 flex-1"
+      <ContentMeasure>
+        <div className="flex items-baseline justify-between gap-x-s4 gap-y-s1">
+          <p
+            className={cn(
+              "text-label",
+              optional ? "text-faint" : "text-muted",
+            )}
           >
-            <MealIngredientLine items={items} />
-          </motion.div>
-        </AnimatePresence>
-        <AnimatePresence>
-          {showCheck ? (
-            <motion.span
-              key="check"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={opacityTween(reduceMotion, "confirmFade")}
-              className="mt-0.5 shrink-0 text-confirm-icon"
-              aria-hidden
+            {meal.label}
+          </p>
+          <MealReplacePopover
+            slot={primarySlot}
+            mealLabel={meal.label}
+            open={open}
+            onOpenChange={onOpenChange}
+            onReplace={handleReplace}
+          />
+        </div>
+
+        <div
+          ref={mealContentRef}
+          className="mt-s1 flex items-start gap-s2"
+          style={
+            swapHeightHold !== undefined ? { minHeight: swapHeightHold } : undefined
+          }
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={formatMealIngredientNames(items)}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={mealSwapVariants(reduceMotion)}
+              transition={mealSwapTransition(reduceMotion)}
+              className="min-w-0 flex-1"
             >
-              <IconCheck className="size-4" />
-            </motion.span>
-          ) : null}
-        </AnimatePresence>
-      </div>
+              <MealIngredientLine items={items} optional={optional} />
+            </motion.div>
+          </AnimatePresence>
+          <AnimatePresence>
+            {showCheck ? (
+              <motion.span
+                key="check"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={opacityTween(reduceMotion, "confirmFade")}
+                className="mt-0.5 shrink-0 text-confirm-icon"
+                aria-hidden
+              >
+                <IconCheck className="size-4" />
+              </motion.span>
+            ) : null}
+          </AnimatePresence>
+        </div>
+      </ContentMeasure>
 
       {failed ? (
-        <p className="mt-2 text-control text-danger">
-          Replacement did not save.{" "}
-          <ReplaceGhostLink onClick={retryReplace}>Try again</ReplaceGhostLink>
-        </p>
+        <ContentMeasure>
+          <p className="mt-s2 text-control text-danger">
+            Replacement did not save.{" "}
+            <ReplaceGhostLink onClick={retryReplace}>Try again</ReplaceGhostLink>
+          </p>
+        </ContentMeasure>
       ) : null}
 
       <p aria-live="polite" className="sr-only">

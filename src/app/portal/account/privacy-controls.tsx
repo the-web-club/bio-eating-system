@@ -118,8 +118,8 @@ export function PrivacyControls({
   }
 
   return (
-    <div className="space-y-group">
-      <div className="space-y-3">
+    <div className="space-y-s5">
+      <div className="space-y-s4">
         <Checkbox
           id="account-marketing"
           label="Send me the weekly shopping list by email."
@@ -141,7 +141,7 @@ export function PrivacyControls({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-s4">
         <Button
           variant="secondary"
           size="compact"

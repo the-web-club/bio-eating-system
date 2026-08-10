@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { GhostLinkButton } from "@/components/ui/ghost-link";
 import { Status } from "@/components/ui/status";
 import { LIFE_HAPPENED_LABELS } from "@/lib/content/labels";
 import { lifeHappenedReasonSchema, type LifeHappenedReason } from "@/lib/intake/schema";
@@ -29,34 +30,34 @@ export function LifeHappenedButton(_props: { basePath: string }) {
     }
   }
 
+  if (!open) {
+    return (
+      <GhostLinkButton type="button" onClick={() => setOpen(true)}>
+        Life happened
+      </GhostLinkButton>
+    );
+  }
+
   return (
-    <div className="mt-group border-t border-hairline pt-group">
-      {!open ? (
-        <Button onClick={() => setOpen(true)}>Life happened</Button>
-      ) : (
-        <div className="space-y-3">
-          <p className="text-body text-foreground">What happened?</p>
-          <div className="flex flex-wrap gap-2">
-            {LIFE_HAPPENED_REASONS.map((reason) => (
-              <Button
-                key={reason}
-                variant="secondary"
-                size="compact"
-                loading={loading}
-                onClick={() => void select(reason)}
-              >
-                {LIFE_HAPPENED_LABELS[reason]}
-              </Button>
-            ))}
-          </div>
-          {nextAction ? (
-            <Status role="neutral">{nextAction}</Status>
-          ) : null}
-          <Button variant="quiet" size="compact" onClick={() => setOpen(false)}>
-            Close
+    <div className="space-y-s4">
+      <p className="text-body text-foreground">What happened?</p>
+      <div className="flex flex-wrap gap-s2">
+        {LIFE_HAPPENED_REASONS.map((reason) => (
+          <Button
+            key={reason}
+            variant="secondary"
+            size="compact"
+            loading={loading}
+            onClick={() => void select(reason)}
+          >
+            {LIFE_HAPPENED_LABELS[reason]}
           </Button>
-        </div>
-      )}
+        ))}
+      </div>
+      {nextAction ? <Status role="neutral">{nextAction}</Status> : null}
+      <GhostLinkButton type="button" onClick={() => setOpen(false)}>
+        Close
+      </GhostLinkButton>
     </div>
   );
 }

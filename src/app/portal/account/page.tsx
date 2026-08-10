@@ -2,7 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { YourPlanSection } from "@/components/portal/your-plan-section";
-import { Section } from "@/components/portal/layout";
+import { PageBody, Section } from "@/components/portal/layout";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
 import { getProfileExtras } from "@/components/portal/nav-config";
 import { isAdminEmail } from "@/lib/admin-allowlist";
@@ -40,7 +40,7 @@ async function ProfilePageContent() {
   const staff = isAdminEmail(session.user.email);
 
   return (
-    <>
+    <PageBody>
       {data ? (
         <YourPlanSection
           entitlements={data.entitlements}
@@ -50,11 +50,11 @@ async function ProfilePageContent() {
 
       <Section ruled title="Signed in as">
         <dl className="divide-y divide-hairline border-t border-hairline">
-          <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+          <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
             <dt className="text-meta text-muted">Name</dt>
             <dd className="text-body text-foreground">{session.user.name}</dd>
           </div>
-          <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+          <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
             <dt className="text-meta text-muted">Email</dt>
             <dd className="break-words text-body text-foreground">
               {session.user.email}
@@ -105,7 +105,7 @@ async function ProfilePageContent() {
       <Section ruled title="Session">
         <SignOutButton />
       </Section>
-    </>
+    </PageBody>
   );
 }
 

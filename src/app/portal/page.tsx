@@ -1,15 +1,24 @@
 import { redirect } from "next/navigation";
-import { LifeHappenedButton } from "@/components/portal/life-happened-button";
+import { Suspense } from "react";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalErrorState } from "@/components/portal/error-state";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
 import { TodayViewContent } from "@/components/portal/views/today-view-content";
 import { ActionLink } from "@/components/ui/action-link";
-import { ButtonLink } from "@/components/ui/button-link";
 import { SCREENING_REASON_COPY } from "@/lib/content/labels";
 import { assembleMeals, todaySummary } from "@/lib/portal/meal-assembly";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
+
+async function TodayGreeting() {
+  try {
+    const data = await loadPortalData();
+    const firstName = data.user.name?.split(" ")[0] || "there";
+    return <p className="text-body-lg text-foreground">Good morning, {firstName}</p>;
+  } catch {
+    return <p className="text-body-lg text-foreground">Good morning</p>;
+  }
+}
 
 async function TodayPageContent() {
   let data;
@@ -51,24 +60,18 @@ async function TodayPageContent() {
   });
 
   return (
-    <>
-      <TodayViewContent
-        basePath="/portal"
-        firstName={data.user.name?.split(" ")[0] || "there"}
-        meals={meals}
-        summary={summary}
-        notices={plan.screeningReasons
-          .map((code) => SCREENING_REASON_COPY[code])
-          .filter(Boolean)}
-        maintenanceOnly={plan.screeningOutcome === "maintenance_only"}
-        weeklyAvailable={data.entitlements.weeklyRotation}
-        showRecalibration={data.recalibrationDue}
-        showCheckIn={data.pendingCheckIn}
-      />
-      <div className="mx-auto max-w-content px-page pb-group">
-        <LifeHappenedButton basePath="/portal" />
-      </div>
-    </>
+    <TodayViewContent
+      basePath="/portal"
+      meals={meals}
+      summary={summary}
+      notices={plan.screeningReasons
+        .map((code) => SCREENING_REASON_COPY[code])
+        .filter(Boolean)}
+      maintenanceOnly={plan.screeningOutcome === "maintenance_only"}
+      weeklyAvailable={data.entitlements.weeklyRotation}
+      showRecalibration={data.recalibrationDue}
+      showCheckIn={data.pendingCheckIn}
+    />
   );
 }
 
@@ -76,8 +79,17 @@ export default function TodayPage() {
   return (
     <PortalPageWithSuspense
       copy={PORTAL_PAGE_COPY.today}
+      meta={
+        <Suspense
+          fallback={<p className="text-body-lg text-foreground">Good morning</p>}
+        >
+          <TodayGreeting />
+        </Suspense>
+      }
       actions={
-        <ButtonLink href="/portal/plan">View full plan</ButtonLink>
+        <ActionLink href="/portal/plan" variant="quiet" size="compact">
+          View full plan
+        </ActionLink>
       }
     >
       <TodayPageContent />

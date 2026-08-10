@@ -26,7 +26,7 @@ export function ProgressMetrics({
 
   return (
     <dl className="divide-y divide-hairline border-t border-hairline">
-      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
         <dt className="text-meta text-muted">Weight trend</dt>
         <dd className="text-body text-foreground">
           {currentWeight != null ? `${currentWeight} kg` : "-"}
@@ -37,19 +37,19 @@ export function ProgressMetrics({
           ) : null}
         </dd>
       </div>
-      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
         <dt className="text-meta text-muted">Adherence</dt>
         <dd className="text-body text-foreground">{avg("adherence") ?? "-"} / 5</dd>
       </div>
-      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
         <dt className="text-meta text-muted">Hunger</dt>
         <dd className="text-body text-foreground">{avg("hunger") ?? "-"} / 5</dd>
       </div>
-      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
         <dt className="text-meta text-muted">Energy</dt>
         <dd className="text-body text-foreground">{avg("energy") ?? "-"} / 5</dd>
       </div>
-      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-4 py-3">
+      <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-s4 py-s4">
         <dt className="text-meta text-muted">Plan satisfaction</dt>
         <dd className="text-body text-foreground">
           {avg("satisfaction") ?? "-"} / 5

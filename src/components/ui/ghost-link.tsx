@@ -10,7 +10,7 @@ export function ghostLinkClassName({
   className?: string;
 } = {}) {
   return cn(
-    "cursor-link bg-transparent p-0 text-control text-muted no-underline underline-offset-4",
+    "cursor-link bg-transparent p-0 text-control text-muted underline decoration-hairline-strong underline-offset-4",
     "transition-colors duration-fast ease-standard",
     "hover:text-foreground hover:underline hover:decoration-foreground",
     "focus-visible:text-foreground focus-visible:underline focus-visible:decoration-foreground",

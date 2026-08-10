@@ -60,7 +60,7 @@ export function PlanView({
 
         <Split
           main={
-            <div className="space-y-group">
+            <div className="space-y-s5">
               {groups.map((group) => (
                 <Section key={group.title} title={group.title}>
                   <ul className="divide-y divide-hairline border-t border-hairline">
@@ -97,10 +97,10 @@ export function PlanView({
             </div>
           }
           aside={
-            <div className="space-y-group">
+            <div className="space-y-s5">
               <div>
                 <Eyebrow>Energy target</Eyebrow>
-                <p className="mt-2">
+                <p className="mt-s2">
                   <MetricValue
                     value={energyKcal}
                     unit="kcal"
@@ -112,7 +112,7 @@ export function PlanView({
               {maintenanceOnly || notices.length ? (
                 <div>
                   <Eyebrow>Your safety limits</Eyebrow>
-                  <div className="mt-2.5">
+                  <div className="mt-s2">
                     <Status role="neutral">
                       {maintenanceOnly ? <p>Maintenance energy only.</p> : null}
                       {notices.map((notice) => (
@@ -128,7 +128,7 @@ export function PlanView({
                 </div>
               ) : null}
 
-              <div className="border-t border-hairline pt-4">
+              <div className="border-t border-hairline pt-s4">
                 <InlineNote>
                   Items without detail are waiting on reviewed preparation copy.
                   Nothing is written by the product itself.

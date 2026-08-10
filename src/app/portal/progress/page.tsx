@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { AdaptationPrompts } from "@/components/portal/adaptation-prompts";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalPageWithSuspense } from "@/components/portal/portal-page-suspense";
-import { Section } from "@/components/portal/layout";
+import { PageBody, Section } from "@/components/portal/layout";
 import { ProgressMetrics } from "@/components/portal/progress-metrics";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { PORTAL_PAGE_COPY } from "@/lib/portal/page-copy";
@@ -35,7 +35,7 @@ async function ProgressPageContent() {
   });
 
   return (
-    <>
+    <PageBody>
       <Section title="Your trends">
         <ProgressMetrics
           currentWeight={data.profile?.weightKg ?? null}
@@ -52,7 +52,7 @@ async function ProgressPageContent() {
       <Section ruled title="Suggestions">
         <AdaptationPrompts />
       </Section>
-    </>
+    </PageBody>
   );
 }
 

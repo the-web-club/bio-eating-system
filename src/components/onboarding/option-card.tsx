@@ -3,8 +3,7 @@
 import { cn } from "@/lib/cn";
 
 /**
- * A discrete interactive object, so a border is earned here. Selection is an
- * inset surface plus an accent edge - not a fill.
+ * A discrete interactive row. Selection is marked by the radio indicator only.
  */
 export function OptionCard({
   selected,
@@ -24,11 +23,9 @@ export function OptionCard({
   return (
     <label
       className={cn(
-        "flex min-h-12 cursor-[var(--cursor-control)] items-start gap-3 rounded-control border px-4 py-3",
+        "flex min-h-12 cursor-[var(--cursor-control)] items-start gap-s4 border-b border-hairline py-s4",
         "transition-colors [transition-duration:var(--duration-selection)] [transition-timing-function:var(--ease-state)]",
-        selected
-          ? "border-accent bg-surface-selected"
-          : "border-hairline-strong hover:bg-surface-inset",
+        "hover:bg-surface-inset",
       )}
     >
       <input
@@ -42,7 +39,7 @@ export function OptionCard({
       <span className="min-w-0">
         <span className="block text-body text-foreground">{title}</span>
         {description ? (
-          <span className="mt-0.5 block text-meta text-muted">{description}</span>
+          <span className="mt-s1 block text-meta text-muted">{description}</span>
         ) : null}
       </span>
     </label>

@@ -41,18 +41,18 @@ export function WeeklyShopList({ items }: { items: ShopItem[] }) {
   }, {});
 
   return (
-    <div className="space-y-group">
+    <div className="space-y-s5">
       {Object.entries(byCategory).map(([category, catItems]) => (
         <div key={category}>
           <h3 className="text-body-lg text-foreground">{category}</h3>
-          <ul className="mt-2 divide-y divide-hairline border-t border-hairline">
+          <ul className="mt-s2 divide-y divide-hairline border-t border-hairline">
             {catItems.map((item) => {
               const checked = have[item.id] ?? false;
               return (
                 <li
                   key={item.id}
                   className={cn(
-                    "py-3 transition-[opacity,color]",
+                    "py-s4 transition-[opacity,color]",
                     "transition-transform duration-selection ease-state",
                     checked && "opacity-70",
                   )}

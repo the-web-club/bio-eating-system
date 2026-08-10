@@ -228,15 +228,18 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
     <OnboardingShell
       footer={
         showFooter ? (
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-col gap-s4">
             {mode === "setup" ? (
-              <Button variant="quiet" onClick={goBack}>
+              <Button variant="quiet" onClick={goBack} className="self-start">
                 Back
               </Button>
-            ) : (
-              <span />
-            )}
-            <Button onClick={goNext} loading={submitting} disabled={submitting}>
+            ) : null}
+            <Button
+              onClick={goNext}
+              loading={submitting}
+              disabled={submitting}
+              className="self-start"
+            >
               {mode === "setup" && SETUP_STEPS[stepIndex].id === "safety"
                 ? "Create my plan"
                 : "Continue"}
@@ -252,7 +255,6 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
           label={SETUP_STEPS[stepIndex].label}
         />
       ) : null}
-
       <AnimatePresence mode="wait">
         <motion.div
           key={`${mode}-${stepIndex}`}
@@ -269,9 +271,9 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
           >
             {headingFor(step.id)}
           </h2>
-          <p className="mt-2 measure text-body-lg text-muted">{whyFor(step.id)}</p>
+          <p className="mt-s2 measure text-body-lg text-muted">{whyFor(step.id)}</p>
 
-          <div className="mt-group space-y-tight">
+          <div className="mt-s5 space-y-s5">
             {step.id === "welcome" ? (
               <>
                 <Status role="neutral">
@@ -282,7 +284,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "basics" ? (
-              <fieldset className="space-y-4">
+              <fieldset className="space-y-s5">
                 <legend className="sr-only">Basics</legend>
                 <MeasurementInput
                   label="Name"
@@ -292,34 +294,36 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                   error={errors.displayName}
                   autoComplete="name"
                 />
-                <MeasurementInput
-                  label="Age in years"
-                  name="age"
-                  type="number"
-                  inputMode="numeric"
-                  value={draft.age}
-                  onChange={(e) => patch({ age: Number(e.target.value) })}
-                  error={errors.age}
-                />
-                <MeasurementInput
-                  label="Height (cm)"
-                  name="heightCm"
-                  type="number"
-                  inputMode="decimal"
-                  value={draft.heightCm}
-                  onChange={(e) => patch({ heightCm: Number(e.target.value) })}
-                  error={errors.heightCm}
-                />
-                <MeasurementInput
-                  label="Current weight (kg)"
-                  name="weightKg"
-                  type="number"
-                  inputMode="decimal"
-                  value={draft.weightKg}
-                  onChange={(e) => patch({ weightKg: Number(e.target.value) })}
-                  error={errors.weightKg}
-                />
-                <div className="space-y-2">
+                <div className="grid gap-s4 sm:grid-cols-3">
+                  <MeasurementInput
+                    label="Age in years"
+                    name="age"
+                    type="number"
+                    inputMode="numeric"
+                    value={draft.age}
+                    onChange={(e) => patch({ age: Number(e.target.value) })}
+                    error={errors.age}
+                  />
+                  <MeasurementInput
+                    label="Height (cm)"
+                    name="heightCm"
+                    type="number"
+                    inputMode="decimal"
+                    value={draft.heightCm}
+                    onChange={(e) => patch({ heightCm: Number(e.target.value) })}
+                    error={errors.heightCm}
+                  />
+                  <MeasurementInput
+                    label="Current weight (kg)"
+                    name="weightKg"
+                    type="number"
+                    inputMode="decimal"
+                    value={draft.weightKg}
+                    onChange={(e) => patch({ weightKg: Number(e.target.value) })}
+                    error={errors.weightKg}
+                  />
+                </div>
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Sex used for energy estimate</p>
                   <OptionCard
                     name="sex"
@@ -336,7 +340,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     onSelect={() => patch({ sex: "male" })}
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Goal</p>
                   {(Object.keys(GOAL_LABELS) as Array<keyof typeof GOAL_LABELS>).map(
                     (goal) => (
@@ -355,9 +359,9 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "lifestyle" ? (
-              <fieldset className="space-y-4">
+              <fieldset className="space-y-s5">
                 <legend className="sr-only">Lifestyle</legend>
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Activity level</p>
                   {(
                     Object.keys(ACTIVITY_LABELS) as Array<keyof typeof ACTIVITY_LABELS>
@@ -377,7 +381,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     />
                   ))}
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Training frequency</p>
                   {TRAINING_FREQUENCIES.map((freq) => (
                     <OptionCard
@@ -418,7 +422,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     }
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Work schedule</p>
                   {WORK_SCHEDULES.map((sched) => (
                     <OptionCard
@@ -439,7 +443,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "food" ? (
-              <fieldset className="space-y-4">
+              <fieldset className="space-y-s5">
                 <legend className="sr-only">Food</legend>
                 <MeasurementInput
                   label="Foods you like (optional)"
@@ -468,7 +472,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     })
                   }
                 />
-                <div className="space-y-3">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Allergies</p>
                   <CheckboxGroup layout="wrap">
                     {ALLERGENS.map((allergen) => (
@@ -486,7 +490,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     ))}
                   </CheckboxGroup>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Intolerances</p>
                   <CheckboxGroup layout="wrap">
                     {INTOLERANCES.map((item) => (
@@ -510,7 +514,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     ))}
                   </CheckboxGroup>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Dietary pattern</p>
                   {DIETARY_PATTERNS.map((pattern) => (
                     <OptionCard
@@ -543,7 +547,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     })
                   }
                 />
-                <div className="space-y-3">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">
                     Foods you prefer to replace in your plan
                   </p>
@@ -567,7 +571,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "practical" ? (
-              <fieldset className="space-y-4">
+              <fieldset className="space-y-s5">
                 <legend className="sr-only">Practical constraints</legend>
                 <MeasurementInput
                   label="Weekly food budget (€, optional)"
@@ -586,7 +590,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     })
                   }
                 />
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">Cooking ability</p>
                   {COOKING_ABILITIES.map((level) => (
                     <OptionCard
@@ -628,7 +632,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     })
                   }
                 />
-                <div className="space-y-2">
+                <div className="space-y-s4">
                   <p className="text-body text-foreground">How often you eat out</p>
                   {EAT_OUT_FREQUENCIES.map((freq) => (
                     <OptionCard
@@ -662,7 +666,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "household" ? (
-              <fieldset className="space-y-3">
+              <fieldset className="space-y-s5">
                 <legend className="text-body text-foreground">
                   Who are you cooking for?
                 </legend>
@@ -702,7 +706,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "preferences" ? (
-              <fieldset className="space-y-2">
+              <fieldset className="space-y-s4">
                 <legend className="sr-only">Measurement preferences</legend>
                 {(["HOUSEHOLD", "METRIC", "SIMPLE"] as const).map((unit) => (
                   <OptionCard
@@ -718,7 +722,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "safety" ? (
-              <div className="space-y-tight">
+              <div className="space-y-s5">
                 <Status role="neutral">
                   <p className="text-foreground">Important</p>
                   <p className="mt-1">
@@ -728,7 +732,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     your plan silently.
                   </p>
                 </Status>
-                <fieldset className="space-y-3">
+                <fieldset className="space-y-s5">
                   <legend className="text-body text-foreground">
                     Health and safety context
                   </legend>
@@ -815,7 +819,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
             ) : null}
 
             {step.id === "refused" ? (
-              <div className="space-y-tight">
+              <div className="space-y-s5">
                 <Status role="neutral">
                   <p className="text-foreground">
                     This product cannot generate a plan for your current answers

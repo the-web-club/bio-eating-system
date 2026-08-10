@@ -30,7 +30,7 @@ export function ProgressLine({
   const featured = tone === "feature";
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("space-y-s1", className)}>
       <div className="flex items-baseline justify-between gap-4">
         <span
           className={cn(

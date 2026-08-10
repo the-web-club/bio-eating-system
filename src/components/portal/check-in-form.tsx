@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox";
+import { Field } from "@/components/ui/field";
 import { CHECK_IN_BARRIER_LABELS } from "@/lib/content/labels";
 import { CHECK_IN_BARRIERS } from "@/lib/intake/schema";
 
@@ -16,9 +17,9 @@ function RatingRow({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-s4">
       <p className="text-body text-foreground">{label}</p>
-      <div className="flex gap-2">
+      <div className="flex gap-s2">
         {[1, 2, 3, 4, 5].map((n) => (
           <Button
             key={n}
@@ -78,13 +79,13 @@ export function CheckInForm() {
   }
 
   return (
-    <div className="space-y-group">
+    <div className="space-y-s5">
       <RatingRow label="Energy" value={energy} onChange={setEnergy} />
       <RatingRow label="Hunger" value={hunger} onChange={setHunger} />
       <RatingRow label="Satisfaction" value={satisfaction} onChange={setSatisfaction} />
       <RatingRow label="Adherence" value={adherence} onChange={setAdherence} />
       <RatingRow label="Difficulty" value={difficulty} onChange={setDifficulty} />
-      <fieldset className="space-y-2">
+      <fieldset className="space-y-s4">
         <legend className="text-body text-foreground">What got in the way?</legend>
         <CheckboxGroup>
           {CHECK_IN_BARRIERS.map((b) => (
@@ -98,15 +99,14 @@ export function CheckInForm() {
           ))}
         </CheckboxGroup>
       </fieldset>
-      <label className="block space-y-1">
-        <span className="text-body text-foreground">Current weight (kg, optional)</span>
-        <input
-          type="number"
-          className="w-full rounded-control border border-hairline bg-surface px-3 py-2 text-body"
-          value={weightKg}
-          onChange={(e) => setWeightKg(e.target.value)}
-        />
-      </label>
+      <Field
+        label="Current weight (kg, optional)"
+        name="weightKg"
+        type="number"
+        inputMode="decimal"
+        value={weightKg}
+        onChange={(e) => setWeightKg(e.target.value)}
+      />
       <Button onClick={() => void submit()} loading={submitting}>
         Save check-in
       </Button>

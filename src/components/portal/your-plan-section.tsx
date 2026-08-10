@@ -24,7 +24,7 @@ export function YourPlanSection({
   const close = (open: boolean) => !open && setUpgrade(null);
 
   return (
-    <div className="space-y-group">
+    <div className="space-y-s5">
       <Section title="Your plan">
         <ModuleRows>
           <ModuleRow

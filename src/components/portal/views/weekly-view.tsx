@@ -62,15 +62,15 @@ export function WeeklyView({
             </Section>
           }
           aside={
-            <div className="space-y-group">
+            <div className="space-y-s5">
               <div>
                 <Eyebrow>Rotation</Eyebrow>
-                <p className="mt-2.5 text-body text-soft">
+                <p className="mt-s2 text-body text-soft">
                   Varieties cycle through {authoredWeeks} reviewed weeks. You are on
                   week {position} of that cycle.
                 </p>
               </div>
-              <div className="border-t border-hairline pt-4">
+              <div className="border-t border-hairline pt-s4">
                 <InlineNote>
                   A dash means the quantity is not joined to your daily plan yet.
                 </InlineNote>

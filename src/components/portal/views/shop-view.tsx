@@ -1,77 +1,10 @@
 import { ActionLink } from "@/components/ui/action-link";
 import { Status } from "@/components/ui/status";
-import { Eyebrow, PageSections, PageShell, Section } from "../layout";
+import { Section } from "../layout";
+import { PageSections, PageShell } from "../layout";
 import { PageHeader } from "../page-header";
 import { WeeklyShopList, type ShopItem } from "../weekly-shop-list";
-import { GOAL_LABELS } from "@/lib/content/labels";
 import { estimateCookingHours, estimateWeeklyCostEur } from "@/lib/nutrition/budget";
-
-export type WeeklyBriefingProps = {
-  weekNumber: number;
-  goal: string;
-  estimatedCostEur: number;
-  cookingHours: number;
-  mealCount: number;
-  budgetEur: number | null;
-  overBudget: boolean;
-  basePath: string;
-};
-
-export function WeeklyBriefing({
-  weekNumber,
-  goal,
-  estimatedCostEur,
-  cookingHours,
-  mealCount,
-  budgetEur,
-  overBudget,
-  basePath,
-}: WeeklyBriefingProps) {
-  const goalLabel = goal in GOAL_LABELS ? GOAL_LABELS[goal as keyof typeof GOAL_LABELS] : goal;
-
-  return (
-    <div className="mb-group space-y-3 rounded-card border border-hairline p-4">
-      <Eyebrow>Your week is ready</Eyebrow>
-      <p className="text-body-lg tabular text-foreground">
-        Week {String(weekNumber).padStart(2, "0")}
-      </p>
-      <dl className="grid gap-2 text-body sm:grid-cols-2">
-        <div>
-          <dt className="text-meta text-muted">Goal</dt>
-          <dd className="text-foreground">{goalLabel}</dd>
-        </div>
-        <div>
-          <dt className="text-meta text-muted">Estimated shopping</dt>
-          <dd className="text-foreground">€{estimatedCostEur}</dd>
-        </div>
-        <div>
-          <dt className="text-meta text-muted">Cooking</dt>
-          <dd className="text-foreground">~{cookingHours} hours</dd>
-        </div>
-        <div>
-          <dt className="text-meta text-muted">Meals</dt>
-          <dd className="text-foreground">{mealCount}</dd>
-        </div>
-      </dl>
-      <div className="flex flex-wrap gap-3 pt-1">
-        <ActionLink href={`${basePath}/plan`} variant="secondary" size="compact">
-          View plan
-        </ActionLink>
-        <ActionLink href={`${basePath}/weekly`} variant="quiet" size="compact">
-          View shopping list
-        </ActionLink>
-      </div>
-      {overBudget && budgetEur != null ? (
-        <Status role="neutral">
-          Your current plan exceeds your €{budgetEur} weekly budget.{" "}
-          <ActionLink href={`${basePath}/weekly`} variant="quiet" size="compact">
-            Reduce cost
-          </ActionLink>
-        </Status>
-      ) : null}
-    </div>
-  );
-}
 
 export type ShopViewProps = {
   items: ShopItem[];
@@ -96,7 +29,7 @@ export function ShopViewContent({
       ) : null}
 
       <Section title="Already have">
-        <p className="mb-3 text-meta text-muted">
+        <p className="mb-s2 text-meta text-muted">
           Tick items you already have at home.
         </p>
         <WeeklyShopList items={items} />
@@ -125,8 +58,8 @@ export function ShopView({
             </p>
           }
           actions={
-            <ActionLink href={`${basePath}/plan`} variant="secondary">
-              View plan
+            <ActionLink href={`${basePath}/plan`} variant="quiet" size="compact">
+              View daily plan
             </ActionLink>
           }
         />

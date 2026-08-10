@@ -20,7 +20,7 @@ export {
   DropdownMenuSeparator,
 } from "./dropdown-menu";
 export { EmptyState } from "./empty-state";
-export { TextField, UnderlineInput } from "./input";
+export { Field, TextField, UnderlineInput } from "./input";
 export { InsetPanel, Panel } from "./panel";
 export { Popover } from "./popover";
 export { RadioGroup } from "./radio-group";

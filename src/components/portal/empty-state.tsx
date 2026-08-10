@@ -36,9 +36,9 @@ export function PortalEmptyState({
   const label = eyebrow ?? TONE_EYEBROW[tone];
 
   return (
-    <div className={cn("border-t border-hairline pt-group", className)}>
+    <div className={cn("border-t border-hairline pt-s5", className)}>
       {label ? (
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-s2 flex items-center gap-s2">
           {tone === "locked" ? (
             <IconLock className="size-3.5 shrink-0 text-faint" />
           ) : null}
@@ -46,9 +46,9 @@ export function PortalEmptyState({
         </div>
       ) : null}
       <h2 className="text-body-lg font-semibold text-foreground">{title}</h2>
-      <div className="mt-2 measure-narrow text-body-lg text-muted">{children}</div>
+      <div className="mt-s2 measure-narrow text-body-lg text-muted">{children}</div>
       {action ? (
-        <div className="mt-group flex flex-wrap items-center gap-3">{action}</div>
+        <div className="mt-s5 flex flex-wrap items-center gap-s4">{action}</div>
       ) : null}
     </div>
   );

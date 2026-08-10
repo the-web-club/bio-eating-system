@@ -14,7 +14,7 @@ export function PageHeader({
 }: {
   title: string;
   description?: string;
-  /** Quiet supporting metadata, such as the current week. */
+  /** Quiet supporting metadata attached to the title block. */
   meta?: ReactNode;
   /** One primary action. It must not become the dominant object on the page. */
   actions?: ReactNode;
@@ -23,21 +23,19 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-10",
+        "flex flex-col gap-s4 sm:flex-row sm:items-start sm:justify-between sm:gap-s5",
         className,
       )}
     >
       <div className="min-w-0">
         <h1 className="text-section-serif text-foreground">{title}</h1>
+        {meta ? <div className="mt-s2">{meta}</div> : null}
         {description ? (
-          <p className="mt-2 measure text-body-lg text-muted">{description}</p>
+          <p className="mt-s2 measure text-body-lg text-muted">{description}</p>
         ) : null}
-        {meta ? <div className="mt-3">{meta}</div> : null}
       </div>
       {actions ? (
-        <div className="flex shrink-0 flex-wrap items-center gap-3 sm:pt-1.5">
-          {actions}
-        </div>
+        <div className="flex shrink-0 flex-wrap items-center gap-s4">{actions}</div>
       ) : null}
     </header>
   );

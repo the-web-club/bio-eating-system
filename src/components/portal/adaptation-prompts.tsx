@@ -36,11 +36,11 @@ export function AdaptationPrompts() {
   if (!prompts.length) return null;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-s4">
       {prompts.map((prompt) => (
-        <div key={prompt.key} className="rounded-card border border-hairline p-4">
+        <div key={prompt.key} className="space-y-s4">
           <p className="text-body text-foreground">{prompt.message}</p>
-          <div className="mt-3 flex gap-2">
+          <div className="flex gap-s2">
             <Button size="compact" onClick={() => void respond(prompt, true)}>
               Yes
             </Button>
