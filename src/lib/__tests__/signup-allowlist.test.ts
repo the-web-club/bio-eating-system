@@ -6,10 +6,11 @@ import {
 } from "../signup-allowlist";
 
 describe("signup allowlist", () => {
-  it("accepts the two invited addresses case-insensitively", () => {
+  it("accepts invited addresses case-insensitively", () => {
     expect(isSignupAllowlisted("contact@katarina2.com")).toBe(true);
     expect(isSignupAllowlisted("Contact@Katarina2.com")).toBe(true);
     expect(isSignupAllowlisted("info@rikderks.nl")).toBe(true);
+    expect(isSignupAllowlisted("katarina.kakkonen@gmail.com")).toBe(true);
   });
 
   it("rejects other addresses", () => {

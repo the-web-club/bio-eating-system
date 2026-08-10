@@ -7,6 +7,7 @@
 const SIGNUP_ALLOWLIST = [
   "contact@katarina2.com",
   "info@rikderks.nl",
+  "katarina.kakkonen@gmail.com",
 ] as const;
 
 const ALLOWLIST_SET = new Set<string>(SIGNUP_ALLOWLIST);
