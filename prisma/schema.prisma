@@ -9,12 +9,12 @@ datasource db {
 }
 
 generator client {
-  provider      = "prisma-client"
-  output        = "../src/generated/prisma"
-  // native = this machine. rhel-openssl-3.0.x = Vercel Node serverless.
-  // Without the second target, Next.js file tracing can ship only the local
-  // engine and the Lambda fails at runtime looking for the RHEL binary.
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider   = "prisma-client"
+  output     = "../src/generated/prisma"
+  // Rust-free client. Next.js Turbopack on Vercel does not reliably ship the
+  // native query-engine .so into the Lambda; the MariaDB driver adapter keeps
+  // connections in plain JS and needs no platform binary.
+  engineType = "client"
 }
 
 // ---------------------------------------------------------------------------
