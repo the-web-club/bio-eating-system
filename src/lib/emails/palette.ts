@@ -33,6 +33,20 @@ export const EMAIL_RADIUS = {
   panel: "11px",
 } as const;
 
+/** Resolved from Button default size in action-styles.ts (min-h-11, px-4, text-body). */
+export const EMAIL_BUTTON = {
+  /** min-h-11 */
+  height: "44px",
+  /** px-4 */
+  paddingX: "16px",
+  /** (height - fontSize) / 2 */
+  paddingY: "15px",
+  /** text-body */
+  fontSize: "14px",
+  /** font-medium */
+  fontWeight: "500",
+} as const;
+
 /** System stack closest to Inter in clients that lack webfonts. */
 export const EMAIL_FONT =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';

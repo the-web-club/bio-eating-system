@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EMAIL_PALETTE } from "@/lib/emails/palette";
+import { EMAIL_BUTTON, EMAIL_PALETTE, EMAIL_RADIUS } from "@/lib/emails/palette";
 import {
   magicLinkEmailHtml,
   welcomeEmailHtml,
@@ -33,6 +33,10 @@ describe("email templates", () => {
       expect(html).toContain("/brand/well-with-katarina.png");
       expect(html).not.toContain("#007AFF");
       expect(html).not.toContain("#3f6b4a");
+      expect(html).not.toContain("9999px");
+      expect(html).toContain(`border-radius:${EMAIL_RADIUS.button}`);
+      expect(html).toContain(`padding:${EMAIL_BUTTON.paddingY} ${EMAIL_BUTTON.paddingX}`);
+      expect(html).toContain(`bgcolor="${EMAIL_PALETTE.accentFill}"`);
     }
 
     expect(welcome).toContain("Ada &lt;script&gt;");

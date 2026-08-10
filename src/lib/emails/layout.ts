@@ -1,5 +1,10 @@
 import { escapeHtml } from "./escape";
-import { EMAIL_FONT, EMAIL_PALETTE as c, EMAIL_RADIUS } from "./palette";
+import {
+  EMAIL_BUTTON,
+  EMAIL_FONT,
+  EMAIL_PALETTE as c,
+  EMAIL_RADIUS,
+} from "./palette";
 
 export type EmailCta = {
   label: string;
@@ -46,13 +51,34 @@ function brandHeaderHtml(appUrl: string): string {
 }
 
 function ctaHtml(cta: EmailCta): string {
+  const href = escapeHtml(cta.href);
+  const label = escapeHtml(cta.label);
+  const linkStyle = [
+    `background-color:${c.accentFill}`,
+    `border-radius:${EMAIL_RADIUS.button}`,
+    `color:${c.onAccent}`,
+    "display:inline-block",
+    `font-family:${EMAIL_FONT}`,
+    `font-size:${EMAIL_BUTTON.fontSize}`,
+    `font-weight:${EMAIL_BUTTON.fontWeight}`,
+    `line-height:${EMAIL_BUTTON.fontSize}`,
+    "mso-hide:all",
+    `padding:${EMAIL_BUTTON.paddingY} ${EMAIL_BUTTON.paddingX}`,
+    "text-align:center",
+    "text-decoration:none",
+    "-webkit-text-size-adjust:none",
+  ].join(";");
+
   return `
     <tr>
       <td style="padding:28px 0 0 0">
-        <a
-          href="${escapeHtml(cta.href)}"
-          style="display:inline-block;background:${c.accentFill};color:${c.onAccent};font-family:${EMAIL_FONT};font-size:14px;font-weight:500;line-height:1;text-decoration:none;padding:14px 22px;border-radius:${EMAIL_RADIUS.button}"
-        >${escapeHtml(cta.label)}</a>
+        <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center" bgcolor="${c.accentFill}" style="border-radius:${EMAIL_RADIUS.button}">
+              <a href="${href}" style="${linkStyle}">${label}</a>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>`;
 }
