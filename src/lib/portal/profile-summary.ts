@@ -23,8 +23,13 @@ export type PortalProfileSummary = {
   allergenCount: number;
 };
 
-export function parseProfileJson<T>(value: unknown, fallback: T): T {
-  if (value && typeof value === "object") return value as T;
+export function parseProfileJson<T extends Record<string, unknown>>(
+  value: unknown,
+  fallback: T,
+): T {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return { ...fallback, ...(value as Record<string, unknown>) } as T;
+  }
   return fallback;
 }
 

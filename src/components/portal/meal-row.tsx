@@ -22,6 +22,7 @@ import {
   type ReplaceSelection,
 } from "./meal-replace-popover";
 import { ReplaceGhostLink } from "./replace-ghost-link";
+import { postReplaceMeal } from "@/lib/portal/replace-meal-client";
 
 export function MealRow({
   meal,
@@ -57,14 +58,10 @@ export function MealRow({
 
   async function runMutation(selection: ReplaceSelection, previousItems: AssembledMealItem[]) {
     try {
-      const res = await fetch("/api/portal/adapt/replace", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slot: primarySlot,
-          reason: selection.reason,
-          replacementSlot: selection.replacementSlot,
-        }),
+      const res = await postReplaceMeal({
+        slot: primarySlot,
+        reason: selection.reason,
+        replacementSlot: selection.replacementSlot,
       });
       if (!res.ok) throw new Error("replace_failed");
       setFailed(false);

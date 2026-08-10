@@ -8,7 +8,7 @@ import {
   ENGINE_VERSION,
 } from "@/lib/nutrition/plan-engine";
 import {
-  ACTIVITY_FACTORS,
+  activityFactorForLevel,
   CONSENT_VERSION,
   intakeBodySchema,
 } from "@/lib/intake/schema";
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     heightCm: input.heightCm,
     weightKg: input.weightKg,
     sex: input.sex,
-    activityFactor: ACTIVITY_FACTORS[activityLevel],
+    activityFactor: activityFactorForLevel(activityLevel),
     goal: input.goal,
     unitSystem: input.unitSystem,
     declaredAllergens: input.declaredAllergens,

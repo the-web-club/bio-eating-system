@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import {
   generatePlan,
@@ -7,16 +5,11 @@ import {
   ENGINE_VERSION,
   SWAP_TARGET,
   type FoodSlot,
+  type PlanResult,
 } from "@/lib/nutrition/plan-engine";
-import { ACTIVITY_FACTORS, defaultIntakeDraft } from "@/lib/intake/schema";
+import { activityFactorForLevel, defaultIntakeDraft } from "@/lib/intake/schema";
 import { parseProfileJson } from "@/lib/portal/profile-summary";
 import type { Prisma } from "@/generated/prisma/client";
-
-async function requireUserId() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) throw new Error("unauthenticated");
-  return session.user.id;
-}
 
 export async function loadProfileForEngine(userId: string) {
   const profile = await db.intakeProfile.findUnique({
@@ -39,7 +32,7 @@ export async function loadProfileForEngine(userId: string) {
       heightCm: profile.heightCm,
       weightKg: profile.weightKg,
       sex: profile.sex as "female" | "male",
-      activityFactor: ACTIVITY_FACTORS[lifestyle.activityLevel],
+      activityFactor: activityFactorForLevel(lifestyle.activityLevel),
       goal: profile.goal as "REDUCE" | "MAINTAIN" | "INCREASE",
       unitSystem: profile.unitSystem as "METRIC" | "HOUSEHOLD" | "SIMPLE",
       declaredAllergens: profile.declaredAllergens as never[],
@@ -52,12 +45,19 @@ export async function loadProfileForEngine(userId: string) {
   };
 }
 
-export async function regeneratePlan(userId: string, extraSwaps: FoodSlot[] = []) {
-  const { profile, engineInput } = await loadProfileForEngine(userId);
-  const swapRequests = [
-    ...new Set([...engineInput.swapRequests, ...extraSwaps]),
-  ] as FoodSlot[];
+function assertPlanIsFinite(plan: PlanResult) {
+  if (!Number.isFinite(plan.energyKcal)) {
+    throw new Error("plan_invalid");
+  }
+  if (plan.slots.some((slot) => !Number.isFinite(slot.grams))) {
+    throw new Error("plan_invalid");
+  }
+}
 
+function buildPlanForSwaps(
+  engineInput: Awaited<ReturnType<typeof loadProfileForEngine>>["engineInput"],
+  swapRequests: FoodSlot[],
+) {
   const plan = generatePlan({ ...engineInput, swapRequests });
   assertNoAllergenLeak({ ...engineInput, swapRequests }, plan);
 
@@ -65,9 +65,17 @@ export async function regeneratePlan(userId: string, extraSwaps: FoodSlot[] = []
     throw new Error("plan_refused");
   }
 
+  assertPlanIsFinite(plan);
+  return plan;
+}
+
+async function persistPlan(
+  profileId: string,
+  plan: PlanResult,
+) {
   await db.generatedPlan.create({
     data: {
-      profileId: profile.id,
+      profileId,
       engineVersion: ENGINE_VERSION,
       contentVersion: process.env.CONTENT_VERSION ?? "unversioned",
       energyKcal: plan.energyKcal,
@@ -76,7 +84,61 @@ export async function regeneratePlan(userId: string, extraSwaps: FoodSlot[] = []
       slots: plan.slots as unknown as Prisma.InputJsonValue,
     },
   });
+}
 
+export async function replaceMealInPlan(
+  userId: string,
+  slot: FoodSlot,
+  reason: string,
+  replacementSlot?: FoodSlot,
+) {
+  const { profile, engineInput } = await loadProfileForEngine(userId);
+  const swapRequests = [
+    ...new Set([...engineInput.swapRequests, slot]),
+  ] as FoodSlot[];
+  const plan = buildPlanForSwaps(engineInput, swapRequests);
+
+  await db.$transaction(async (tx) => {
+    if (replacementSlot) {
+      await tx.adaptationEvent.create({
+        data: {
+          userId,
+          type: "replace",
+          reason,
+          context: { slot, replacementSlot },
+        },
+      });
+    }
+
+    await tx.intakeProfile.update({
+      where: { userId },
+      data: { swapRequests },
+    });
+
+    await tx.generatedPlan.create({
+      data: {
+        profileId: profile.id,
+        engineVersion: ENGINE_VERSION,
+        contentVersion: process.env.CONTENT_VERSION ?? "unversioned",
+        energyKcal: plan.energyKcal,
+        screeningOutcome: plan.screening.outcome,
+        screeningReasons: plan.screening.reasons as Prisma.InputJsonValue,
+        slots: plan.slots as unknown as Prisma.InputJsonValue,
+      },
+    });
+  });
+
+  return plan;
+}
+
+export async function regeneratePlan(userId: string, extraSwaps: FoodSlot[] = []) {
+  const { profile, engineInput } = await loadProfileForEngine(userId);
+  const swapRequests = [
+    ...new Set([...engineInput.swapRequests, ...extraSwaps]),
+  ] as FoodSlot[];
+
+  const plan = buildPlanForSwaps(engineInput, swapRequests);
+  await persistPlan(profile.id, plan);
   return plan;
 }
 

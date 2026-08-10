@@ -101,6 +101,17 @@ describe("plan engine", () => {
     expect(conservedEggsMuscle).toBe(true);
   });
 
+  it("handles many swap requests without NaN grams", () => {
+    const result = generatePlan(
+      baseInput({
+        swapRequests: ["eggs", "tubers", "muscle_meat", "aromatics", "small_fish"],
+      }),
+    );
+
+    expect(Number.isFinite(result.energyKcal)).toBe(true);
+    expect(result.slots.every((slot) => Number.isFinite(slot.grams))).toBe(true);
+  });
+
   it("leaves the original slot when the swap target is blocked by an allergen", () => {
     const input = baseInput({
       declaredAllergens: ["egg"],

@@ -11,6 +11,16 @@ export const ACTIVITY_FACTORS = {
   active: 1.725,
 } as const;
 
+export type ActivityLevel = keyof typeof ACTIVITY_FACTORS;
+
+/** Unknown or legacy activity levels fall back to light so energy never becomes NaN. */
+export function activityFactorForLevel(level: string | undefined): number {
+  if (level && level in ACTIVITY_FACTORS) {
+    return ACTIVITY_FACTORS[level as ActivityLevel];
+  }
+  return ACTIVITY_FACTORS.light;
+}
+
 export const TRAINING_FREQUENCIES = [
   "none",
   "one_two",
