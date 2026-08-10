@@ -15,7 +15,7 @@ export function WizardSlideDemo() {
   const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
   const step = STEPS[index];
-  const variants = wizardSlideVariants(!!reduceMotion);
+  const { variants, transition } = wizardSlideVariants(!!reduceMotion);
 
   return (
     <div className="overflow-hidden rounded-panel border border-hairline bg-surface p-5 sm:p-6">
@@ -30,12 +30,7 @@ export function WizardSlideDemo() {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{
-              duration: variants.transition.duration,
-              ease: variants.transition.ease as
-                | "linear"
-                | [number, number, number, number],
-            }}
+            transition={transition}
           >
             <h3 className="text-display text-foreground">{step.title}</h3>
             <p className="mt-2 measure text-body text-muted">{step.body}</p>

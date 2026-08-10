@@ -49,5 +49,6 @@ describe("motion tokens CSS sync", () => {
 
   it("matches loading threshold from motion.ts", () => {
     expect(css).toContain(`--loading-threshold: ${loadingThresholdCss}`);
+    expect(loadingThresholdCss).toBe("400ms");
   });
 });

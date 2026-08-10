@@ -73,7 +73,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
   const [resultNotice, setResultNotice] = useState<string[] | null>(null);
   const submitted = useRef(false);
   const headingId = useId();
-  const variants = wizardSlideVariants(!!reduceMotion);
+  const { variants, transition } = wizardSlideVariants(!!reduceMotion);
 
   const step: { id: WizardStepId; label: string } =
     mode === "welcome"
@@ -260,10 +260,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{
-            duration: variants.transition.duration,
-            ease: variants.transition.ease as "linear" | [number, number, number, number],
-          }}
+          transition={transition}
         >
           <h2
             id={headingId}

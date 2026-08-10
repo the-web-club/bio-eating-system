@@ -1,30 +1,92 @@
 /**
  * Motion token source of truth. CSS custom properties in globals.css must match
- * these values. See docs/motion.md.
+ * duration and loading values here. See docs/motion.md and .cursor/rules/motion.mdc.
  *
  * Motion confirms interaction and state change. Content is static by default.
+ * No component defines its own spring, duration, or easing array.
  */
 
+import type { Transition, Variants } from "motion/react";
+
+/** Springs. Chosen by surface size, not by taste. */
+export const spring = {
+  /** Small floating surfaces: popovers, menus, tooltips. */
+  snap: { type: "spring", stiffness: 400, damping: 32, mass: 0.8 },
+  /** Modal dialogs and other mid-size surfaces. */
+  modal: { type: "spring", stiffness: 380, damping: 34, mass: 0.9 },
+  /** Bottom sheets and anything driven by a drag gesture. */
+  sheet: { type: "spring", stiffness: 300, damping: 34, mass: 1 },
+  /** Container resize under the `layout` prop. */
+  resize: { type: "spring", stiffness: 350, damping: 35, mass: 1 },
+  /** Large surfaces and route-level movement. */
+  gentle: { type: "spring", stiffness: 260, damping: 30, mass: 1 },
+} satisfies Record<string, Transition>;
+
+/** Tweens. Only for opacity and colour, which gain nothing from a spring. */
+export const tween = {
+  fade: { duration: 0.12, ease: [0.2, 0.7, 0.2, 1] as const },
+  crossfade: { duration: 0.18, ease: [0.2, 0.7, 0.2, 1] as const },
+  exit: { duration: 0.13, ease: [0.4, 0, 1, 1] as const },
+  micro: { duration: 0.12, ease: [0.2, 0.7, 0.2, 1] as const },
+  /** Step heading crossfade inside replace popover. */
+  heading: { duration: 0.14, ease: [0.2, 0.7, 0.2, 1] as const },
+  /** Outgoing chip collapse inside replace popover. */
+  chipExit: { duration: 0.13, ease: [0.2, 0.7, 0.2, 1] as const },
+  /** Sheet backdrop under reduced motion. */
+  sheetReduced: { duration: 0.12, ease: [0.2, 0.7, 0.2, 1] as const },
+  /** Optimistic meal text swap in the list row. */
+  mealSwap: { duration: 0.2, ease: [0.2, 0.7, 0.2, 1] as const },
+  /** Confirmation mark fade out. */
+  confirmFade: { duration: 0.26, ease: [0.2, 0.7, 0.2, 1] as const },
+  /** Sheet backdrop on enter. */
+  sheetBackdrop: { duration: 0.18, ease: [0.2, 0.7, 0.2, 1] as const },
+} satisfies Record<string, Transition>;
+
+/** Stagger. Never exceed 6 animated children or 150ms of total offset. */
+export const stagger = {
+  enter: 0.025,
+  exit: 0.02,
+  chipEnter: 0.025,
+  chipExit: 0.02,
+  max: 6,
+} as const;
+
+/** Loading. Below this threshold, show nothing at all. */
+export const LOADING_THRESHOLD_MS = 400;
+
+/** Gesture dismissal. Projection factor, distance ratio, escape velocity. */
+export const dismiss = {
+  projection: 0.2,
+  ratio: 0.4,
+  velocity: 700,
+} as const;
+
+/** Confirmation mark hold before fade. */
+export const CONFIRM_HOLD_MS = 1400;
+
+export const surfaceVariants = {
+  hidden: { opacity: 0, scale: 0.96, y: -4 },
+  visible: { opacity: 1, scale: 1, y: 0 },
+} satisfies Variants;
+
+export const sheetVariants = {
+  hidden: { y: "100%" },
+  visible: { y: 0 },
+} satisfies Variants;
+
+/* ---------- Legacy duration tokens (CSS sync) ----------------------------- */
+
 export const duration = {
-  /** Colour-only hover/active on dense rows. */
   instant: 80,
-  /** Micro interaction: press, tooltip. */
   press: 120,
-  /** Hover, focus, menus, popovers. */
   fast: 120,
-  /** Exits: shorter than the matching enter. */
   exit: 100,
-  /** Active navigation, selection, checkbox state. */
   selection: 180,
-  /** Disclosure, dialog, sheet, localized row transitions. */
   disclosure: 200,
-  /** Standard UI transition: progress, wizard step. */
   moderate: 180,
-  /** Contextual transition ceiling. */
   slow: 260,
 } as const;
 
-/** CSS string forms for style attributes and tests. */
 export const durationCss = {
   instant: `${duration.instant}ms`,
   press: `${duration.press}ms`,
@@ -37,11 +99,8 @@ export const durationCss = {
 } as const;
 
 export const ease = {
-  /** Standard UI easing - entrances, state changes, exits. */
   standard: [0.2, 0, 0, 1] as const,
-  /** Modals and emphasized surfaces only. */
   emphasized: [0.2, 0.8, 0.2, 1] as const,
-  /** Legacy aliases kept for imports. */
   out: [0.2, 0, 0, 1] as const,
   in: [0.7, 0, 0.84, 0] as const,
   inOut: [0.65, 0, 0.35, 1] as const,
@@ -75,7 +134,6 @@ export const travelCss = {
   far: `${travel.far}px`,
 } as const;
 
-export const LOADING_THRESHOLD_MS = 300;
 export const loadingThresholdCss = `${LOADING_THRESHOLD_MS}ms`;
 
 export function usePrefersReducedMotion(): boolean {
@@ -83,24 +141,29 @@ export function usePrefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/** Subscribeable helper for client components. */
 export function getPrefersReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-type MotionTransition = {
-  duration: number;
-  ease: "linear" | readonly [number, number, number, number];
-};
+type MotionTransition = Transition;
 
-type VariantSet = {
-  enter: Record<string, number>;
-  center: Record<string, number>;
-  exit: Record<string, number>;
-};
+/** Onboarding / wizard step change - opacity only. */
+export function wizardSlideVariants(reduced: boolean): {
+  variants: Variants;
+  transition: MotionTransition;
+} {
+  return {
+    variants: {
+      enter: { opacity: 0 },
+      center: { opacity: 1 },
+      exit: { opacity: 0 },
+    },
+    transition: legacyTransition(reduced, duration.moderate, ease.standard),
+  };
+}
 
-function transition(
+function legacyTransition(
   reduced: boolean,
   ms: number,
   curve: readonly [number, number, number, number],
@@ -109,29 +172,104 @@ function transition(
   return { duration: ms / 1000, ease: curve };
 }
 
-/**
- * Reduced motion drops spatial transforms and uses a near-instant opacity
- * change. It never disables the state change itself.
- */
 export function motionSafe<T>(reduced: boolean, animated: T, staticVariant: T): T {
   return reduced ? staticVariant : animated;
 }
 
-/** Onboarding / wizard step change - opacity only. */
-export function wizardSlideVariants(
-  reduced: boolean,
-): VariantSet & { transition: MotionTransition } {
+/** Opacity-only tween; 0ms under reduced motion. */
+export function opacityTween(reduced: boolean, key: keyof typeof tween = "fade"): MotionTransition {
+  if (reduced) return { duration: 0 };
+  return tween[key];
+}
+
+/** Popover / menu surface enter and exit. */
+export function floatingSurfaceVariants(reduced: boolean): Variants {
+  if (reduced) {
+    return {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+    };
+  }
+  return surfaceVariants;
+}
+
+export function floatingSurfaceTransition(reduced: boolean): MotionTransition {
+  return reduced ? { duration: 0 } : spring.snap;
+}
+
+/** Bottom sheet enter and exit. */
+export function sheetSurfaceVariants(reduced: boolean): Variants {
+  if (reduced) {
+    return {
+      hidden: { opacity: 0, y: "100%" },
+      visible: { opacity: 1, y: 0 },
+    };
+  }
+  return sheetVariants;
+}
+
+export function sheetSurfaceTransition(reduced: boolean): MotionTransition {
+  return reduced ? tween.sheetReduced : spring.sheet;
+}
+
+/** Replace popover step chip groups. */
+export function replaceChipEnterVariants(reduced: boolean): Variants {
+  if (reduced) {
+    return {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+    };
+  }
   return {
-    enter: { opacity: 0 },
-    center: { opacity: 1 },
-    exit: { opacity: 0 },
-    transition: transition(reduced, duration.moderate, ease.standard),
+    hidden: { opacity: 0, y: 6 },
+    visible: { opacity: 1, y: 0 },
   };
+}
+
+export function replaceChipExitVariants(reduced: boolean): Variants {
+  if (reduced) {
+    return {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+    };
+  }
+  return {
+    hidden: { opacity: 0, y: 4, scale: 0.98 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+  };
+}
+
+export function replaceChipEnterTransition(reduced: boolean): MotionTransition {
+  return reduced ? { duration: 0 } : spring.snap;
+}
+
+export function replaceChipExitTransition(reduced: boolean): MotionTransition {
+  return opacityTween(reduced, "chipExit");
+}
+
+/** Optimistic meal row text swap. */
+export function mealSwapVariants(reduced: boolean): Variants {
+  if (reduced) {
+    return {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+    };
+  }
+  return {
+    initial: { opacity: 0, y: 3 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 3 },
+  };
+}
+
+export function mealSwapTransition(reduced: boolean): MotionTransition {
+  return opacityTween(reduced, "mealSwap");
 }
 
 /** Height and opacity expansion for rows that reveal detail in place. */
 export function disclosureTransition(reduced: boolean) {
-  return transition(reduced, duration.disclosure, ease.standard);
+  return legacyTransition(reduced, duration.disclosure, ease.standard);
 }
 
 export function disclosureVariants(reduced: boolean) {
@@ -147,22 +285,20 @@ export function disclosureVariants(reduced: boolean) {
   };
 }
 
-/** Shared active-navigation indicator and selected-control changes. */
 export function selectionTransition(reduced: boolean) {
-  return transition(reduced, duration.selection, ease.standard);
+  return legacyTransition(reduced, duration.selection, ease.standard);
 }
 
-/** Progress animates from its previous value, never from zero. */
 export function progressTransition(reduced: boolean) {
-  return transition(reduced, duration.moderate, ease.standard);
+  return legacyTransition(reduced, duration.moderate, ease.standard);
 }
 
 export function dialogTransition(reduced: boolean) {
-  return transition(reduced, duration.disclosure, ease.emphasized);
+  return legacyTransition(reduced, duration.disclosure, ease.emphasized);
 }
 
 export function menuContentTransition(reduced: boolean) {
-  return transition(reduced, duration.fast, ease.standard);
+  return legacyTransition(reduced, duration.fast, ease.standard);
 }
 
 export function menuExitTransition(reduced: boolean) {
@@ -171,5 +307,5 @@ export function menuExitTransition(reduced: boolean) {
 }
 
 export function toastTransition(reduced: boolean) {
-  return transition(reduced, duration.disclosure, ease.standard);
+  return legacyTransition(reduced, duration.disclosure, ease.standard);
 }
