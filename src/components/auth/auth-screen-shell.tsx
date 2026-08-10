@@ -15,8 +15,7 @@ export function AuthScreenShell({
 }) {
   return (
     <div className="auth-screen relative min-h-dvh">
-      <div className="auth-screen__photo" aria-hidden />
-      <div className="auth-screen__veil" aria-hidden />
+      <div className="auth-bg" aria-hidden />
       <main
         className={cn(
           "relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col justify-center px-gutter py-group sm:px-8",

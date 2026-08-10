@@ -2,11 +2,13 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { magicLink } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { APIError } from "better-auth/api";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { sendMagicLinkEmail } from "@/lib/mail";
 import { provisionAllowlistedUser } from "@/lib/provision-allowlisted-user";
 import { isSignupAllowlisted, normalizeEmail } from "@/lib/signup-allowlist";
+import { buildTrustedOrigins } from "@/lib/trusted-origins";
 
 /**
  * Session length: 7 days.
@@ -20,13 +22,19 @@ const SESSION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
 const SESSION_UPDATE_AGE_SECONDS = 60 * 60 * 24;
 const MAGIC_LINK_EXPIRES_IN_SECONDS = 60 * 10;
 
+function rejectSignInNotAllowed(): never {
+  throw new APIError("FORBIDDEN", {
+    message: "Sign-in is by purchase or invite.",
+  });
+}
+
 export const auth = betterAuth({
   database: prismaAdapter(db, {
     provider: "mysql",
   }),
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
-  trustedOrigins: [env.NEXT_PUBLIC_APP_URL],
+  trustedOrigins: buildTrustedOrigins(),
   session: {
     expiresIn: SESSION_EXPIRES_IN_SECONDS,
     updateAge: SESSION_UPDATE_AGE_SECONDS,
@@ -74,25 +82,38 @@ export const auth = betterAuth({
       expiresIn: MAGIC_LINK_EXPIRES_IN_SECONDS,
       sendMagicLink: async ({ email, url }) => {
         const normalized = normalizeEmail(email);
-        const existing = await db.user.findUnique({
-          where: { email: normalized },
-          select: { id: true },
-        });
 
-        if (!existing) {
-          if (!isSignupAllowlisted(normalized)) {
-            // Do not send a link that would fail at verify.
-            throw new Error("signup_not_allowed");
-          }
-          const provisioned = await provisionAllowlistedUser(normalized);
-          if (provisioned === "rejected") {
-            throw new Error("signup_not_allowed");
-          }
-        }
+        try {
+          const existing = await db.user.findUnique({
+            where: { email: normalized },
+            select: { id: true },
+          });
 
-        const result = await sendMagicLinkEmail({ to: normalized, url });
-        if (!result.ok) {
-          throw new Error(result.error ?? "magic link send failed");
+          if (!existing) {
+            if (!isSignupAllowlisted(normalized)) {
+              rejectSignInNotAllowed();
+            }
+            const provisioned = await provisionAllowlistedUser(normalized);
+            if (provisioned === "rejected") {
+              rejectSignInNotAllowed();
+            }
+          }
+
+          const result = await sendMagicLinkEmail({ to: normalized, url });
+          if (!result.ok) {
+            console.error("magic_link_email_failed");
+            throw new APIError("INTERNAL_SERVER_ERROR", {
+              message: "Could not send the sign-in link. Try again in a few minutes.",
+            });
+          }
+        } catch (error) {
+          if (error instanceof APIError) {
+            throw error;
+          }
+          console.error("magic_link_send_failed");
+          throw new APIError("INTERNAL_SERVER_ERROR", {
+            message: "Could not send the sign-in link. Try again in a few minutes.",
+          });
         }
       },
     }),

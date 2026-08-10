@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { env } from "@/lib/env";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -12,6 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: "Well with Katarina",
   description: "Your daily plan, weekly list and reference material in one place.",
 };

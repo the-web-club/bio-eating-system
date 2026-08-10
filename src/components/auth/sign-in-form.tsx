@@ -44,6 +44,26 @@ export function SignInForm({
     setPending(false);
 
     if (signInError) {
+      if (signInError.status === 429) {
+        setError("Too many attempts. Wait a minute and try again.");
+        return;
+      }
+      if (signInError.status === 403) {
+        if (signInError.message?.includes("purchase or invite")) {
+          setError(
+            "That email is not on the access list. Use the address from your purchase or invite.",
+          );
+          return;
+        }
+        setError(
+          "Sign-in was blocked because this page address is not recognised. Open the site from the link in your purchase confirmation email.",
+        );
+        return;
+      }
+      if (signInError.status === 500) {
+        setError("We could not send the link right now. Wait a minute and try again.");
+        return;
+      }
       setError("We could not send the link. Check the email and try again.");
       return;
     }

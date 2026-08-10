@@ -218,11 +218,10 @@
     0 32px 64px rgb(27 26 24 / 0.08);
 
   /* Auth screen — photograph + radial veil keep the form centre readable. */
-  --auth-veil-core: rgb(251 250 248 / 0.88);
-  --auth-veil-mid: rgb(251 250 248 / 0.5);
+  --auth-veil-core: rgb(255 253 250 / 0.88);
+  --auth-veil-mid: rgb(255 253 250 / 0.55);
   --auth-panel: rgb(255 255 255 / 0.9);
   --auth-panel-border: rgb(27 26 24 / 0.07);
-  --auth-photo-dim: rgb(27 26 24 / 0);
 }
 
 .dark {
@@ -313,7 +312,6 @@
   --auth-veil-mid: rgb(17 17 17 / 0.58);
   --auth-panel: rgb(22 22 21 / 0.94);
   --auth-panel-border: rgb(244 242 238 / 0.08);
-  --auth-photo-dim: rgb(17 17 17 / 0.35);
 }
 
 /* ---------- Layer 3: Tailwind binding ------------------------------------ */
@@ -633,7 +631,7 @@
   }
 
   /* Sign-in / magic-link sent — wellness photograph with a protected centre. */
-  .auth-screen__photo {
+  .auth-bg {
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -643,24 +641,17 @@
     background-repeat: no-repeat;
   }
 
-  .auth-screen__photo::after {
+  .auth-bg::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--auth-photo-dim);
-  }
-
-  .auth-screen__veil {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
     background: radial-gradient(
-      ellipse 52% 72% at 50% 48%,
+      ellipse 60% 55% at 50% 50%,
       var(--auth-veil-core) 0%,
-      var(--auth-veil-mid) 52%,
-      transparent 100%
+      var(--auth-veil-mid) 45%,
+      transparent 75%
     );
+    pointer-events: none;
   }
 
   .auth-screen__panel {
@@ -673,8 +664,7 @@
   }
 
   @media (forced-colors: active) {
-    .auth-screen__photo,
-    .auth-screen__veil {
+    .auth-bg {
       display: none;
     }
 
