@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox";
 import { CHECK_IN_BARRIER_LABELS } from "@/lib/content/labels";
 import { CHECK_IN_BARRIERS } from "@/lib/intake/schema";
 
@@ -86,15 +86,17 @@ export function CheckInForm() {
       <RatingRow label="Difficulty" value={difficulty} onChange={setDifficulty} />
       <fieldset className="space-y-2">
         <legend className="text-body text-foreground">What got in the way?</legend>
-        {CHECK_IN_BARRIERS.map((b) => (
-          <Checkbox
-            key={b}
-            id={`barrier-${b}`}
-            label={CHECK_IN_BARRIER_LABELS[b]}
-            checked={barriers.includes(b)}
-            onCheckedChange={() => toggleBarrier(b)}
-          />
-        ))}
+        <CheckboxGroup>
+          {CHECK_IN_BARRIERS.map((b) => (
+            <Checkbox
+              key={b}
+              id={`barrier-${b}`}
+              label={CHECK_IN_BARRIER_LABELS[b]}
+              checked={barriers.includes(b)}
+              onCheckedChange={() => toggleBarrier(b)}
+            />
+          ))}
+        </CheckboxGroup>
       </fieldset>
       <label className="block space-y-1">
         <span className="text-body text-foreground">Current weight (kg, optional)</span>

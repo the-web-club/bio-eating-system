@@ -3,6 +3,27 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { cn } from "@/lib/cn";
 
+export function CheckboxGroup({
+  children,
+  layout = "stack",
+  className,
+}: {
+  children: React.ReactNode;
+  layout?: "stack" | "wrap";
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        layout === "wrap" ? "checkbox-group-wrap" : "checkbox-group",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function Checkbox({
   id,
   label,
@@ -22,7 +43,7 @@ export function Checkbox({
     <label
       htmlFor={id}
       className={cn(
-        "inline-flex items-center gap-3 text-body text-foreground",
+        "control-checkbox text-body text-foreground",
         disabled && "text-disabled",
       )}
       title={disabled ? disabledReason : undefined}

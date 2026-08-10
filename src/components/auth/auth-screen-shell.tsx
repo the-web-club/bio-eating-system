@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Full-viewport sign-in composition. The wellness photograph sits behind a
- * uniform veil and a radial lift so the centred panel stays the focal point.
+ * dark overlay and a soft vignette so the centred panel stays the focal point.
  */
 export function AuthScreenShell({
   children,

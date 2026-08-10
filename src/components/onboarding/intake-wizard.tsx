@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox";
 import { Status } from "@/components/ui/status";
 import {
   ALLERGEN_LABELS,
@@ -473,41 +473,45 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                 />
                 <div className="space-y-3">
                   <p className="text-body text-foreground">Allergies</p>
-                  {ALLERGENS.map((allergen) => (
-                    <Checkbox
-                      key={allergen}
-                      id={`allergen-${allergen}`}
-                      label={ALLERGEN_LABELS[allergen]}
-                      checked={draft.declaredAllergens.includes(allergen)}
-                      onCheckedChange={() =>
-                        patch({
-                          declaredAllergens: toggleIn(draft.declaredAllergens, allergen),
-                        })
-                      }
-                    />
-                  ))}
+                  <CheckboxGroup layout="wrap">
+                    {ALLERGENS.map((allergen) => (
+                      <Checkbox
+                        key={allergen}
+                        id={`allergen-${allergen}`}
+                        label={ALLERGEN_LABELS[allergen]}
+                        checked={draft.declaredAllergens.includes(allergen)}
+                        onCheckedChange={() =>
+                          patch({
+                            declaredAllergens: toggleIn(draft.declaredAllergens, allergen),
+                          })
+                        }
+                      />
+                    ))}
+                  </CheckboxGroup>
                 </div>
                 <div className="space-y-3">
                   <p className="text-body text-foreground">Intolerances</p>
-                  {INTOLERANCES.map((item) => (
-                    <Checkbox
-                      key={item}
-                      id={`intolerance-${item}`}
-                      label={INTOLERANCE_LABELS[item]}
-                      checked={draft.foodPreferences.intolerances.includes(item)}
-                      onCheckedChange={() =>
-                        patch({
-                          foodPreferences: {
-                            ...draft.foodPreferences,
-                            intolerances: toggleIn(
-                              draft.foodPreferences.intolerances,
-                              item,
-                            ),
-                          },
-                        })
-                      }
-                    />
-                  ))}
+                  <CheckboxGroup layout="wrap">
+                    {INTOLERANCES.map((item) => (
+                      <Checkbox
+                        key={item}
+                        id={`intolerance-${item}`}
+                        label={INTOLERANCE_LABELS[item]}
+                        checked={draft.foodPreferences.intolerances.includes(item)}
+                        onCheckedChange={() =>
+                          patch({
+                            foodPreferences: {
+                              ...draft.foodPreferences,
+                              intolerances: toggleIn(
+                                draft.foodPreferences.intolerances,
+                                item,
+                              ),
+                            },
+                          })
+                        }
+                      />
+                    ))}
+                  </CheckboxGroup>
                 </div>
                 <div className="space-y-2">
                   <p className="text-body text-foreground">Dietary pattern</p>
@@ -546,19 +550,21 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                   <p className="text-body text-foreground">
                     Foods you prefer to replace in your plan
                   </p>
-                  {FOOD_SLOTS.map((slot) => (
-                    <Checkbox
-                      key={slot}
-                      id={`swap-${slot}`}
-                      label={SLOT_LABELS[slot]}
-                      checked={draft.swapRequests.includes(slot)}
-                      onCheckedChange={() =>
-                        patch({
-                          swapRequests: toggleIn(draft.swapRequests, slot),
-                        })
-                      }
-                    />
-                  ))}
+                  <CheckboxGroup layout="wrap">
+                    {FOOD_SLOTS.map((slot) => (
+                      <Checkbox
+                        key={slot}
+                        id={`swap-${slot}`}
+                        label={SLOT_LABELS[slot]}
+                        checked={draft.swapRequests.includes(slot)}
+                        onCheckedChange={() =>
+                          patch({
+                            swapRequests: toggleIn(draft.swapRequests, slot),
+                          })
+                        }
+                      />
+                    ))}
+                  </CheckboxGroup>
                 </div>
               </fieldset>
             ) : null}
@@ -663,36 +669,38 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                 <legend className="text-body text-foreground">
                   Who are you cooking for?
                 </legend>
-                <Checkbox
-                  id="self"
-                  label="Myself"
-                  checked={draft.household.cookingForSelf}
-                  onCheckedChange={(checked) =>
-                    patch({
-                      household: { ...draft.household, cookingForSelf: checked },
-                    })
-                  }
-                />
-                <Checkbox
-                  id="partner"
-                  label="Partner"
-                  checked={draft.household.cookingForPartner}
-                  onCheckedChange={(checked) =>
-                    patch({
-                      household: { ...draft.household, cookingForPartner: checked },
-                    })
-                  }
-                />
-                <Checkbox
-                  id="family"
-                  label="Family"
-                  checked={draft.household.cookingForFamily}
-                  onCheckedChange={(checked) =>
-                    patch({
-                      household: { ...draft.household, cookingForFamily: checked },
-                    })
-                  }
-                />
+                <CheckboxGroup>
+                  <Checkbox
+                    id="self"
+                    label="Myself"
+                    checked={draft.household.cookingForSelf}
+                    onCheckedChange={(checked) =>
+                      patch({
+                        household: { ...draft.household, cookingForSelf: checked },
+                      })
+                    }
+                  />
+                  <Checkbox
+                    id="partner"
+                    label="Partner"
+                    checked={draft.household.cookingForPartner}
+                    onCheckedChange={(checked) =>
+                      patch({
+                        household: { ...draft.household, cookingForPartner: checked },
+                      })
+                    }
+                  />
+                  <Checkbox
+                    id="family"
+                    label="Family"
+                    checked={draft.household.cookingForFamily}
+                    onCheckedChange={(checked) =>
+                      patch({
+                        household: { ...draft.household, cookingForFamily: checked },
+                      })
+                    }
+                  />
+                </CheckboxGroup>
               </fieldset>
             ) : null}
 
@@ -727,19 +735,21 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                   <legend className="text-body text-foreground">
                     Health and safety context
                   </legend>
-                  {SCREENING_FLAGS.map((flag) => (
-                    <Checkbox
-                      key={flag}
-                      id={`flag-${flag}`}
-                      label={SCREENING_LABELS[flag]}
-                      checked={draft.screeningFlags.includes(flag)}
-                      onCheckedChange={() =>
-                        patch({
-                          screeningFlags: toggleIn(draft.screeningFlags, flag),
-                        })
-                      }
-                    />
-                  ))}
+                  <CheckboxGroup>
+                    {SCREENING_FLAGS.map((flag) => (
+                      <Checkbox
+                        key={flag}
+                        id={`flag-${flag}`}
+                        label={SCREENING_LABELS[flag]}
+                        checked={draft.screeningFlags.includes(flag)}
+                        onCheckedChange={() =>
+                          patch({
+                            screeningFlags: toggleIn(draft.screeningFlags, flag),
+                          })
+                        }
+                      />
+                    ))}
+                  </CheckboxGroup>
                   <MeasurementInput
                     label="Notes for your coach (optional)"
                     name="notes"
@@ -764,7 +774,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                     </p>
                   </ReviewGroup>
                 </div>
-                <div className="space-y-3">
+                <CheckboxGroup>
                   <Checkbox
                     id="consent"
                     label="I consent to processing of my health data to create my plan."
@@ -781,7 +791,7 @@ export function IntakeWizard({ initialName }: { initialName?: string }) {
                       patch({ marketingOptIn: checked })
                     }
                   />
-                </div>
+                </CheckboxGroup>
                 {errors.consent ? (
                   <p className="text-small text-status-danger-text">{errors.consent}</p>
                 ) : null}

@@ -221,7 +221,11 @@ export function PageLoadingState({
   width = "wide",
   body,
   loadingLabel,
-}: PortalPageCopy & { body: ReactNode }) {
+}: PortalPageCopy & {
+  body: ReactNode;
+  meta?: ReactNode;
+  actions?: ReactNode;
+}) {
   return (
     <PageShell width={width}>
       <div aria-busy="true" aria-label={loadingLabel}>

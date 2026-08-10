@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox";
 import { TextField } from "@/components/ui/input";
 import { Status } from "@/components/ui/status";
 
@@ -88,30 +88,32 @@ export function CreateMemberForm() {
 
       <fieldset className="space-y-2 border-t border-hairline pt-tight">
         <legend className="text-small text-soft">Starting access</legend>
-        <Checkbox
-          id="create-core"
-          label="Daily plan"
-          checked={corePlan}
-          onCheckedChange={setCorePlan}
-        />
-        <Checkbox
-          id="create-weekly"
-          label="Weekly list"
-          checked={weeklyRotation}
-          onCheckedChange={setWeeklyRotation}
-        />
-        <Checkbox
-          id="create-lab"
-          label="Biomarker reference"
-          checked={labReference}
-          onCheckedChange={setLabReference}
-        />
-        <Checkbox
-          id="create-coach"
-          label="Coaching"
-          checked={coaching}
-          onCheckedChange={setCoaching}
-        />
+        <CheckboxGroup>
+          <Checkbox
+            id="create-core"
+            label="Daily plan"
+            checked={corePlan}
+            onCheckedChange={setCorePlan}
+          />
+          <Checkbox
+            id="create-weekly"
+            label="Weekly list"
+            checked={weeklyRotation}
+            onCheckedChange={setWeeklyRotation}
+          />
+          <Checkbox
+            id="create-lab"
+            label="Biomarker reference"
+            checked={labReference}
+            onCheckedChange={setLabReference}
+          />
+          <Checkbox
+            id="create-coach"
+            label="Coaching"
+            checked={coaching}
+            onCheckedChange={setCoaching}
+          />
+        </CheckboxGroup>
       </fieldset>
 
       <div aria-live="polite">

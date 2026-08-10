@@ -5,6 +5,7 @@ import {
   Badge,
   Button,
   Checkbox,
+  CheckboxGroup,
   Combobox,
   CommandMenu,
   CommandMenuHint,
@@ -61,25 +62,27 @@ export function ProofShowcase() {
         <h2 id="playground-controls" className="text-section text-foreground">
           Playground controls
         </h2>
-        <InsetPanel className="flex flex-wrap gap-x-8 gap-y-3">
-          <Checkbox
-            id="toggle-greyscale"
-            label="Greyscale"
-            checked={greyscale}
-            onCheckedChange={setGreyscale}
-          />
-          <Checkbox
-            id="toggle-reduced"
-            label="Force reduced motion"
-            checked={forceReduced}
-            onCheckedChange={setForceReduced}
-          />
-          <Checkbox
-            id="toggle-slow"
-            label="Slow network"
-            checked={slowNetwork}
-            onCheckedChange={setSlowNetwork}
-          />
+        <InsetPanel>
+          <CheckboxGroup layout="wrap">
+            <Checkbox
+              id="toggle-greyscale"
+              label="Greyscale"
+              checked={greyscale}
+              onCheckedChange={setGreyscale}
+            />
+            <Checkbox
+              id="toggle-reduced"
+              label="Force reduced motion"
+              checked={forceReduced}
+              onCheckedChange={setForceReduced}
+            />
+            <Checkbox
+              id="toggle-slow"
+              label="Slow network"
+              checked={slowNetwork}
+              onCheckedChange={setSlowNetwork}
+            />
+          </CheckboxGroup>
         </InsetPanel>
         <CommandMenuHint />
       </section>
@@ -193,7 +196,7 @@ export function ProofShowcase() {
           <h3 id={headingId} className="sr-only">
             Your age
           </h3>
-          <div className="flex flex-col gap-3 border-t border-hairline pt-tight">
+          <CheckboxGroup className="border-t border-hairline pt-tight">
             <Checkbox
               id="opt-in"
               label="Optional preference"
@@ -209,7 +212,7 @@ export function ProofShowcase() {
                 { value: "b", label: "Choice B" },
               ]}
             />
-          </div>
+          </CheckboxGroup>
         </div>
       </section>
 

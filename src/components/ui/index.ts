@@ -6,7 +6,7 @@ export {
 } from "./action-styles";
 export { Badge } from "./badge";
 export { Button } from "./button";
-export { Checkbox } from "./checkbox";
+export { Checkbox, CheckboxGroup } from "./checkbox";
 export { Combobox } from "./combobox";
 export { CommandMenu, CommandMenuHint } from "./command-menu";
 export { DataList } from "./data-list";

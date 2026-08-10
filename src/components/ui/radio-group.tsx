@@ -19,12 +19,12 @@ export function RadioGroup({
       value={value}
       onValueChange={onValueChange}
       aria-label={label}
-      className="flex flex-col gap-3"
+      className="control-group"
     >
       {options.map((option) => (
         <label
           key={option.value}
-          className="inline-flex items-center gap-3 text-body text-foreground"
+          className="control-checkbox text-body text-foreground"
         >
           <RadioGroupPrimitive.Item
             value={option.value}
