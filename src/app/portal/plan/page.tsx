@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { AppShell } from "@/components/portal/app-shell";
 import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PageSections, PageShell, Section } from "@/components/portal/layout";
@@ -26,13 +25,11 @@ export default async function PlanPage() {
 
   if (!data.entitlements.corePlan) {
     return (
-      <AppShell title="Plan">
-        <PageShell width="reading">
-          <PortalEmptyState title="Personal nutrition plan not on your account">
-            Add the plan on the website to see your weekly meals here.
-          </PortalEmptyState>
-        </PageShell>
-      </AppShell>
+      <PageShell width="reading">
+        <PortalEmptyState title="Personal nutrition plan not on your account">
+          Add the plan on the website to see your weekly meals here.
+        </PortalEmptyState>
+      </PageShell>
     );
   }
 
@@ -54,60 +51,58 @@ export default async function PlanPage() {
       : data.profile.goal;
 
   return (
-    <AppShell title="Plan" weekLabel={week}>
-      <PageShell>
-        <PageSections>
-          <PageHeader
-            title="Plan"
-            description="My week."
-            meta={
-              <p className="text-meta text-muted">
-                <span className="font-meta tabular">{week}</span>
-              </p>
-            }
-            actions={
-              data.entitlements.weeklyRotation ? (
-                <ActionLink href="/portal/weekly" variant="secondary">
-                  Shopping list
-                </ActionLink>
-              ) : null
-            }
-          />
-
-          <WeeklyBriefing
-            weekNumber={position}
-            goal={data.profile.goal}
-            estimatedCostEur={estimatedCost}
-            cookingHours={cookingHours}
-            mealCount={21}
-            budgetEur={budget}
-            overBudget={overBudget}
-            basePath="/portal"
-          />
-
-          <Section title="This week">
-            <p className="mb-3 text-body text-muted">
-              Goal: {goalLabel} · Focus: simple high-protein meals
+    <PageShell>
+      <PageSections>
+        <PageHeader
+          title="Plan"
+          description="My week."
+          meta={
+            <p className="text-meta text-muted">
+              <span className="font-meta tabular">{week}</span>
             </p>
-            <MealListWithReplace meals={meals} />
-          </Section>
+          }
+          actions={
+            data.entitlements.weeklyRotation ? (
+              <ActionLink href="/portal/weekly" variant="secondary">
+                Shopping list
+              </ActionLink>
+            ) : null
+          }
+        />
 
-          {plan.screeningOutcome === "maintenance_only" ||
-          plan.screeningReasons.length ? (
-            <Status role="neutral">
-              {plan.screeningOutcome === "maintenance_only" ? (
-                <p>Your plan stays at maintenance energy.</p>
-              ) : null}
-              {plan.screeningReasons
-                .map((code) => SCREENING_REASON_COPY[code])
-                .filter(Boolean)
-                .map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-            </Status>
-          ) : null}
-        </PageSections>
-      </PageShell>
-    </AppShell>
+        <WeeklyBriefing
+          weekNumber={position}
+          goal={data.profile.goal}
+          estimatedCostEur={estimatedCost}
+          cookingHours={cookingHours}
+          mealCount={21}
+          budgetEur={budget}
+          overBudget={overBudget}
+          basePath="/portal"
+        />
+
+        <Section title="This week">
+          <p className="mb-3 text-body text-muted">
+            Goal: {goalLabel} · Focus: simple high-protein meals
+          </p>
+          <MealListWithReplace meals={meals} />
+        </Section>
+
+        {plan.screeningOutcome === "maintenance_only" ||
+        plan.screeningReasons.length ? (
+          <Status role="neutral">
+            {plan.screeningOutcome === "maintenance_only" ? (
+              <p>Your plan stays at maintenance energy.</p>
+            ) : null}
+            {plan.screeningReasons
+              .map((code) => SCREENING_REASON_COPY[code])
+              .filter(Boolean)
+              .map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+          </Status>
+        ) : null}
+      </PageSections>
+    </PageShell>
   );
 }

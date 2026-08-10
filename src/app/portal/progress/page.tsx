@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { AppShell } from "@/components/portal/app-shell";
 import { AdaptationPrompts } from "@/components/portal/adaptation-prompts";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PageSections, PageShell, Section } from "@/components/portal/layout";
@@ -18,13 +17,11 @@ export default async function ProgressPage() {
 
   if (!data.entitlements.corePlan || !data.plan) {
     return (
-      <AppShell title="Progress">
-        <PageShell width="reading">
-          <PortalEmptyState title="No plan yet">
-            Complete your setup to track progress.
-          </PortalEmptyState>
-        </PageShell>
-      </AppShell>
+      <PageShell width="reading">
+        <PortalEmptyState title="No plan yet">
+          Complete your setup to track progress.
+        </PortalEmptyState>
+      </PageShell>
     );
   }
 
@@ -35,31 +32,29 @@ export default async function ProgressPage() {
   });
 
   return (
-    <AppShell title="Progress">
-      <PageShell>
-        <PageSections>
-          <PageHeader
-            title="Progress"
-            description="Is this working? Trends matter more than a single number."
+    <PageShell>
+      <PageSections>
+        <PageHeader
+          title="Progress"
+          description="Is this working? Trends matter more than a single number."
+        />
+        <Section title="Your trends">
+          <ProgressMetrics
+            currentWeight={data.profile?.weightKg ?? null}
+            checkIns={checkIns.map((c) => ({
+              energy: c.energy,
+              hunger: c.hunger,
+              satisfaction: c.satisfaction,
+              adherence: c.adherence,
+              weightKg: c.weightKg,
+              createdAt: c.createdAt.toISOString(),
+            }))}
           />
-          <Section title="Your trends">
-            <ProgressMetrics
-              currentWeight={data.profile?.weightKg ?? null}
-              checkIns={checkIns.map((c) => ({
-                energy: c.energy,
-                hunger: c.hunger,
-                satisfaction: c.satisfaction,
-                adherence: c.adherence,
-                weightKg: c.weightKg,
-                createdAt: c.createdAt.toISOString(),
-              }))}
-            />
-          </Section>
-          <Section ruled title="Suggestions">
-            <AdaptationPrompts />
-          </Section>
-        </PageSections>
-      </PageShell>
-    </AppShell>
+        </Section>
+        <Section ruled title="Suggestions">
+          <AdaptationPrompts />
+        </Section>
+      </PageSections>
+    </PageShell>
   );
 }

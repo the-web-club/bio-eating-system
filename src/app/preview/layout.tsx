@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PreviewShell } from "./preview-shell";
 
 export const metadata = {
   title: "Preview · Katarina portal shell",
@@ -7,5 +8,5 @@ export const metadata = {
 };
 
 export default function PreviewLayout({ children }: { children: ReactNode }) {
-  return children;
+  return <PreviewShell title="Preview">{children}</PreviewShell>;
 }

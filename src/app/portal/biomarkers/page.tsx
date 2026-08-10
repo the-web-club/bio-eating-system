@@ -1,4 +1,3 @@
-import { AppShell } from "@/components/portal/app-shell";
 import { PortalEmptyState } from "@/components/portal/empty-state";
 import { PortalErrorState } from "@/components/portal/error-state";
 import { InlineNote } from "@/components/portal/inline-note";
@@ -10,7 +9,6 @@ import {
 } from "@/components/portal/views/biomarkers-view";
 import { ActionLink } from "@/components/ui/action-link";
 import { resolveContent } from "@/lib/content/resolve";
-import { rotationPosition, weekLabel } from "@/lib/portal/format";
 import { loadPortalData } from "@/lib/portal/load-portal-data";
 import { BiomarkerUpgradeClient } from "./biomarker-upgrade-client";
 
@@ -27,61 +25,48 @@ export default async function BiomarkersPage() {
     data = await loadPortalData();
   } catch {
     return (
-      <AppShell title="Biomarkers">
-        <PageShell width="reading">
-          <PageHeader title="Biomarkers" />
-          <div className="mt-group">
-            <PortalErrorState
-              title="The biomarker reference did not load"
-              action={
-                <ActionLink
-                  href="/portal/biomarkers"
-                  variant="secondary"
-                  size="compact"
-                >
-                  Try again
-                </ActionLink>
-              }
-            >
-              Check your connection, then try again.
-            </PortalErrorState>
-          </div>
-        </PageShell>
-      </AppShell>
+      <PageShell width="reading">
+        <PageHeader title="Biomarkers" />
+        <div className="mt-group">
+          <PortalErrorState
+            title="The biomarker reference did not load"
+            action={
+              <ActionLink
+                href="/portal/biomarkers"
+                variant="secondary"
+                size="compact"
+              >
+                Try again
+              </ActionLink>
+            }
+          >
+            Check your connection, then try again.
+          </PortalErrorState>
+        </div>
+      </PageShell>
     );
   }
 
-  const week = weekLabel(data.week);
-  const position = rotationPosition(data.week, data.authoredWeeks);
-
   if (!data.entitlements.labReference) {
     return (
-      <AppShell
-        title="Biomarkers"
-        weekLabel={week}
-        programLabel="Core plan"
-        rotationPosition={position}
-        authoredWeeks={data.authoredWeeks}
-      >
-        <PageShell width="reading">
-          <PageSections>
-            <PageHeader
-              title="Biomarkers"
-              description="A plain-language reference for common markers, written and reviewed by a dietitian."
-            />
-            <div className="space-y-group">
-              <PortalEmptyState
-                title="Not on your account yet"
-                action={<BiomarkerUpgradeClient />}
-              >
-                Biomarker support explains what each marker describes and gives
-                reference context, without scoring your results.
-              </PortalEmptyState>
-              <InlineNote>{BIOMARKER_DISCLAIMER}</InlineNote>
-            </div>
-          </PageSections>
-        </PageShell>
-      </AppShell>
+      <PageShell width="reading">
+        <PageSections>
+          <PageHeader
+            title="Biomarkers"
+            description="A plain-language reference for common markers, written and reviewed by a dietitian."
+          />
+          <div className="space-y-group">
+            <PortalEmptyState
+              title="Not on your account yet"
+              action={<BiomarkerUpgradeClient />}
+            >
+              Biomarker support explains what each marker describes and gives
+              reference context, without scoring your results.
+            </PortalEmptyState>
+            <InlineNote>{BIOMARKER_DISCLAIMER}</InlineNote>
+          </div>
+        </PageSections>
+      </PageShell>
     );
   }
 
@@ -95,15 +80,5 @@ export default async function BiomarkersPage() {
     (marker): marker is typeof marker & { name: string } => Boolean(marker.name),
   );
 
-  return (
-    <AppShell
-      title="Biomarkers"
-      weekLabel={week}
-      programLabel="Core plan"
-      rotationPosition={position}
-      authoredWeeks={data.authoredWeeks}
-    >
-      <BiomarkersView markers={markers} />
-    </AppShell>
-  );
+  return <BiomarkersView markers={markers} />;
 }

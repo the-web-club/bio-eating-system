@@ -125,7 +125,7 @@ export function motionSafe<T>(reduced: boolean, animated: T, staticVariant: T): 
   return reduced ? staticVariant : animated;
 }
 
-/** Crossfade plus a small vertical settle for main content. */
+/** Crossfade for main content. No vertical travel — it reads as bounce beside a fixed rail. */
 export function pageContentTransition(reduced: boolean) {
   return transition(reduced, duration.moderate, ease.out);
 }
@@ -133,19 +133,13 @@ export function pageContentTransition(reduced: boolean) {
 export function pageContentVariants(reduced: boolean): VariantSet & {
   transition: MotionTransition;
 } {
-  if (reduced) {
-    return {
-      enter: { opacity: 0 },
-      center: { opacity: 1 },
-      exit: { opacity: 0 },
-      transition: { duration: duration.exit / 1000, ease: "linear" },
-    };
-  }
   return {
-    enter: { opacity: 0, y: travel.near },
-    center: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -travel.close },
-    transition: { duration: duration.moderate / 1000, ease: ease.out },
+    enter: { opacity: 0 },
+    center: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: reduced
+      ? { duration: duration.exit / 1000, ease: "linear" }
+      : { duration: duration.moderate / 1000, ease: ease.out },
   };
 }
 

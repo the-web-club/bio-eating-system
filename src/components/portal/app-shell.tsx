@@ -1,7 +1,11 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { LayoutGroup } from "framer-motion";
 import { MobileBottomNav, MobileTopBar } from "./mobile-navigation";
 import { PageTransition } from "./page-transition";
 import { PortalSidebar } from "./portal-sidebar";
+import { ScrollReset } from "./scroll-reset";
 
 /**
  * Product shell: a stable rail beside an open content canvas. The shell adds no
@@ -28,31 +32,36 @@ export function AppShell({
   /** Compact developer-only bar. Never used for customer-facing copy. */
   devBar?: ReactNode;
 }) {
+  const shellGroupId = `shell-${basePath.replace(/\/$/, "") || "portal"}`;
+
   return (
     <div className="min-h-dvh bg-surface-canvas text-foreground">
+      <ScrollReset />
       {devBar}
-      <div className="flex">
-        <PortalSidebar
-          weekLabel={weekLabel}
-          programLabel={programLabel}
-          rotationPosition={rotationPosition}
-          authoredWeeks={authoredWeeks}
-          basePath={basePath}
-        />
-        <div className="flex min-h-dvh min-w-0 flex-1 flex-col pb-16 lg:pb-0">
-          <MobileTopBar
+      <LayoutGroup id={shellGroupId}>
+        <div className="lg:pl-rail">
+          <PortalSidebar
             weekLabel={weekLabel}
             programLabel={programLabel}
             rotationPosition={rotationPosition}
             authoredWeeks={authoredWeeks}
             basePath={basePath}
           />
-          <main aria-label={title} className="flex-1">
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <MobileBottomNav basePath={basePath} />
+          <div className="flex min-h-dvh min-w-0 flex-col pb-16 lg:pb-0">
+            <MobileTopBar
+              weekLabel={weekLabel}
+              programLabel={programLabel}
+              rotationPosition={rotationPosition}
+              authoredWeeks={authoredWeeks}
+              basePath={basePath}
+            />
+            <main aria-label={title} className="flex-1">
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <MobileBottomNav basePath={basePath} />
+          </div>
         </div>
-      </div>
+      </LayoutGroup>
     </div>
   );
 }

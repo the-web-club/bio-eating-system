@@ -8,7 +8,6 @@ import {
 } from "@/components/portal/lesson-navigation";
 import { PageHeader } from "@/components/portal/page-header";
 import { Button } from "@/components/ui/button";
-import { PreviewShell } from "../preview-shell";
 
 const LESSONS: LessonNavItem[] = [
   { id: "l1", title: "Noticing hunger cues", state: "complete", duration: "8 min" },
@@ -61,65 +60,63 @@ export default function PreviewLearnPage() {
   const nextId = next && next.state !== "locked" ? next.id : undefined;
 
   return (
-    <PreviewShell title="Learn">
-      <PageShell>
-        <PageSections>
-          <PageHeader
-            title="Lessons"
-            description="Short lessons on eating practices, to read alongside your plan."
-          />
+    <PageShell>
+      <PageSections>
+        <PageHeader
+          title="Lessons"
+          description="Short lessons on eating practices, to read alongside your plan."
+        />
 
-          <div className="grid gap-group md:grid-cols-[16rem_minmax(0,1fr)] md:gap-10 xl:gap-12">
-            <div className="min-w-0 md:order-first">
-              <Eyebrow className="mb-2.5">This course</Eyebrow>
-              <LessonNavigation
-                lessons={LESSONS}
-                activeId={activeId}
-                onSelect={(id) => {
-                  const item = LESSONS.find((entry) => entry.id === id);
-                  if (item && item.state !== "locked") setActiveId(id);
-                }}
-              />
+        <div className="grid gap-group md:grid-cols-[16rem_minmax(0,1fr)] md:gap-10 xl:gap-12">
+          <div className="min-w-0 md:order-first">
+            <Eyebrow className="mb-2.5">This course</Eyebrow>
+            <LessonNavigation
+              lessons={LESSONS}
+              activeId={activeId}
+              onSelect={(id) => {
+                const item = LESSONS.find((entry) => entry.id === id);
+                if (item && item.state !== "locked") setActiveId(id);
+              }}
+            />
+          </div>
+
+          <article className="min-w-0">
+            <h2 className="text-display text-foreground">{lesson.title}</h2>
+            <Prose className="mt-4">
+              {lesson.body.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </Prose>
+
+            <div className="mt-group border-l-2 border-accent pl-5">
+              <Eyebrow>This week’s practice</Eyebrow>
+              <p className="mt-1.5 measure text-body text-foreground">
+                {lesson.action}
+              </p>
             </div>
 
-            <article className="min-w-0">
-              <h2 className="text-display text-foreground">{lesson.title}</h2>
-              <Prose className="mt-4">
-                {lesson.body.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </Prose>
-
-              <div className="mt-group border-l-2 border-accent pl-5">
-                <Eyebrow>This week’s practice</Eyebrow>
-                <p className="mt-1.5 measure text-body text-foreground">
-                  {lesson.action}
-                </p>
-              </div>
-
-              <div className="mt-group flex flex-wrap gap-3 border-t border-hairline pt-group">
-                <Button
-                  variant="secondary"
-                  size="compact"
-                  disabled={!previousId}
-                  disabledReason="This is the first lesson"
-                  onClick={() => previousId && setActiveId(previousId)}
-                >
-                  Previous lesson
-                </Button>
-                <Button
-                  size="compact"
-                  disabled={!nextId}
-                  disabledReason="The next lesson is not published yet"
-                  onClick={() => nextId && setActiveId(nextId)}
-                >
-                  Next lesson
-                </Button>
-              </div>
-            </article>
-          </div>
-        </PageSections>
-      </PageShell>
-    </PreviewShell>
+            <div className="mt-group flex flex-wrap gap-3 border-t border-hairline pt-group">
+              <Button
+                variant="secondary"
+                size="compact"
+                disabled={!previousId}
+                disabledReason="This is the first lesson"
+                onClick={() => previousId && setActiveId(previousId)}
+              >
+                Previous lesson
+              </Button>
+              <Button
+                size="compact"
+                disabled={!nextId}
+                disabledReason="The next lesson is not published yet"
+                onClick={() => nextId && setActiveId(nextId)}
+              >
+                Next lesson
+              </Button>
+            </div>
+          </article>
+        </div>
+      </PageSections>
+    </PageShell>
   );
 }

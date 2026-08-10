@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { AppShell } from "@/components/portal/app-shell";
 import { LifeHappenedButton } from "@/components/portal/life-happened-button";
 import { MealListWithReplace } from "@/components/portal/meal-list-with-replace";
 import { PortalEmptyState } from "@/components/portal/empty-state";
@@ -18,42 +17,38 @@ export default async function TodayPage() {
     data = await loadPortalData();
   } catch {
     return (
-      <AppShell title="Today">
-        <PageShell width="reading">
-          <PageHeader title="Today" />
-          <div className="mt-group">
-            <PortalErrorState
-              title="Your plan did not load"
-              action={
-                <ActionLink href="/portal" variant="secondary" size="compact">
-                  Try again
-                </ActionLink>
-              }
-            >
-              Check your connection, then try again.
-            </PortalErrorState>
-          </div>
-        </PageShell>
-      </AppShell>
+      <PageShell width="reading">
+        <PageHeader title="Today" />
+        <div className="mt-group">
+          <PortalErrorState
+            title="Your plan did not load"
+            action={
+              <ActionLink href="/portal" variant="secondary" size="compact">
+                Try again
+              </ActionLink>
+            }
+          >
+            Check your connection, then try again.
+          </PortalErrorState>
+        </div>
+      </PageShell>
     );
   }
 
   if (!data.entitlements.corePlan) {
     return (
-      <AppShell title="Today">
-        <PageShell width="reading">
-          <PageHeader
-            title="Welcome"
-            description="Your account is signed in. The personal nutrition plan is not on it yet."
-          />
-          <div className="mt-group">
-            <PortalEmptyState title="Personal nutrition plan not on your account">
-              Add the plan on the website. Your setup and daily meals appear here once
-              the purchase is confirmed.
-            </PortalEmptyState>
-          </div>
-        </PageShell>
-      </AppShell>
+      <PageShell width="reading">
+        <PageHeader
+          title="Welcome"
+          description="Your account is signed in. The personal nutrition plan is not on it yet."
+        />
+        <div className="mt-group">
+          <PortalEmptyState title="Personal nutrition plan not on your account">
+            Add the plan on the website. Your setup and daily meals appear here once
+            the purchase is confirmed.
+          </PortalEmptyState>
+        </div>
+      </PageShell>
     );
   }
 
@@ -69,7 +64,7 @@ export default async function TodayPage() {
   });
 
   return (
-    <AppShell title="Today">
+    <>
       <TodayView
         basePath="/portal"
         firstName={data.user.name?.split(" ")[0] || "there"}
@@ -86,6 +81,6 @@ export default async function TodayPage() {
       <div className="mx-auto max-w-content px-page pb-group">
         <LifeHappenedButton basePath="/portal" />
       </div>
-    </AppShell>
+    </>
   );
 }

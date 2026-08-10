@@ -73,7 +73,7 @@ export function PortalSidebar({
   const indicatorId = `nav-rail-${root}`;
 
   return (
-    <aside className="sticky top-0 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden h-dvh w-rail shrink-0 flex-col border-r border-hairline bg-surface-canvas lg:flex">
       <div className="px-5 pb-6 pt-8">
         <BrandSignature href={root} />
         <ProgramIdentity

@@ -459,6 +459,8 @@
   html {
     color-scheme: light dark;
     scrollbar-gutter: stable;
+    overflow-y: scroll;
+    overscroll-behavior-y: none;
   }
 
   body {
@@ -469,6 +471,7 @@
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
   }
 
   /* The outline follows the element's own radius, so the ring must not

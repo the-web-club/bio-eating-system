@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { AppShell } from "@/components/portal/app-shell";
 import { CheckInForm } from "@/components/portal/check-in-form";
 import { PageSections, PageShell, Section } from "@/components/portal/layout";
 import { PageHeader } from "@/components/portal/page-header";
@@ -16,18 +15,16 @@ export default async function CheckInPage() {
   if (!data.plan) redirect("/portal/intake");
 
   return (
-    <AppShell title="Weekly check-in">
-      <PageShell width="reading">
-        <PageSections>
-          <PageHeader
-            title="How did this week feel?"
-            description="About two minutes. This shapes your next week."
-          />
-          <Section title="Your ratings">
-            <CheckInForm />
-          </Section>
-        </PageSections>
-      </PageShell>
-    </AppShell>
+    <PageShell width="reading">
+      <PageSections>
+        <PageHeader
+          title="How did this week feel?"
+          description="About two minutes. This shapes your next week."
+        />
+        <Section title="Your ratings">
+          <CheckInForm />
+        </Section>
+      </PageSections>
+    </PageShell>
   );
 }

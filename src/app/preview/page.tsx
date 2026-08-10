@@ -4,20 +4,18 @@ import {
   FIXTURE_MEALS,
   FIXTURE_TODAY_SUMMARY,
 } from "./fixtures";
-import { PREVIEW_BASE, PreviewShell } from "./preview-shell";
+import { PREVIEW_BASE } from "./preview-shell";
 
 export default function PreviewTodayPage() {
   return (
-    <PreviewShell title="Today">
-      <TodayView
-        basePath={PREVIEW_BASE}
-        firstName="Maya"
-        meals={FIXTURE_MEALS}
-        summary={FIXTURE_TODAY_SUMMARY}
-        notices={[]}
-        maintenanceOnly={false}
-        weeklyAvailable={FIXTURE_ENTITLEMENTS.weeklyRotation}
-      />
-    </PreviewShell>
+    <TodayView
+      basePath={PREVIEW_BASE}
+      firstName="Maya"
+      meals={FIXTURE_MEALS}
+      summary={FIXTURE_TODAY_SUMMARY}
+      notices={[]}
+      maintenanceOnly={false}
+      weeklyAvailable={FIXTURE_ENTITLEMENTS.weeklyRotation}
+    />
   );
 }

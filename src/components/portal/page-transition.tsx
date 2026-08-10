@@ -6,9 +6,8 @@ import type { ReactNode } from "react";
 import { pageContentVariants } from "@/lib/motion";
 
 /**
- * Main content settles in on navigation: a crossfade plus a short vertical
- * travel so the change of place is legible. Reduced motion keeps the opacity
- * change and drops the transform.
+ * Main content crossfades on navigation. Vertical travel is omitted so the
+ * fixed rail and document scroll position stay visually stable.
  */
 export function PageTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
