@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { isAdminEmail } from "@/lib/admin-allowlist";
 
 describe("isAdminEmail", () => {
-  it("allows the two staff addresses", () => {
+  it("allows staff addresses", () => {
     expect(isAdminEmail("contact@katarina2.com")).toBe(true);
     expect(isAdminEmail("info@rikderks.nl")).toBe(true);
+    expect(isAdminEmail("katarina.kakkonen@gmail.com")).toBe(true);
     expect(isAdminEmail("  Info@RikDerks.nl ")).toBe(true);
   });
 

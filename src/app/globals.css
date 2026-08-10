@@ -221,11 +221,12 @@
     0 12px 32px rgb(27 26 24 / 0.11),
     0 32px 64px rgb(27 26 24 / 0.08);
 
-  /* Auth screen — photograph + radial veil keep the form centre readable. */
-  --auth-veil-core: rgb(255 253 250 / 0.88);
-  --auth-veil-mid: rgb(255 253 250 / 0.55);
-  --auth-panel: rgb(255 255 255 / 0.9);
-  --auth-panel-border: rgb(27 26 24 / 0.07);
+  /* Auth screen — photograph dimmed by a base veil; radial lift keeps the form centre readable. */
+  --auth-veil-base: rgb(255 253 250 / 0.38);
+  --auth-veil-core: rgb(255 253 250 / 0.92);
+  --auth-veil-mid: rgb(255 253 250 / 0.68);
+  --auth-panel: rgb(255 255 255 / 0.96);
+  --auth-panel-border: rgb(27 26 24 / 0.08);
 }
 
 .dark {
@@ -312,10 +313,11 @@
     0 1px 0 rgb(244 242 238 / 0.05),
     0 16px 44px rgb(0 0 0 / 0.6);
 
-  --auth-veil-core: rgb(17 17 17 / 0.84);
-  --auth-veil-mid: rgb(17 17 17 / 0.58);
-  --auth-panel: rgb(22 22 21 / 0.94);
-  --auth-panel-border: rgb(244 242 238 / 0.08);
+  --auth-veil-base: rgb(17 17 17 / 0.48);
+  --auth-veil-core: rgb(17 17 17 / 0.9);
+  --auth-veil-mid: rgb(17 17 17 / 0.72);
+  --auth-panel: rgb(22 22 21 / 0.96);
+  --auth-panel-border: rgb(244 242 238 / 0.1);
 }
 
 /* ---------- Layer 3: Tailwind binding ------------------------------------ */
@@ -643,7 +645,7 @@
     scrollbar-gutter: auto;
   }
 
-  /* Sign-in / magic-link sent — wellness photograph with a protected centre. */
+  /* Sign-in / magic-link sent — wellness photograph with a clean veil and a protected centre. */
   .auth-bg {
     position: fixed;
     inset: 0;
@@ -654,15 +656,23 @@
     background-repeat: no-repeat;
   }
 
+  .auth-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--auth-veil-base);
+    pointer-events: none;
+  }
+
   .auth-bg::after {
     content: "";
     position: absolute;
     inset: 0;
     background: radial-gradient(
-      ellipse 60% 55% at 50% 50%,
+      ellipse 62% 58% at 50% 48%,
       var(--auth-veil-core) 0%,
-      var(--auth-veil-mid) 45%,
-      transparent 75%
+      var(--auth-veil-mid) 52%,
+      transparent 82%
     );
     pointer-events: none;
   }

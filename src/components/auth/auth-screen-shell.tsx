@@ -3,8 +3,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Full-viewport sign-in composition. The wellness photograph sits behind a
- * radial veil so the centred panel stays readable; visual interest stays at
- * the edges of the artwork.
+ * uniform veil and a radial lift so the centred panel stays the focal point.
  */
 export function AuthScreenShell({
   children,

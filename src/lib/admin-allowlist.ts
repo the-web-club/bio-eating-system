@@ -7,6 +7,7 @@ import { normalizeEmail } from "@/lib/signup-allowlist";
 const ADMIN_ALLOWLIST = [
   "contact@katarina2.com",
   "info@rikderks.nl",
+  "katarina.kakkonen@gmail.com",
 ] as const;
 
 const ADMIN_SET = new Set<string>(ADMIN_ALLOWLIST);
