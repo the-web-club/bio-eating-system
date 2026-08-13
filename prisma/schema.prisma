@@ -1,0 +1,1174 @@
+// Migration workflow, see rules.md §7:
+//   prisma migrate diff --from-schema-datasource --to-schema-datamodel --script > migration.sql
+//   review by hand, then: prisma migrate deploy
+// Never migrate dev, never db push, never migrate reset.
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider   = "prisma-client"
+  output     = "../src/generated/prisma"
+  // Rust-free client. Next.js Turbopack on Vercel does not reliably ship the
+  // native query-engine .so into the Lambda; the MariaDB driver adapter keeps
+  // connections in plain JS and needs no platform binary.
+  engineType = "client"
+}
+
+// ---------------------------------------------------------------------------
+// Identity. Shape matches better-auth@1.6.26 core tables (getAuthTables).
+// Domain fields on User are additional; Better Auth ignores unknown columns.
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String
+  image         String?
+  locale        String   @default("EN")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  entitlements Entitlement?
+  profile      IntakeProfile?
+  schedule     RotationSchedule?
+
+  // Email consent. Marketing sends filter on these in the query, never after.
+  marketingOptIn   Boolean   @default(false)
+  unsubscribedAt   DateTime?
+  unsubscribeToken String    @unique @default(uuid())
+
+  emailDrops        EmailDrop[]
+  auditLog          AuditEvent[]
+  adaptationEvents  AdaptationEvent[]
+  preferenceRecords PreferenceRecord[]
+  weeklyCheckIns    WeeklyCheckIn[]
+  entitlementGrants EntitlementGrant[]
+  purchases         Purchase[]
+  subscriptions     Subscription[]
+
+  userAllergens       UserAllergen[]
+  userFoodPreferences UserFoodPreference[]
+  activityEntries     ActivityEntry[]
+  proteinPreference   ProteinPreference?
+  energyEstimates     EnergyEstimate[]
+  foodMatrixVersions  FoodMatrixVersion[]
+
+  @@index([unsubscribedAt])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  ipAddress String?
+  userAgent String?  @db.Text
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  userId                String
+  providerId            String
+  accountId             String
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String   @db.Text
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ---------------------------------------------------------------------------
+// Entitlements. Written only by a verified webhook or a logged admin action.
+// Never from a client request. See rules.md §5.3.
+// ---------------------------------------------------------------------------
+
+model Entitlement {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  corePlan       Boolean @default(false)
+  weeklyRotation Boolean @default(false)
+  labReference   Boolean @default(false)
+  coaching       Boolean @default(false)
+
+  // Shipped as flags only for MVP, the modules do not exist yet.
+  hormoneModule Boolean @default(false)
+  nervousModule Boolean @default(false)
+
+  grantedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Intake. Article 9 special category data. Never logged, never in errors.
+// ---------------------------------------------------------------------------
+
+model IntakeProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  age         Int
+  heightCm    Float
+  weightKg    Float
+  sex         Sex    @default(female)
+  goal        Goal
+  unitSystem  UnitSystem @default(HOUSEHOLD)
+
+  // Exclusions are structured only. Free text never drives the plan.
+  declaredAllergens Json @default("[]") // Allergen[]
+  excludedSlots     Json @default("[]") // FoodSlot[]
+  swapRequests      Json @default("[]") // FoodSlot[]
+
+  // Extended setup sections. Free-text food prefs are coach-only. rules.md §4.1.
+  lifestyle       Json @default("{}")
+  foodPreferences Json @default("{}")
+  practical       Json @default("{}")
+  household       Json @default("{}")
+
+  // Stored for a human reviewer. Code must not parse this. rules.md §4.1.
+  notesForCoach String? @db.Text
+
+  // Screening answers. Drive the deficit gate. rules.md §4.2.
+  screeningFlags Json @default("[]") // ScreeningFlag[]
+
+  weeklyBudgetEur Int?
+
+  consentHealthDataAt DateTime
+  consentVersion      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  plans GeneratedPlan[]
+}
+
+enum Goal {
+  REDUCE
+  MAINTAIN
+  INCREASE
+}
+
+enum UnitSystem {
+  METRIC
+  HOUSEHOLD
+  SIMPLE
+}
+
+enum Sex {
+  female
+  male
+}
+
+// ---------------------------------------------------------------------------
+// Adaptation and learning loop.
+// ---------------------------------------------------------------------------
+
+model AdaptationEvent {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  reason    String
+  context   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model PreferenceRecord {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key    String
+  tier   String
+  value  Json   @default("{}")
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, key])
+}
+
+model WeeklyCheckIn {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekNumber    Int
+  cycleYear     Int
+  energy        Int
+  hunger        Int
+  satisfaction  Int
+  adherence     Int
+  difficulty    Int
+  barriers      Json     @default("[]")
+  weightKg      Float?
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, cycleYear, weekNumber])
+}
+
+// ---------------------------------------------------------------------------
+// Plan output. Persisted so an email and the portal always show the same
+// thing, and so a screening decision is auditable after the fact.
+// ---------------------------------------------------------------------------
+
+model GeneratedPlan {
+  id        String        @id @default(uuid())
+  profileId String
+  profile   IntakeProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  engineVersion   String
+  contentVersion  String
+  energyKcal      Int
+  screeningOutcome String       // allowed | maintenance_only | refused
+  screeningReasons Json         @default("[]")
+  slots           Json          // rendered slot list
+  createdAt       DateTime      @default(now())
+
+  @@index([profileId, createdAt])
+}
+
+model RotationSchedule {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  currentWeek Int      @default(1)
+  active      Boolean  @default(false)
+  lastSentAt  DateTime?
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, lastSentAt])
+}
+
+// ---------------------------------------------------------------------------
+// Idempotency and audit.
+// ---------------------------------------------------------------------------
+
+model WebhookEvent {
+  id          String   @id @default(uuid())
+  provider    String
+  providerEventId String
+  payloadHash String
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+  error       String?  @db.Text
+
+  @@unique([provider, providerEventId])
+}
+
+model EmailDrop {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  weekNumber Int
+  cycleYear  Int
+  sentAt     DateTime?
+  providerId String?
+  failedAt   DateTime?
+  failure    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  // Guarantees a cron retry cannot double-send. rules.md §6.3.
+  @@unique([userId, cycleYear, weekNumber])
+  @@index([sentAt])
+}
+
+model AuditEvent {
+  id       String   @id @default(uuid())
+  userId   String?
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action   String
+  actor    String
+  detail   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Commerce catalog. Product grants replace boolean entitlement sprawl.
+// Legacy Entitlement row is synced from active grants during migration.
+// ---------------------------------------------------------------------------
+
+enum ProductKind {
+  one_time
+  subscription
+  coaching
+}
+
+enum GrantStatus {
+  active
+  expired
+  revoked
+}
+
+enum SubscriptionStatus {
+  active
+  past_due
+  canceled
+  trialing
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  slug        String      @unique
+  name        String
+  description String?     @db.Text
+  kind        ProductKind
+  sortOrder   Int         @default(0)
+  active      Boolean     @default(true)
+  checkoutUrl String?     @db.Text
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  bundleItems   BundleItem[]
+  grants        EntitlementGrant[]
+  purchaseLines PurchaseLine[]
+  subscriptions Subscription[]
+  skuMaps       SkuProductMap[]
+}
+
+model Bundle {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  name      String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items   BundleItem[]
+  skuMaps SkuBundleMap[]
+}
+
+model BundleItem {
+  id        String @id @default(uuid())
+  bundleId  String
+  productId String
+  bundle    Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([bundleId, productId])
+}
+
+model SkuProductMap {
+  id        String  @id @default(uuid())
+  sku       String  @unique
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model SkuBundleMap {
+  id       String @id @default(uuid())
+  sku      String @unique
+  bundleId String
+  bundle   Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+}
+
+model Purchase {
+  id             String    @id @default(uuid())
+  externalId     String?   @unique
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency       String    @default("EUR")
+  grossCents     Int       @default(0)
+  netCents       Int?
+  vatRate        Float?
+  vatAmountCents Int?
+  country        String?
+  billedCountry  String?
+  vatNumber      String?
+  refundedAt     DateTime?
+  purchasedAt    DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+
+  lines  PurchaseLine[]
+  grants EntitlementGrant[]
+
+  @@index([userId, purchasedAt])
+}
+
+model PurchaseLine {
+  id         String   @id @default(uuid())
+  purchaseId String
+  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  sku        String
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  quantity   Int      @default(1)
+
+  @@index([purchaseId])
+}
+
+model EntitlementGrant {
+  id         String      @id @default(uuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  purchaseId String?
+  purchase   Purchase?   @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+  status     GrantStatus @default(active)
+  startsAt   DateTime    @default(now())
+  endsAt     DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([userId, status])
+  @@index([productId])
+}
+
+model Subscription {
+  id               String             @id @default(uuid())
+  userId           String
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+  externalId       String?            @unique
+  status           SubscriptionStatus @default(active)
+  currentPeriodEnd DateTime?
+  canceledAt       DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@index([userId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Nutrition data layer (Phase 2 complete). Production-capable architecture.
+// DEV fixtures are explicitly marked. No invented nutrition values in code.
+// ---------------------------------------------------------------------------
+
+enum FoodImportStatus {
+  pending
+  running
+  completed
+  failed
+}
+
+enum DataSourceStatus {
+  CANDIDATE
+  REVIEW_REQUIRED
+  APPROVED
+  REJECTED
+  FUTURE_OPTION
+  RETIRED
+}
+
+enum RecordReviewStatus {
+  DRAFT
+  IMPORTED
+  REVIEW_REQUIRED
+  APPROVED
+  RETIRED
+}
+
+enum NutrientUnit {
+  g
+  mg
+  mcg
+  kcal
+  iu
+}
+
+enum NutrientClass {
+  ENERGY
+  MACRONUTRIENT
+  FATTY_ACID
+  VITAMIN
+  MINERAL
+  OTHER_NUTRIENT
+}
+
+enum PreparationStateSlug {
+  RAW
+  BOILED
+  STEAMED
+  BAKED
+  ROASTED
+  GRILLED
+  FRIED
+  CANNED
+  FERMENTED
+  DRIED
+  COOKED
+  OTHER
+}
+
+enum ReferenceValueType {
+  AR
+  PRI
+  AI
+  RI
+  UL
+  AMDR
+  OTHER_REVIEWED_REFERENCE
+}
+
+enum RequirementJurisdiction {
+  GLOBAL
+  INTERNAL
+  EU
+  US
+  NORDIC
+}
+
+enum DeclaredAllergen {
+  egg
+  fish
+  crustaceans
+  molluscs
+  milk
+  soy
+  gluten
+  tree_nuts
+  peanuts
+  sesame
+  celery
+  mustard
+  sulphites
+  lupin
+}
+
+enum BiologicalCategorySlug {
+  eggs
+  organ_meat
+  small_fish
+  bivalves
+  muscle_meat
+  tubers
+  cruciferous
+  berries
+  olive_oil
+  fermented
+  kiwi
+  mushrooms
+  aromatics
+}
+
+enum PreferenceKind {
+  HARD_EXCLUSION
+  HARD_PREFERENCE
+  SOFT_PREFERENCE
+  OPTIMIZATION_PREFERENCE
+}
+
+enum RedundancyLevel {
+  NONE
+  POTENTIAL
+  INTENTIONAL
+}
+
+enum RedundancyDecision {
+  keep_both
+  remove_a
+  remove_b
+  review
+}
+
+enum ProteinPreferenceType {
+  g_per_kg_0_7
+  g_per_kg_1_0
+  g_per_kg_1_6
+  g_per_kg_2_2
+  no_preference
+  custom
+}
+
+enum ImportRowOutcome {
+  imported
+  rejected
+  warning
+}
+
+model FoodDataSource {
+  id                      String           @id @default(uuid())
+  sourceKey               String           @unique
+  name                    String
+  provider                String
+  datasetName             String
+  datasetVersion          String?
+  releaseDate             DateTime?
+  retrievedAt             DateTime?
+  accessMethod            String
+  license                 String           @db.Text
+  licenseName             String?
+  licenseVersion          String?
+  licenseUrl              String?          @db.Text
+  termsUrl                String?          @db.Text
+  commercialUseAllowed    Boolean          @default(false)
+  storageAllowed          Boolean          @default(false)
+  transformationAllowed   Boolean          @default(false)
+  customerDisplayAllowed  Boolean          @default(false)
+  redistributionAllowed   Boolean          @default(false)
+  licenseVerified         Boolean          @default(false)
+  termsVerifiedAt         DateTime?
+  verifiedBy              String?
+  verificationMethod      String?
+  verificationNotes       String?          @db.Text
+  attributionText         String?          @db.Text
+  citationRequirement     String?          @db.Text
+  sourceUrl               String?          @db.Text
+  devOnly                 Boolean          @default(false)
+  status                  DataSourceStatus @default(CANDIDATE)
+  notes                   String?          @db.Text
+  importedAt              DateTime?
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+
+  imports      FoodSourceImport[]
+  foods        Food[]
+  requirements RequirementSourcePolicy[]
+}
+
+model PreparationState {
+  id          String               @id @default(uuid())
+  slug        PreparationStateSlug @unique
+  name        String
+  description String?              @db.Text
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  foods Food[]
+}
+
+model Nutrient {
+  id                      String         @id @default(uuid())
+  code                    String         @unique
+  name                    String
+  canonicalName           String
+  displayName             String
+  unit                    NutrientUnit
+  nutrientClass           NutrientClass  @default(OTHER_NUTRIENT)
+  description             String?        @db.Text
+  referenceTypeSupport    Json           @default("[]")
+  sourceMappingIdentifiers Json          @default("{}")
+  status                  RecordReviewStatus @default(REVIEW_REQUIRED)
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+
+  foodNutrients FoodNutrient[]
+  requirements  NutrientRequirement[]
+}
+
+model Food {
+  id                       String             @id @default(uuid())
+  externalId               String
+  source                   String
+  sourceVersion            String
+  canonicalName            String
+  displayName              String?
+  localizedNames           Json               @default("{}")
+  aliases                  Json               @default("[]")
+  description              String?            @db.Text
+  name                     String
+  active                   Boolean            @default(true)
+  devOnly                  Boolean            @default(false)
+  foodDataSourceId         String?
+  sourceImportId           String?
+  preparationStateId       String?
+  processingState          PreparationStateSlug?
+  biologicalCategoryId     String?
+  ediblePortionDescription String?            @db.Text
+  defaultServingWeightG    Float?
+  reviewStatus             RecordReviewStatus @default(IMPORTED)
+  approvedAt               DateTime?
+  approvedBy               String?
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+
+  foodDataSource         FoodDataSource?           @relation(fields: [foodDataSourceId], references: [id], onDelete: SetNull)
+  sourceImport           FoodSourceImport?         @relation(fields: [sourceImportId], references: [id], onDelete: SetNull)
+  preparationState       PreparationState?         @relation(fields: [preparationStateId], references: [id], onDelete: SetNull)
+  biologicalCategory     BiologicalCategory?       @relation(fields: [biologicalCategoryId], references: [id], onDelete: SetNull)
+  nutrients              FoodNutrient[]
+  allergens              FoodAllergen[]
+  categoryMaps           FoodCategoryMap[]
+  substitutionsFrom      FoodSubstitution[]        @relation("SubstitutionFrom")
+  substitutionsTo        FoodSubstitution[]        @relation("SubstitutionTo")
+  categoryCandidates     BiologicalCategoryFood[]
+  matrixItems            FoodMatrixItem[]
+  userPreferences        UserFoodPreference[]
+
+  @@unique([source, sourceVersion, externalId])
+  @@index([source, sourceVersion])
+  @@index([foodDataSourceId])
+  @@index([reviewStatus, devOnly])
+}
+
+model FoodNutrient {
+  id                 String             @id @default(uuid())
+  foodId             String
+  nutrientId         String
+  amount             Float
+  unit               NutrientUnit
+  basisAmount        Float              @default(100)
+  basisUnit          String             @default("g")
+  perAmountG         Float              @default(100)
+  ediblePortionBasis Boolean            @default(true)
+  source             String
+  sourceVersion      String
+  sourceImportId     String?
+  analyticalMethod   String?
+  reviewStatus       RecordReviewStatus @default(IMPORTED)
+
+  food         Food              @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  nutrient     Nutrient          @relation(fields: [nutrientId], references: [id], onDelete: Cascade)
+  sourceImport FoodSourceImport? @relation(fields: [sourceImportId], references: [id], onDelete: SetNull)
+
+  @@unique([foodId, nutrientId])
+}
+
+model FoodAllergen {
+  id            String             @id @default(uuid())
+  foodId        String
+  allergen      DeclaredAllergen
+  source        String?
+  sourceVersion String?
+  confidence    String?
+  reviewStatus  RecordReviewStatus @default(REVIEW_REQUIRED)
+
+  food Food @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  @@unique([foodId, allergen])
+}
+
+model FoodCategory {
+  id   String @id @default(uuid())
+  slug String @unique
+  name String
+
+  foods FoodCategoryMap[]
+}
+
+model FoodCategoryMap {
+  id         String @id @default(uuid())
+  foodId     String
+  categoryId String
+
+  food     Food         @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  category FoodCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([foodId, categoryId])
+}
+
+model FoodSubstitution {
+  id                     String             @id @default(uuid())
+  fromFoodId             String
+  toFoodId               String
+  rank                   Int                @default(0)
+  reasonTags             Json               @default("[]")
+  nutrientCoverageEvidence Json             @default("{}")
+  reviewStatus           RecordReviewStatus @default(REVIEW_REQUIRED)
+  sourceVersion          String?
+
+  fromFood Food @relation("SubstitutionFrom", fields: [fromFoodId], references: [id], onDelete: Cascade)
+  toFood   Food @relation("SubstitutionTo", fields: [toFoodId], references: [id], onDelete: Cascade)
+
+  @@unique([fromFoodId, toFoodId])
+  @@index([fromFoodId, rank])
+}
+
+model FoodSourceImport {
+  id               String           @id @default(uuid())
+  foodDataSourceId String?
+  source           String
+  sourceVersion    String
+  importDate       DateTime         @default(now())
+  rowCount         Int              @default(0)
+  rowsReceived     Int              @default(0)
+  rowsImported     Int              @default(0)
+  rowsRejected     Int              @default(0)
+  rowsWarning      Int              @default(0)
+  checksum         String?
+  status           FoodImportStatus
+  error            String?          @db.Text
+  report           Json             @default("{}")
+
+  foodDataSource FoodDataSource? @relation(fields: [foodDataSourceId], references: [id], onDelete: SetNull)
+  foods          Food[]
+  foodNutrients  FoodNutrient[]
+  reportRows     FoodImportReportRow[]
+
+  @@unique([source, sourceVersion])
+  @@index([importDate])
+}
+
+model FoodImportReportRow {
+  id             String           @id @default(uuid())
+  importId       String
+  outcome        ImportRowOutcome
+  entityType     String
+  externalId     String?
+  message        String           @db.Text
+  createdAt      DateTime         @default(now())
+
+  import FoodSourceImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  @@index([importId, outcome])
+}
+
+model RequirementSourcePolicy {
+  id                      String                   @id @default(uuid())
+  code                    String                   @unique
+  name                    String
+  authority               String
+  version                 String
+  jurisdiction            RequirementJurisdiction  @default(INTERNAL)
+  populationScope         String?                  @db.Text
+  effectiveDate           DateTime?
+  priority                Int                      @default(0)
+  foodDataSourceId        String?
+  sourceUrl               String?                  @db.Text
+  termsUrl                String?                  @db.Text
+  license                 String?                  @db.Text
+  licenseName             String?
+  licenseVersion          String?
+  licenseUrl              String?                  @db.Text
+  commercialUseAllowed    Boolean                  @default(false)
+  storageAllowed          Boolean                  @default(false)
+  transformationAllowed   Boolean                  @default(false)
+  customerDisplayAllowed  Boolean                  @default(false)
+  redistributionAllowed   Boolean                  @default(false)
+  licenseVerified         Boolean                  @default(false)
+  termsVerifiedAt         DateTime?
+  verifiedBy              String?
+  verificationMethod      String?
+  verificationNotes       String?                  @db.Text
+  attributionText         String?                  @db.Text
+  citationRequirement     String?                  @db.Text
+  devOnly                 Boolean                  @default(false)
+  reviewStatus            RecordReviewStatus       @default(REVIEW_REQUIRED)
+  conflictResolution      String?                  @db.Text
+  notes                   String?                  @db.Text
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+
+  foodDataSource     FoodDataSource?       @relation(fields: [foodDataSourceId], references: [id], onDelete: SetNull)
+  requirementSets    RequirementSet[]
+  conflictsPrimary   RequirementConflict[] @relation("PrimaryPolicy")
+  conflictsSecondary RequirementConflict[] @relation("SecondaryPolicy")
+}
+
+model RequirementConflict {
+  id                String             @id @default(uuid())
+  nutrientCode      String
+  primaryPolicyId   String
+  secondaryPolicyId String
+  primaryValue      Float
+  secondaryValue    Float
+  unit              NutrientUnit
+  resolution        String?            @db.Text
+  reviewStatus      RecordReviewStatus @default(REVIEW_REQUIRED)
+  createdAt         DateTime           @default(now())
+
+  primaryPolicy   RequirementSourcePolicy @relation("PrimaryPolicy", fields: [primaryPolicyId], references: [id], onDelete: Cascade)
+  secondaryPolicy RequirementSourcePolicy @relation("SecondaryPolicy", fields: [secondaryPolicyId], references: [id], onDelete: Cascade)
+
+  @@index([nutrientCode])
+}
+
+model RequirementSet {
+  id                String                   @id @default(uuid())
+  version           String                   @unique
+  name              String
+  jurisdiction      RequirementJurisdiction  @default(INTERNAL)
+  populationScope   String?                  @db.Text
+  source            String
+  sourceVersion     String
+  effectiveDate     DateTime?
+  sourceUrl         String?                  @db.Text
+  termsUrl          String?                  @db.Text
+  sourcePolicyId    String?
+  reviewer          String?
+  reviewedAt        DateTime?
+  reviewStatus      RecordReviewStatus       @default(REVIEW_REQUIRED)
+  devOnly           Boolean                  @default(false)
+  importedAt        DateTime?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+
+  sourcePolicy RequirementSourcePolicy? @relation(fields: [sourcePolicyId], references: [id], onDelete: SetNull)
+  requirements NutrientRequirement[]
+}
+
+model NutrientRequirement {
+  id               String             @id @default(uuid())
+  setId            String
+  nutrientId       String
+  ageMin           Int
+  ageMax           Int
+  sex              Sex?
+  lifeStage        String?
+  referenceType    ReferenceValueType
+  value            Float?
+  valueMin         Float?
+  valueMax         Float?
+  unit             NutrientUnit
+  sourcePolicyCode String?
+  sourceVersion    String?
+  effectiveDate    DateTime?
+  reviewStatus     RecordReviewStatus @default(REVIEW_REQUIRED)
+  devOnly          Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  set      RequirementSet @relation(fields: [setId], references: [id], onDelete: Cascade)
+  nutrient Nutrient       @relation(fields: [nutrientId], references: [id], onDelete: Cascade)
+
+  @@index([setId, nutrientId])
+}
+
+model BiologicalCategory {
+  id           String                 @id @default(uuid())
+  slug         BiologicalCategorySlug @unique
+  name         String
+  description  String?                @db.Text
+  version      String                 @default("1.0.0")
+  sortOrder    Int                    @default(0)
+  reviewStatus RecordReviewStatus     @default(REVIEW_REQUIRED)
+  reviewer     String?
+  reviewedAt   DateTime?
+
+  foods       Food[]
+  candidates  BiologicalCategoryFood[]
+}
+
+model BiologicalCategoryFood {
+  id                String             @id @default(uuid())
+  categoryId        String
+  foodId            String
+  priority          Int                @default(0)
+  eligibilityStatus RecordReviewStatus   @default(IMPORTED)
+  reviewStatus      RecordReviewStatus @default(REVIEW_REQUIRED)
+  reasonSource      String?            @db.Text
+  notes             String?            @db.Text
+
+  category BiologicalCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  food     Food               @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, foodId])
+  @@index([categoryId, priority])
+}
+
+model UserAllergen {
+  id           String             @id @default(uuid())
+  userId       String
+  allergen     DeclaredAllergen
+  notes        String?            @db.Text
+  reviewStatus RecordReviewStatus @default(REVIEW_REQUIRED)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, allergen])
+  @@index([userId])
+}
+
+model UserFoodPreference {
+  id           String             @id @default(uuid())
+  userId       String
+  foodId       String?
+  kind         PreferenceKind
+  notes        String?            @db.Text
+  reviewStatus RecordReviewStatus @default(REVIEW_REQUIRED)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  food Food? @relation(fields: [foodId], references: [id], onDelete: SetNull)
+
+  @@index([userId, kind])
+}
+
+model ActivityEntry {
+  id                String   @id @default(uuid())
+  userId            String
+  activityType      String
+  sessionsPerWeek   Int
+  minutesPerSession Int
+  intensity         String
+  distanceKm        Float?
+  volumeNotes       String?  @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ProteinPreference {
+  id           String                @id @default(uuid())
+  userId       String                @unique
+  preference   ProteinPreferenceType @default(no_preference)
+  customValue  Float?
+  unit         String                @default("g_per_kg")
+  reviewStatus RecordReviewStatus    @default(REVIEW_REQUIRED)
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EnergyMethod {
+  id                String             @id @default(uuid())
+  code              String             @unique
+  version           String
+  source            String?
+  sourceUrl         String?            @db.Text
+  termsUrl          String?            @db.Text
+  formulaDescription String?           @db.Text
+  assumptions       String?            @db.Text
+  description       String?            @db.Text
+  reviewStatus      RecordReviewStatus @default(REVIEW_REQUIRED)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  estimates EnergyEstimate[]
+}
+
+model EnergyEstimate {
+  id              String   @id @default(uuid())
+  userId          String
+  energyMethodId  String
+  profileSnapshot Json
+  activitySnapshot Json    @default("[]")
+  resultKcal      Int
+  createdAt       DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  energyMethod EnergyMethod @relation(fields: [energyMethodId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model FoodMatrixVersion {
+  id                   String             @id @default(uuid())
+  userId               String
+  version              Int
+  status               RecordReviewStatus @default(DRAFT)
+  engineVersion        String?
+  foodDatasetVersion   String?
+  requirementSetVersion String?
+  calculationVersion   String?
+  approvedAt           DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items               FoodMatrixItem[]
+  redundancyAssessments RedundancyAssessment[]
+  redundancyChoices   RedundancyChoice[]
+
+  @@unique([userId, version])
+  @@index([userId, status])
+}
+
+model FoodMatrixItem {
+  id                     String         @id @default(uuid())
+  matrixVersionId        String
+  foodId                 String
+  biologicalCategorySlug BiologicalCategorySlug?
+  portionGrams           Float?
+  preference             PreferenceKind @default(SOFT_PREFERENCE)
+  sortOrder              Int            @default(0)
+
+  matrixVersion FoodMatrixVersion @relation(fields: [matrixVersionId], references: [id], onDelete: Cascade)
+  food          Food              @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  @@unique([matrixVersionId, foodId])
+}
+
+model RedundancyAssessment {
+  id              String          @id @default(uuid())
+  matrixVersionId String
+  foodAId         String
+  foodBId         String
+  level           RedundancyLevel @default(POTENTIAL)
+  overlapNutrients Json           @default("[]")
+  evidence        Json            @default("{}")
+  createdAt       DateTime        @default(now())
+
+  matrixVersion FoodMatrixVersion @relation(fields: [matrixVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([matrixVersionId, foodAId, foodBId])
+}
+
+model RedundancyChoice {
+  id              String             @id @default(uuid())
+  matrixVersionId String
+  foodAId         String
+  foodBId         String
+  decision        RedundancyDecision
+  decidedAt       DateTime           @default(now())
+
+  matrixVersion FoodMatrixVersion @relation(fields: [matrixVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([matrixVersionId, foodAId, foodBId])
+}
+
+model FoodDiversityRule {
+  id             String             @id @default(uuid())
+  code           String             @unique
+  name           String
+  description    String?            @db.Text
+  targetMetric   String
+  evidenceSource String?            @db.Text
+  reviewStatus   RecordReviewStatus @default(REVIEW_REQUIRED)
+  version        String             @default("1.0.0")
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model BioavailabilityRule {
+  id           String             @id @default(uuid())
+  foodId       String?
+  ruleCode     String
+  evidenceSource String?          @db.Text
+  confidence   String?
+  reviewer     String?
+  reviewStatus RecordReviewStatus @default(REVIEW_REQUIRED)
+  version      String             @default("1.0.0")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}

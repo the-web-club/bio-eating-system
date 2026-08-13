@@ -1,0 +1,869 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Token system. Three layers, one direction of flow.
+
+   Layer 1  primitives   raw values, no meaning in the name
+   Layer 2  semantics    role aliases, the only layer that changes per theme
+   Layer 3  @theme       binds semantics to Tailwind utility names
+
+   Components reference layer 3 only. Adding a colour means adding a token.
+
+   Motion durations/easings synced with src/lib/motion.ts - keep in lockstep.
+   See docs/brand.md, docs/motion.md, docs/status-colour.md.
+   ========================================================================== */
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------- Layer 1: primitives ------------------------------------------ */
+
+:root {
+  /* Paper - warm near-white canvas and object surfaces */
+  --paper-000: #ffffff;
+  --paper-050: #fbfaf8;
+  --paper-100: #f7f5f1;
+
+  /* Stone - warm secondary surfaces and dividers */
+  --stone-100: #f4f2ed;
+  --stone-200: #eae6df;
+  --stone-300: #d8d3c9;
+
+  /* Ink - deep warm neutrals for text and feature panels */
+  --ink-900: #1b1a18;
+  --ink-800: #26251f;
+  --ink-700: #3a3833;
+  --ink-500: #6a665e;
+  --ink-400: #8f8a80;
+  --ink-300: #a8a29a;
+
+  /* Editorial spa primitives - meal list and replace surfaces */
+  --editorial-ink-950: #2a2248;
+  --editorial-ink-deep: #221b3a;
+  --editorial-ink-900: #382c5c;
+  --editorial-ink-500: #64638a;
+  --editorial-ink-400: #857ea0;
+  --editorial-paper-000: #fdfbf7;
+  --editorial-paper-100: #f6f1e9;
+  --editorial-paper-200: #ebe4d8;
+  --editorial-paper-selected: #f1efee;
+  --editorial-olive: #5f7340;
+
+  /* Mineral - legacy primitives, retained for reference. Semantics use editorial ink. */
+  --mineral-800: #24486b;
+  --mineral-700: #2c5a86;
+  --mineral-500: #5c86ab;
+  --mineral-300: #8fb3d4;
+  --mineral-200: #b6cee4;
+  --mineral-050: #eef2f6;
+  --mineral-shade: #1a2530;
+  --mineral-950: #16212c;
+
+  /* Indigo - sampled from the supplied wordmark artwork. Used only by the mark. */
+  --indigo-900: #1a0e64;
+
+  /* Dark-mode neutrals */
+  --slate-950: #111111;
+  --slate-900: #161615;
+  --slate-850: #1e1d1c;
+  --slate-800: #2a2926;
+  --slate-selected: #262528;
+  --slate-accent-subtle: #232226;
+  --slate-100: #f4f2ee;
+  --slate-300: #a6a19a;
+  --slate-400: #7d7871;
+
+  /* Semantic feedback primitives - kept accessible, used sparingly.
+     text = body copy (4.5:1), mark = glyph (3:1), 700 = fill under white. */
+  --blue-text-dark: #8ab4e8;
+  --blue-mark-dark: #6bb3ff;
+
+  --green-700: #1e7a3c;
+  --green-text: #1d6f3f;
+  --green-mark: #268749;
+  --green-text-dark: #5dcaa0;
+  --green-mark-dark: #6bcb95;
+
+  --red-700: #c4160b;
+  --red-text: #a62b21;
+  --red-mark: #d93b2e;
+  --red-text-dark: #e07a72;
+  --red-mark-dark: #ff6b61;
+
+  /* Radii - three role-based values. Pill is reserved for progress caps only. */
+  --radius-control: 2px;
+  --radius-surface: 2px;
+  --radius-sheet: 12px;
+  --radius-pill: 9999px;
+
+  /* Motion - synced with src/lib/motion.ts */
+  --duration-instant: 80ms;
+  --duration-press: 120ms;
+  --duration-fast: 120ms;
+  --duration-exit: 100ms;
+  --duration-selection: 180ms;
+  --duration-disclosure: 200ms;
+  --duration-moderate: 180ms;
+  --duration-slow: 260ms;
+  --motion-fast: var(--duration-fast);
+  --motion-normal: var(--duration-selection);
+  --motion-slow: var(--duration-slow);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: var(--ease-standard);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-state: var(--ease-standard);
+  --ease-linear: linear;
+  --travel-hair: 2px;
+  --travel-close: 4px;
+  --travel-near: 8px;
+  --travel-far: 80px;
+  --loading-threshold: 400ms;
+  --height-menu-max: 320px;
+
+  /* Type stacks. Instrument Sans for UI, Instrument Serif for display and section. */
+  --font-body-stack: var(--font-instrument-sans), "Instrument Sans",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif-display-stack: var(--font-instrument-serif), "Instrument Serif",
+    ui-serif, Georgia, serif;
+
+  /* Reading measure for body and meal prose */
+  --measure: 62ch;
+  --measure-narrow: 52ch;
+
+  /* Vertical rhythm. Four steps plus heading attachment. */
+  --s1: 0.5rem;
+  --s2: 0.75rem;
+  --s4: 1.5rem;
+  --s5: 2.25rem;
+  --s6: 3.5rem;
+
+  /* Cursor: default on controls, pointer on links (Linear-adjacent). */
+  --cursor-control: default;
+  --cursor-link: pointer;
+}
+
+/* ---------- Layer 2: semantics ------------------------------------------- */
+
+:root {
+  /* Elevation level 0 is the canvas. Level 1 differentiates with a surface
+     shift or a hairline. Level 2 is an interactive object. Level 3 floats. */
+  --surface-canvas: var(--editorial-paper-100);
+  --surface: var(--editorial-paper-000);
+  --surface-inset: var(--editorial-paper-200);
+  --surface-selected: var(--editorial-paper-selected);
+  --surface-feature: var(--editorial-ink-950);
+  --surface-overlay: rgb(36 28 61 / 0.28);
+
+  --foreground: var(--editorial-ink-950);
+  --foreground-soft: var(--editorial-ink-900);
+  --foreground-muted: var(--editorial-ink-500);
+  --foreground-faint: var(--editorial-ink-400);
+  --foreground-disabled: var(--editorial-ink-400);
+
+  --on-accent: var(--paper-000);
+  --on-fill: var(--paper-000);
+  --on-feature: var(--paper-100);
+  --on-feature-muted: var(--ink-300);
+  --on-feature-track: rgb(247 245 241 / 0.22);
+  /* Inverted action for use inside a feature panel */
+  --feature-fill: var(--paper-100);
+  --on-feature-fill: var(--ink-900);
+
+  /* Violet-tinted hairlines for the editorial palette */
+  --hairline: rgb(56 44 92 / 0.09);
+  --hairline-strong: rgb(56 44 92 / 0.14);
+
+  /* accent = editorial ink rails, focus and emphasis; fill matches primary ink */
+  --accent: var(--editorial-ink-900);
+  --accent-fill: var(--editorial-ink-950);
+  --accent-hover: var(--editorial-ink-deep);
+  --accent-text: var(--editorial-ink-900);
+  --accent-soft: var(--editorial-ink-500);
+  --accent-subtle: var(--editorial-paper-selected);
+  --accent-track: var(--stone-200);
+  --chart-primary: var(--editorial-ink-900);
+  --chart-secondary: var(--ink-400);
+
+  /* The wordmark is painted through an alpha mask, so its colour is a token
+     rather than something baked into the artwork. */
+  --brand-mark: var(--indigo-900);
+
+  /* Feedback text and marks, which must read on a surface. Separate from the
+     action fills below: a fill is measured against --on-fill, not the canvas. */
+  --confirm: var(--green-text);
+  --confirm-icon: var(--editorial-olive);
+  --confirm-subtle: rgb(30 122 60 / 0.07);
+  --confirm-fill: var(--green-700);
+
+  --danger: var(--red-text);
+  --danger-icon: var(--red-mark);
+  --danger-subtle: rgb(196 22 11 / 0.06);
+  --danger-fill: var(--red-700);
+
+  --focus-ring: var(--editorial-ink-900);
+
+  /* Status roles - mark + text; wash reserved for blocking danger */
+  --status-neutral-text: var(--foreground);
+  --status-neutral-mark: var(--foreground-muted);
+  --status-neutral-line: var(--hairline-strong);
+  --status-neutral-wash: var(--surface-inset);
+
+  --status-info-text: var(--editorial-ink-900);
+  --status-info-mark: var(--editorial-ink-500);
+  --status-info-line: rgb(56 44 92 / 0.24);
+  --status-info-wash: rgb(56 44 92 / 0.05);
+
+  --status-success-text: var(--green-text);
+  --status-success-mark: var(--green-mark);
+  --status-success-line: rgb(46 155 87 / 0.24);
+  --status-success-wash: rgb(46 155 87 / 0.05);
+
+  --status-danger-text: var(--red-text);
+  --status-danger-mark: var(--red-mark);
+  --status-danger-line: rgb(217 59 46 / 0.28);
+  --status-danger-wash: rgb(217 59 46 / 0.05);
+
+  /* Shadow tokens live in styles/surfaces.css (revalued, tint on editorial ink). */
+
+  /* Auth screen - photograph dimmed by a dark overlay; vignette keeps the form centre focal. */
+  --auth-overlay: rgb(36 28 61 / 0.48);
+  --auth-overlay-vignette: rgb(36 28 61 / 0.32);
+  --auth-panel: var(--editorial-paper-000);
+  --auth-panel-border: rgb(56 44 92 / 0.08);
+}
+
+.dark {
+  --surface-canvas: var(--slate-950);
+  --surface: var(--slate-900);
+  --surface-inset: var(--slate-850);
+  --surface-selected: var(--slate-selected);
+  --surface-feature: var(--editorial-ink-950);
+  --surface-overlay: rgb(0 0 0 / 0.6);
+
+  --foreground: var(--slate-100);
+  --foreground-soft: var(--slate-300);
+  --foreground-muted: var(--slate-300);
+  --foreground-faint: var(--slate-400);
+  /* Disabled must stay readable, so it matches faint rather than dimming further. */
+  --foreground-disabled: var(--slate-400);
+
+  --on-accent: var(--slate-950);
+  --on-fill: var(--paper-000);
+  --on-feature: var(--slate-100);
+  --on-feature-muted: var(--slate-300);
+  --on-feature-track: rgb(244 242 238 / 0.2);
+  --feature-fill: var(--slate-100);
+  --on-feature-fill: var(--slate-950);
+
+  --hairline: rgb(244 242 238 / 0.09);
+  --hairline-strong: rgb(244 242 238 / 0.16);
+
+  --accent: var(--editorial-ink-400);
+  --accent-fill: var(--editorial-paper-000);
+  --accent-hover: var(--editorial-paper-100);
+  --accent-text: var(--slate-300);
+  --accent-soft: var(--editorial-ink-500);
+  --accent-subtle: var(--slate-accent-subtle);
+  --accent-track: var(--slate-800);
+  --chart-primary: var(--editorial-ink-400);
+  --chart-secondary: var(--slate-400);
+
+  /* The artwork's indigo disappears on a dark canvas, so the mark is painted in
+     the foreground ink instead. Masking is what makes that possible. */
+  --brand-mark: var(--foreground);
+
+  /* Feedback text lightens on a dark canvas. The fills do not: they keep white
+     text, so they stay deep in both themes. */
+  --confirm: var(--green-text-dark);
+  --confirm-icon: var(--green-mark-dark);
+  --confirm-subtle: rgb(107 203 149 / 0.08);
+  --confirm-fill: var(--green-700);
+
+  --danger: var(--red-text-dark);
+  --danger-icon: var(--red-mark-dark);
+  --danger-subtle: rgb(255 107 97 / 0.08);
+  --danger-fill: var(--red-700);
+
+  --focus-ring: var(--editorial-ink-400);
+
+  --status-neutral-text: var(--foreground);
+  --status-neutral-mark: var(--foreground-muted);
+  --status-neutral-line: var(--hairline-strong);
+  --status-neutral-wash: var(--surface-inset);
+
+  --status-info-text: var(--slate-300);
+  --status-info-mark: var(--slate-400);
+  --status-info-line: rgb(166 161 154 / 0.28);
+  --status-info-wash: var(--slate-accent-subtle);
+
+  --status-success-text: var(--green-text-dark);
+  --status-success-mark: var(--green-mark-dark);
+  --status-success-line: rgb(107 203 149 / 0.28);
+  --status-success-wash: rgb(107 203 149 / 0.06);
+
+  --status-danger-text: var(--red-text-dark);
+  --status-danger-mark: var(--red-mark-dark);
+  --status-danger-line: rgb(255 107 97 / 0.3);
+  --status-danger-wash: rgb(255 107 97 / 0.06);
+
+  /* Shadow tokens: dark overrides in styles/surfaces.css */
+
+  --auth-overlay: rgb(0 0 0 / 0.58);
+  --auth-overlay-vignette: rgb(0 0 0 / 0.36);
+  --auth-panel: rgb(22 22 21 / 0.96);
+  --auth-panel-border: rgb(244 242 238 / 0.1);
+
+  --surface-overlay: rgb(0 0 0 / 0.45);
+}
+
+/* ---------- Layer 3: Tailwind binding ------------------------------------ */
+
+@theme inline {
+  --color-surface-canvas: var(--surface-canvas);
+  --color-surface: var(--surface);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-selected: var(--surface-selected);
+  --color-surface-feature: var(--surface-feature);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-foreground: var(--foreground);
+  --color-soft: var(--foreground-soft);
+  --color-muted: var(--foreground-muted);
+  --color-faint: var(--foreground-faint);
+  --color-disabled: var(--foreground-disabled);
+
+  --color-on-accent: var(--on-accent);
+  --color-on-fill: var(--on-fill);
+  --color-on-feature: var(--on-feature);
+  --color-on-feature-muted: var(--on-feature-muted);
+  --color-on-feature-track: var(--on-feature-track);
+  --color-feature-fill: var(--feature-fill);
+  --color-on-feature-fill: var(--on-feature-fill);
+
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-track: var(--accent-track);
+  --color-chart-primary: var(--chart-primary);
+  --color-chart-secondary: var(--chart-secondary);
+
+  --color-confirm: var(--confirm);
+  --color-confirm-icon: var(--confirm-icon);
+  --color-confirm-subtle: var(--confirm-subtle);
+  --color-confirm-fill: var(--confirm-fill);
+
+  --color-danger: var(--danger);
+  --color-danger-icon: var(--danger-icon);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-danger-fill: var(--danger-fill);
+
+  --color-focus-ring: var(--focus-ring);
+
+  --color-status-neutral-text: var(--status-neutral-text);
+  --color-status-neutral-mark: var(--status-neutral-mark);
+  --color-status-neutral-line: var(--status-neutral-line);
+  --color-status-neutral-wash: var(--status-neutral-wash);
+
+  --color-status-info-text: var(--status-info-text);
+  --color-status-info-mark: var(--status-info-mark);
+  --color-status-info-line: var(--status-info-line);
+  --color-status-info-wash: var(--status-info-wash);
+
+  --color-status-success-text: var(--status-success-text);
+  --color-status-success-mark: var(--status-success-mark);
+  --color-status-success-line: var(--status-success-line);
+  --color-status-success-wash: var(--status-success-wash);
+
+  --color-status-danger-text: var(--status-danger-text);
+  --color-status-danger-mark: var(--status-danger-mark);
+  --color-status-danger-line: var(--status-danger-line);
+  --color-status-danger-wash: var(--status-danger-wash);
+
+  --radius-control: var(--radius-control);
+  --radius-surface: var(--radius-surface);
+  --radius-sheet: var(--radius-sheet);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-object: var(--shadow-object);
+  --shadow-object-hover: var(--shadow-object-hover);
+  --shadow-floating: var(--shadow-floating);
+  --shadow-modal: var(--shadow-modal);
+
+  /* Vertical rhythm aliases for Tailwind utilities. */
+  --spacing-s1: var(--s1);
+  --spacing-s2: var(--s2);
+  --spacing-s4: var(--s4);
+  --spacing-s5: var(--s5);
+  --spacing-s6: var(--s6);
+  --spacing-tight: var(--s4);
+  --spacing-group: var(--s5);
+  --spacing-section: var(--s6);
+  --spacing-gutter: 1.25rem;
+  --spacing-rail: 15rem;
+
+  /* Selection controls. gap = stacked rows and label-to-control; wrap-x = wrapped groups. */
+  --spacing-control-gap: 0.75rem;
+  --spacing-control-wrap-x: 2rem;
+
+  --font-body: var(--font-body-stack);
+  --font-display: var(--font-body-stack);
+  --font-serif-display: var(--font-serif-display-stack);
+
+  /* Seven type roles. See docs/design.md */
+  --text-display: clamp(2.75rem, 5vw, 4rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.015em;
+  --text-display--font-weight: 400;
+
+  --text-section: 1.75rem;
+  --text-section--line-height: 1.05;
+  --text-section--letter-spacing: -0.01em;
+  --text-section--font-weight: 400;
+
+  --text-body-lg: 1.0625rem;
+  --text-body-lg--line-height: 1.45;
+  --text-body-lg--font-weight: 400;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+  --text-body--font-weight: 400;
+
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.5;
+  --text-meta--font-weight: 400;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1.45;
+  --text-label--letter-spacing: 0.14em;
+  --text-label--font-weight: 500;
+
+  --text-control: 0.75rem;
+  --text-control--line-height: 1.45;
+  --text-control--letter-spacing: 0.14em;
+  --text-control--font-weight: 500;
+
+  --max-width-content: 76rem;
+  --max-width-reading: 52rem;
+  --spacing-page: var(--spacing-gutter);
+
+  --duration-fast: 120ms;
+  --duration-instant: 80ms;
+  --duration-exit: 100ms;
+  --duration-selection: 180ms;
+  --ease-state: cubic-bezier(0.2, 0, 0, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --cursor-control: default;
+  --cursor-link: pointer;
+  --max-height-menu: var(--height-menu-max);
+
+  --animate-skeleton: skeleton 1.5s var(--ease-in-out) infinite;
+}
+
+@import "./styles/surfaces.css";
+
+/* ---------- Base ---------------------------------------------------------- */
+
+@layer base {
+  html {
+    color-scheme: light dark;
+    scrollbar-gutter: stable;
+    overflow-y: scroll;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    background-color: var(--surface-canvas);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+  }
+
+  /* The outline follows the element's own radius, so the ring must not
+     redefine border-radius - doing so reshapes buttons on focus. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--accent-subtle);
+    color: var(--foreground);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------- Keyframes ----------------------------------------------------- */
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--travel-close));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menu-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--travel-close));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Overlay fades in place - never travels with the panel. */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + var(--travel-close)));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes dialog-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--travel-far) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Utilities ----------------------------------------------------- */
+
+@layer utilities {
+  /* Uppercase is a typographic decision for headings, tab labels, badges and
+     step counters only. Never a sentence, paragraph, error or input label. */
+  .u-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Constrain educational reading content. Operational lists stay wide. */
+  .measure {
+    max-width: var(--measure);
+  }
+
+  .measure-narrow {
+    max-width: var(--measure-narrow);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Serif display and section roles. Always italic. */
+  .text-display-serif {
+    font-family: var(--font-serif-display);
+    font-style: italic;
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    letter-spacing: var(--text-display--letter-spacing);
+    font-weight: var(--text-display--font-weight);
+  }
+
+  .text-section-serif {
+    font-family: var(--font-serif-display);
+    font-style: italic;
+    font-size: var(--text-section);
+    line-height: var(--text-section--line-height);
+    letter-spacing: var(--text-section--letter-spacing);
+    font-weight: var(--text-section--font-weight);
+  }
+
+  .text-label {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--text-label--letter-spacing);
+    font-weight: var(--text-label--font-weight);
+    text-transform: uppercase;
+  }
+
+  .text-control {
+    font-size: var(--text-control);
+    line-height: var(--text-control--line-height);
+    letter-spacing: var(--text-control--letter-spacing);
+    font-weight: var(--text-control--font-weight);
+    text-transform: uppercase;
+  }
+
+  /* Checkbox and radio rows. Block-level so group spacing applies; w-fit keeps
+     wrapped groups compact. Never use inline-flex on the label wrapper. */
+  .control-checkbox {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: var(--spacing-control-gap);
+  }
+
+  /* Related selection controls. Wrap groups in this instead of space-y on inline children. */
+  .control-group,
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-control-gap);
+  }
+
+  .checkbox-group-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--spacing-control-wrap-x);
+    row-gap: var(--spacing-control-gap);
+  }
+
+  .ui-transition {
+    transition:
+      opacity var(--motion-fast) var(--ease-standard),
+      transform var(--motion-fast) var(--ease-standard),
+      background-color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard);
+  }
+
+  /* The wordmark is drawn as an alpha mask rather than an <img>, so its colour
+     comes from --brand-mark and it can invert for dark mode. Set a height on
+     the element; the intrinsic ratio of the artwork supplies the width. */
+  .brand-mark {
+    display: block;
+    aspect-ratio: 189 / 91;
+    background-color: var(--brand-mark);
+    -webkit-mask: url("/brand/well-with-katarina.png") no-repeat center / contain;
+    mask: url("/brand/well-with-katarina.png") no-repeat center / contain;
+  }
+
+  /* Windows high-contrast strips background painting, which would erase a
+     masked mark entirely. Fall back to the artwork itself. */
+  @media (forced-colors: active) {
+    .brand-mark {
+      background: none;
+      content: url("/brand/well-with-katarina.png");
+    }
+  }
+
+  /* Full-bleed auth backgrounds must not stop short of a reserved scrollbar gutter. */
+  html:has(.auth-screen) {
+    scrollbar-gutter: auto;
+  }
+
+  /* Sign-in / magic-link sent - wellness photograph with a dark overlay and a protected centre. */
+  .auth-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: url("/well-with-katarina-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .auth-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--auth-overlay);
+    pointer-events: none;
+  }
+
+  .auth-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 58% 54% at 50% 48%,
+      transparent 0%,
+      var(--auth-overlay-vignette) 100%
+    );
+    pointer-events: none;
+  }
+
+  .auth-screen__panel {
+    border-radius: var(--radius-surface);
+    border: 1px solid var(--auth-panel-border);
+    background: var(--auth-panel);
+    box-shadow: var(--shadow-floating);
+    backdrop-filter: blur(10px);
+    padding: clamp(1.75rem, 4vw, 2.25rem);
+  }
+
+  @media (forced-colors: active) {
+    .auth-bg {
+      display: none;
+    }
+
+    .auth-screen__panel {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      backdrop-filter: none;
+    }
+  }
+
+  .force-reduced-motion *,
+  .force-reduced-motion *::before,
+  .force-reduced-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes menu-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes overlay-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  @keyframes dialog-out {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "_comment": "Phase D catalogue. Dietitian-authored keys only. Missing keys render empty states.",
+  "meal.breakfast.template": "",
+  "meal.lunch.template": "",
+  "meal.dinner.template": "",
+  "replacement.dont_have.small_fish": "",
+  "adaptation.life_happened.overate": "",
+  "lesson.week01.title": "",
+  "pricing.disclaimer": "Estimated costs are indicative only."
+}

@@ -1,0 +1,196 @@
+# Design system standard and migration
+
+Scope: every surface in this app. Cursor agents load this from `.cursor/rules/design.mdc` with `alwaysApply: true`. It sits alongside `docs/motion.md`, which governs how things move; this one governs how they look.
+
+## The problem this exists to fix
+
+The app is currently half Apple-adjacent (Inter, system sans, pill radii, blue accents) and half editorial (Instrument Serif italic, ink violet, cream paper, 2px radii). Neither system is wrong. The mixture is what reads as unfinished, because a user cannot tell which choices are deliberate.
+
+The editorial system wins. Everything else is migrated or deleted. Half-migrated is worse than either state, so this document is a migration procedure first and a reference second.
+
+## 0. How to work
+
+When asked to build or change UI, name the token roles you will use before writing code, and stop for confirmation.
+
+When migrating, work one route at a time, commit each separately, and screenshot before and after. Never migrate the whole app in one pass; a diff that large cannot be reviewed, and regressions become impossible to attribute.
+
+Never introduce a value that is not in this document. If a case is genuinely uncovered, propose an addition to the token layer rather than a local override. A one-off value in a component is how the current mixed state happened.
+
+## 1. Single source of truth
+
+All tokens live in `src/app/globals.css`. Two layers, and the distinction matters:
+
+- **Primitives**: raw values. Never referenced from a component.
+- **Semantic roles**: what a thing is for. The only layer components may use.
+
+```css
+:root {
+  /* Primitives */
+  --violet-900: #241c3d;
+  --violet-700: #382c5c;
+  --violet-400: #6d6483;
+  --cream-100: #fdfbf7;
+  --cream-200: #f6f1e9;
+  --cream-300: #ece5d9;
+  --olive-600: #6e7a5a;
+  --clay-700: #8a4a3c;
+
+  /* Semantic: ink */
+  --ink: var(--violet-700);
+  --ink-deep: var(--violet-900);
+  --ink-soft: var(--violet-400);
+  --ink-faint: rgb(56 44 92 / 0.14);
+  --ink-hairline: rgb(56 44 92 / 0.18);
+
+  /* Semantic: surface */
+  --paper: var(--cream-200);
+  --paper-high: var(--cream-100);
+  --paper-shade: var(--cream-300);
+
+  /* Semantic: signal. One each. No parallel tokens. */
+  --success: var(--olive-600);
+  --alert: var(--clay-700);
+
+  /* Radius. Three values, and that is the whole set. */
+  --radius-control: 2px;
+  --radius-surface: 2px;
+  --radius-sheet: 12px;
+
+  /* Elevation. Two values. Nothing else casts a shadow. */
+  --shadow-float: 0 18px 48px -24px rgb(36 28 61 / 0.4);
+  --shadow-press: 0 10px 24px -14px rgb(36 28 61 / 0.75);
+
+  /* Space. One scale. */
+  --s1: 0.5rem;
+  --s2: 0.75rem;
+  --s3: 1rem;
+  --s4: 1.5rem;
+  --s5: 2.25rem;
+  --s6: 3.5rem;
+  --s7: 5rem;
+}
+```
+
+Rules:
+
+1.1 A component may reference semantic roles only. A primitive appearing outside this block is a review failure.
+
+1.2 No raw hex, `rgb()`, or `hsl()` in any component, style file, Tailwind arbitrary value, or inline style. Zero exceptions.
+
+1.3 No parallel tokens for the same concept. If `--danger` exists, alias it to `--alert` or rename it. Two names for one colour guarantees drift.
+
+1.4 Shadows come from the two elevation tokens. If a surface needs a third depth, it probably needs a different pattern, not a new shadow.
+
+## 2. Type
+
+Two faces. Instrument Serif for display, Instrument Sans for everything else.
+
+Inter is removed entirely. Keeping it "for UI" is precisely the mixed state this document exists to end. The blueprint's mono meta labels are also dropped; where numeric alignment is needed, use Instrument Sans with `font-variant-numeric: tabular-nums`. This is reversible if tabular data later proves genuinely unreadable, but it is not to be reintroduced casually.
+
+Roles, not sizes. A component picks a role. It never sets `font-size` directly.
+
+| Role | Face | Size | Weight | Tracking | Colour |
+| --- | --- | --- | --- | --- | --- |
+| `display` | Serif italic | clamp 2.75-4rem | 400 | -0.015em | `--ink` |
+| `section` | Serif italic | 28px | 400 | -0.01em | `--ink` |
+| `body-lg` | Sans | 17px | 400 | 0 | `--ink-deep` |
+| `body` | Sans | 16px | 400 | 0 | `--ink-deep` |
+| `meta` | Sans | 13px | 400 | 0 | `--ink-soft` |
+| `label` | Sans | 11px | 500 | 0.14em, uppercase | `--ink-soft` |
+| `control` | Sans | 12px | 500 | 0.14em, uppercase | inherited |
+
+Rules:
+
+2.1 Serif appears only in `display` and `section`. It is never used for body copy, labels, buttons, or data. Its scarcity is what gives it weight.
+
+2.2 Serif is always italic. The upright cut is not used anywhere in this app.
+
+2.3 Labels are smaller than the content they label. If a slot name is larger than its value, the hierarchy is inverted; fix that before anything else.
+
+2.4 Seven roles is the complete set. A new size means a new role added here, agreed first.
+
+2.5 Check `--font-display` consumers before repointing it. If anything outside the intended surfaces reads that token, introduce the serif under a new name and migrate consumers deliberately.
+
+## 3. Primitives that must exist
+
+If a component is styling a raw `<button>` or `<input>`, it is doing something wrong. These exist once, in `src/components/ui/`, and everything composes them:
+
+| Component | Notes |
+| --- | --- |
+| `Button` | Solid ink fill, `--radius-control`, `control` type role, all seven states |
+| `GhostLink` | Underlined, `--ink-soft`, offset 4px, `--ink-faint` decoration |
+| `Chip` | Hairline border, transparent fill, selected state fills `--ink` |
+| `Field` | Label plus underline input. No boxed inputs anywhere in this app |
+| `Surface` | Paper background, hairline border, `--radius-surface` |
+| `Divider` | 1px `--ink-faint`. Never between the last item and the container edge |
+| `SectionHeader` | `section` role, optional meta line |
+| `Label` | `label` role |
+
+3.1 Every interactive primitive ships all seven states: default, hover, focus-visible, active, disabled, loading, error. Missing states are the most common reason a build looks unfinished.
+
+3.2 Focus-visible uses the global outline in `globals.css`. Never overridden per component.
+
+3.3 No component library is added on top of these. If a kit is needed for behaviour (Floating UI for positioning), it supplies behaviour only, never styling.
+
+## 4. Migration procedure
+
+Do not skip the inventory. Cursor: run these, report counts and file lists, and stop before changing anything.
+
+```bash
+# Raw colour values outside globals.css
+rg -n --glob '!**/globals.css' '#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(' src
+
+# Raw font sizes in components
+rg -n 'font-size|text-\[|text-(xs|sm|base|lg|xl|2xl|3xl)\b' src
+
+# Inter and any second font stack
+rg -n 'Inter|font-sans|--font-body|system-ui|-apple-system' src
+
+# Radii outside the three tokens
+rg -n 'rounded-|border-radius|radius-\[' src
+
+# Shadows outside the two tokens
+rg -n 'shadow-|box-shadow' src
+
+# Tailwind arbitrary values, which bypass the token layer entirely
+rg -n '\[[0-9]+px\]|\[#' src
+```
+
+Then, in this order, one commit each:
+
+1. Token layer complete in `globals.css`, with old tokens aliased to new ones rather than deleted. Nothing should look different yet. Verify that.
+2. Fonts wired in `layout.tsx`. Inter removed from the loader. Screenshot three unrelated routes and confirm only the faces changed.
+3. The `src/components/ui/` primitives built or brought onto tokens.
+4. One route at a time, replacing local styling with primitives and roles.
+5. Old aliases deleted. This is the step that proves the migration finished; if deleting them breaks a build, something was never migrated.
+
+A route is not done while it still contains a raw hex value, a raw font size, or a hand-styled button.
+
+## 5. Enforcement
+
+Documentation does not hold a system together. Add the guards in the same pass as step 1, or the mixed state returns within a month.
+
+5.1 Stylelint with `declaration-property-value-disallowed-list` blocking raw colour functions and hex in every file except `globals.css`.
+
+5.2 ESLint rule or a CI grep failing the build on the patterns in section 4 outside the allowlist. Start it as a warning, flip to error at the end of step 5.
+
+5.3 If Tailwind is in use, restrict the theme to the token set and disable arbitrary value syntax where the config allows it. Arbitrary values are the main leak.
+
+5.4 A PR template line: "no new tokens, or the new token is proposed in docs/design.md". Cheap and it works.
+
+## 6. Ban list
+
+Inter, or any second sans. Upright serif. Boxed inputs. Pill radii. Gradients. More than two shadow depths. Any blue. Icon sets other than the one already chosen. Emoji as UI. Raw hex anywhere outside `globals.css`. A component that sets `font-size`. A third elevation. Dimming an entire page to focus one element. Two names for one colour.
+
+## 7. Review checklist
+
+1. No hex, `rgb()` or `hsl()` outside `globals.css`.
+2. No component sets `font-size`, `font-family`, `border-radius` or `box-shadow` directly.
+3. Serif appears only as `display` or `section`, and only italic.
+4. Every label is smaller than the content it labels.
+5. Every interactive element has all seven states.
+6. Only three radii and two shadows appear in the whole diff.
+7. Inter appears nowhere, including in fallback stacks.
+8. Every route renders correctly at 360px and with a keyboard alone.
+9. The old token aliases have been deleted and the build passes.
+10. A screenshot of a route not touched by this change looks identical to before.

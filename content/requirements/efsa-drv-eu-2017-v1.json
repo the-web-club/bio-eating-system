@@ -1,0 +1,220 @@
+{
+  "policyCode": "efsa-drv-eu-v1",
+  "setVersion": "efsa-drv-eu-2017-v1",
+  "name": "EFSA Dietary Reference Values — healthy adults 18-49",
+  "jurisdiction": "EU",
+  "populationScope": "Healthy adults aged 18-49 years without clinical conditions",
+  "source": "EFSA",
+  "sourceVersion": "2017-e15121",
+  "effectiveDate": "2017-12-04",
+  "sourceUrl": "https://www.efsa.europa.eu/sites/default/files/2017_09_DRVs_summary_report.pdf",
+  "termsUrl": "https://www.efsa.europa.eu/en/legalnotice",
+  "devOnly": false,
+  "setReviewStatus": "APPROVED",
+  "requirements": [
+    {
+      "nutrientCode": "protein",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "PRI",
+      "value": 56.5,
+      "unit": "g",
+      "reviewStatus": "APPROVED",
+      "lifeStage": "healthy_adult"
+    },
+    {
+      "nutrientCode": "protein",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "PRI",
+      "value": 48.6,
+      "unit": "g",
+      "reviewStatus": "APPROVED",
+      "lifeStage": "healthy_adult"
+    },
+    {
+      "nutrientCode": "fiber",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": null,
+      "referenceType": "AI",
+      "value": 25,
+      "unit": "g",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "omega3",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": null,
+      "referenceType": "AI",
+      "value": 0.25,
+      "unit": "g",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "calcium",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "PRI",
+      "value": 950,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "calcium",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "PRI",
+      "value": 950,
+      "unit": "mg",
+      "reviewStatus": "APPROVED",
+      "lifeStage": "premenopausal"
+    },
+    {
+      "nutrientCode": "iron",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "PRI",
+      "value": 11,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "iron",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "PRI",
+      "value": 16,
+      "unit": "mg",
+      "reviewStatus": "APPROVED",
+      "lifeStage": "premenopausal"
+    },
+    {
+      "nutrientCode": "magnesium",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "AI",
+      "value": 350,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "magnesium",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "AI",
+      "value": 300,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "potassium",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": null,
+      "referenceType": "AI",
+      "value": 3500,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "zinc",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "PRI",
+      "value": 9.4,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "zinc",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "PRI",
+      "value": 7.5,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "vitamin_a",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "PRI",
+      "value": 750,
+      "unit": "mcg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "vitamin_a",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "PRI",
+      "value": 650,
+      "unit": "mcg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "vitamin_c",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "male",
+      "referenceType": "PRI",
+      "value": 110,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "vitamin_c",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": "female",
+      "referenceType": "PRI",
+      "value": 95,
+      "unit": "mg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "vitamin_d",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": null,
+      "referenceType": "AI",
+      "value": 15,
+      "unit": "mcg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "folate",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": null,
+      "referenceType": "PRI",
+      "value": 330,
+      "unit": "mcg",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "nutrientCode": "vitamin_b12",
+      "ageMin": 18,
+      "ageMax": 49,
+      "sex": null,
+      "referenceType": "AI",
+      "value": 4,
+      "unit": "mcg",
+      "reviewStatus": "APPROVED"
+    }
+  ]
+}

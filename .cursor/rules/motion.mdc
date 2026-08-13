@@ -1,0 +1,212 @@
+---
+description: Motion and interaction standard for every interactive surface in the app
+alwaysApply: true
+---
+
+# Motion and interaction standard
+
+Scope: every interactive surface in this app.
+
+Human-readable copy also lives at `docs/motion.md`. Shared tokens live in `src/lib/motion.ts`.
+
+## How to use this
+
+When asked to build or change any interactive UI, read this first, then state which patterns from section 5 apply and which springs from section 4 you will use, and stop. Do not write code until that plan is confirmed.
+
+When reviewing existing UI against this document, produce a list of violations by file with the specific rule number, not a rewrite.
+
+Never invent a new spring, duration, easing curve, or interaction pattern. If something here genuinely does not cover the case, say so and propose an addition to this document rather than a one-off value in a component.
+
+## 1. The physics rules
+
+These are not preferences. Breaking them is what makes an interface feel cheap, and no amount of curve-tuning compensates.
+
+1.1 Animate `transform` and `opacity` only. Never animate `height`, `width`, `top`, `left`, `margin`, `padding`, or `box-shadow`. Those run on the main thread and cause layout, and they will stutter on a mid-range phone no matter how good the timing is. Reaching for one of them means the structure is wrong.
+
+1.2 When something must resize, use Framer Motion's `layout` prop, which performs the change as a transform-based FLIP. Put `layout="position"` on text children so they translate instead of stretching.
+
+1.3 Prefer surfaces that float. A popover, sheet, or dialog is rendered into a portal and has no height for the page to react to. An inline expander forces every element below it to move, which is the single most common source of jank in this app. Use inline expansion only when the content is genuinely part of the document flow and the user is expected to read around it.
+
+1.4 Every animation must be interruptible. If the user reverses an action mid-flight, the motion continues from its current position and velocity. Use springs, which do this natively, rather than fixed-duration tweens, which snap to the end state before reversing.
+
+1.5 One thing moves at a time. If three elements animate simultaneously, nothing reads as intentional. Orchestrate: the surface arrives, then its contents settle.
+
+1.6 Exits are faster than entrances, and quieter. Nobody needs to read something on its way out.
+
+1.7 Never animate content the user has already seen. Entrance animations belong to elements entering the DOM, not to every re-render. If a list re-animates when an unrelated piece of state changes, the keys or the `AnimatePresence` boundary are wrong.
+
+## 2. Libraries
+
+- `motion` (Framer Motion) for all animation
+- `@floating-ui/react` for all anchored positioning, dismissal, and focus management on popovers, menus, tooltips and dialogs
+
+Do not hand-roll positioning maths, focus traps, or outside-click listeners. Do not add a second animation library. Do not use a component kit that ships its own motion on top of these.
+
+## 3. The shared module
+
+Create `src/lib/motion.ts` and import from it everywhere. No component defines its own spring or duration.
+
+```ts
+import type { Transition, Variants } from "motion/react";
+
+/** Springs. Chosen by surface size, not by taste. */
+export const spring = {
+  /** Small floating surfaces: popovers, menus, tooltips. */
+  snap: { type: "spring", stiffness: 400, damping: 32, mass: 0.8 },
+  /** Modal dialogs and other mid-size surfaces. */
+  modal: { type: "spring", stiffness: 380, damping: 34, mass: 0.9 },
+  /** Bottom sheets and anything driven by a drag gesture. */
+  sheet: { type: "spring", stiffness: 300, damping: 34, mass: 1 },
+  /** Container resize under the `layout` prop. */
+  resize: { type: "spring", stiffness: 350, damping: 35, mass: 1 },
+  /** Large surfaces and route-level movement. */
+  gentle: { type: "spring", stiffness: 260, damping: 30, mass: 1 },
+} satisfies Record<string, Transition>;
+
+/** Tweens. Only for opacity and colour, which gain nothing from a spring. */
+export const tween = {
+  fade: { duration: 0.12, ease: [0.2, 0.7, 0.2, 1] },
+  crossfade: { duration: 0.18, ease: [0.2, 0.7, 0.2, 1] },
+  exit: { duration: 0.13, ease: [0.4, 0, 1, 1] },
+  micro: { duration: 0.12, ease: [0.2, 0.7, 0.2, 1] },
+} satisfies Record<string, Transition>;
+
+/** Stagger. Never exceed 6 animated children or 150ms of total offset. */
+export const stagger = {
+  enter: 0.03,
+  exit: 0.02,
+  max: 6,
+} as const;
+
+/** Loading. Below this threshold, show nothing at all. */
+export const LOADING_THRESHOLD_MS = 400;
+
+/** Gesture dismissal. Projection factor, distance ratio, escape velocity. */
+export const dismiss = {
+  projection: 0.2,
+  ratio: 0.4,
+  velocity: 700,
+} as const;
+
+export const surfaceVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.96, y: -4 },
+  visible: { opacity: 1, scale: 1, y: 0 },
+};
+```
+
+Every value in section 4 comes from this file. A literal duration or stiffness in a component is a review failure.
+
+## 4. The table
+
+| Surface | Transition | Enter from | Exit to |
+| --- | --- | --- | --- |
+| Popover, menu, tooltip | `spring.snap` | `opacity 0, scale 0.96, y -4` | reverse |
+| Modal dialog | `spring.modal` | `opacity 0, scale 0.97` | reverse |
+| Bottom sheet | `spring.sheet` | `y 100%` | `y 100%` at release velocity |
+| Container resize | `spring.resize` | n/a, `layout` | n/a |
+| Route or step change | `spring.gentle` | `opacity 0, x ±24` | `opacity 0, x ∓24` |
+| List item | `spring.snap` | `opacity 0, y 8` | `opacity 0, y 4, scale 0.98` |
+| Text swap | `tween.crossfade` | `opacity 0, y 3` | `opacity 0` |
+| Hover, press | `tween.micro` | n/a | n/a |
+
+Nothing in this app runs longer than 300ms except a deliberate hold, such as a confirmation mark resting before it fades.
+
+## 5. Pattern catalogue
+
+### 5.1 Anchored popover, menu, dropdown
+
+`useFloating` with `offset(8)`, `flip({ padding: 12 })`, `shift({ padding: 12 })`, and `size` capping `maxHeight` against the viewport. `whileElementsMounted: autoUpdate` so it tracks the anchor rather than closing on scroll. Portal to `document.body`.
+
+Derive `transformOrigin` from the placement Floating UI returns, so the surface grows out of the corner nearest its trigger. Hardcoding it means the origin is wrong after a flip, which readers feel without being able to name.
+
+Dismissal through `useDismiss`, `useRole`, `useFocus`. Focus returns to the trigger on every exit path. Do not lock body scroll.
+
+Failure mode to watch for: the panel snapping to its full size before its contents arrive. That means `layout` is missing on the panel or the content wrapper is remounting.
+
+### 5.2 Modal dialog
+
+Only when the task genuinely blocks everything else. Backdrop `rgba(36, 28, 61, 0.28)`, fading on `tween.crossfade`. Body scroll locked. Escape and backdrop click both close. Focus trapped, and returned to the trigger on close.
+
+Do not scale the backdrop. Do not slide dialogs in from an edge on desktop.
+
+### 5.3 Bottom sheet, below 640px
+
+Replaces the popover on narrow viewports, from the same component. Radius on the top corners only, `padding-bottom: max(20px, env(safe-area-inset-bottom))`, a 36x4px grab handle in `var(--ink-faint)`.
+
+`drag="y"`, constrained to 0 at top and bottom, `dragElastic={{ top: 0, bottom: 0.6 }}`. Backdrop opacity maps to drag offset, so the surface behind brightens as the user pulls. On release, project the landing point as `offset + velocity * dismiss.projection` and dismiss if it exceeds `dismiss.ratio` of the sheet height, or if velocity exceeds `dismiss.velocity` regardless of distance. Hand the release velocity to the exit so the dismissal continues the gesture rather than restarting it.
+
+Drag must not engage when the gesture begins inside a scrollable region that is not scrolled to its top.
+
+Failure mode: a sheet that only checks distance feels sticky, because a fast short flick reads as intent to a human and as nothing to the code.
+
+### 5.4 Inline disclosure
+
+Allowed only where 1.3 permits it. Animate `grid-template-rows` from `0fr` to `1fr` on the wrapper, never a measured pixel height. Content translates from `y: -4`. Nothing below may shift more than the disclosure's own height, and the scroll position must not jump.
+
+Never dim the surrounding content to indicate focus. Express the active state on the active element: a lighter background and a 2px `var(--ink)` left rule scaling from `scaleY(0)`. Dimming the page reads as broken, not as focused.
+
+### 5.5 Step and wizard transitions
+
+Direction-aware. Forward moves `x` from `+24` to `0`, backward from `-24`. `AnimatePresence` with `mode="wait"` and a `custom` prop carrying the direction. The container carries `layout` so height changes ride the same motion as the content swap, not a second one after it.
+
+The step heading crossfades alone, without a y-offset, so it reads as one label changing rather than two labels trading places.
+
+### 5.6 Lists
+
+Keyed by stable ids, never by index. `AnimatePresence` with `popLayout` so removal does not leave a hole while neighbours close it. Stagger only on first mount, and only for the first `stagger.max` items; anything past that appears with the batch. Reordering uses `layout`, not re-mounting.
+
+### 5.7 Optimistic state changes
+
+The default for anything the user initiated. Update local state at once, crossfade the changed text on `tween.crossfade` with a 3px rise, then fire the mutation. On failure, revert with the same crossfade and show an inline retry in `var(--alert)` at the point of failure.
+
+Reserve the space the new value will need before it arrives. If a replacement value can wrap to a second line, hold `min-height` for two lines from the start, or the row height changes and rule 1.1 is broken through the back door.
+
+### 5.8 Loading
+
+Nothing is shown for the first `LOADING_THRESHOLD_MS`. Most responses land inside that window and the user never sees a loading state at all, which is what "fast" actually means to people.
+
+Past the threshold, hold the existing content at 0.5 opacity with pointer-events off, or show skeletons sized to the expected result. Never both, and never a spinner inside a surface that is already open. Skeleton dimensions must match the real content, or the surface resizes twice.
+
+### 5.9 Confirmation
+
+Confirm where the change happened, not in a corner. A small `var(--olive)` mark beside the changed value, holding 1.4s, fading over 260ms.
+
+Toasts are only for events outside the user's current field of view, or for failures that need an action. Success toasts for things the user is already looking at are noise.
+
+### 5.10 Micro-states
+
+Every interactive element ships all seven: default, hover, focus-visible, active, disabled, loading, error. Missing states are the most common reason a build looks unfinished.
+
+Hover and press on `tween.micro`. Press is `translateY(1px)` and shadow removal, never a scale on text. Focus-visible uses the global outline defined in `globals.css`; do not override it per component.
+
+## 6. Reduced motion
+
+Read `useReducedMotion()` once per component and select variant objects from it. Do not fork components or duplicate JSX.
+
+Under reduce: no scale, no translate, no stagger, no drag springs. Opacity changes at 0ms. Sheets still slide, on a 120ms tween with no elasticity, because a sheet that teleports is disorienting. Everything else is instant.
+
+## 7. Performance budget
+
+- No animation may cause layout or paint. Verify in DevTools Performance with Paint flashing on: only Composite Layers should appear during motion.
+- 60fps on a 4x CPU throttle. If a surface cannot hold that, it is animating the wrong property.
+- No `transition: all` anywhere. Enumerate properties.
+- `will-change` only on elements about to animate, removed afterwards. Left in place it costs memory and can make things worse.
+
+## 8. Review checklist
+
+Run this before any interaction work is called done.
+
+1. No `height`, `width`, `top`, `left`, `margin`, `padding` or `box-shadow` is animated in the diff.
+2. No literal duration, stiffness, damping or easing array appears in a component. All of it comes from `src/lib/motion.ts`.
+3. Nothing outside the active surface moves by a pixel when it opens, closes, or changes contents.
+4. Triggering an action and reversing it within 100ms produces a smooth reversal with no snap to either end state.
+5. Focus returns to the trigger on every exit path, including Escape, outside click, gesture dismissal, and successful completion.
+6. Every interactive element has all seven states from 5.10.
+7. With reduced motion enabled, nothing translates, scales, or staggers.
+8. Nothing re-animates on a re-render that did not add or remove it.
+9. Every colour resolves to a token from `globals.css`. No new hex values.
+10. The whole flow works at 360px wide and with a keyboard alone.
+
+## 9. Anti-patterns
+
+Overshoot or bounce on text. Spinners for sub-400ms waits. Success toasts for visible changes. Dimming a whole page to focus one row. Entrance animations that replay on re-render. Staggering more than six items. Fade-in on scroll for ordinary content. Animating a property group and its `layout` at the same time on one element. Durations above 300ms. A second easing curve introduced for one component because the standard one "felt off", which almost always means the property being animated is wrong.

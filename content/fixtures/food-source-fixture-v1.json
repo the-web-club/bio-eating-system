@@ -1,0 +1,140 @@
+{
+  "source": "fixture-v1",
+  "sourceVersion": "2026.08.12",
+  "devOnly": true,
+  "nutrients": [
+    { "code": "protein", "name": "Protein", "unit": "g" },
+    { "code": "iron", "name": "Iron", "unit": "mg" },
+    { "code": "zinc", "name": "Zinc", "unit": "mg" },
+    { "code": "vitamin_a", "name": "Vitamin A", "unit": "mcg" },
+    { "code": "vitamin_c", "name": "Vitamin C", "unit": "mg" },
+    { "code": "omega3", "name": "Omega-3 fatty acids", "unit": "g" }
+  ],
+  "foods": [
+    {
+      "externalId": "egg-whole-raw",
+      "name": "Egg, whole, raw",
+      "preparationState": "RAW",
+      "biologicalCategory": "eggs",
+      "foodCategories": ["animal_protein"],
+      "allergens": ["egg"],
+      "nutrients": [
+        { "code": "protein", "amount": 12.6, "perAmountG": 100 },
+        { "code": "iron", "amount": 1.8, "perAmountG": 100 },
+        { "code": "zinc", "amount": 1.3, "perAmountG": 100 },
+        { "code": "vitamin_a", "amount": 160, "perAmountG": 100 },
+        { "code": "vitamin_c", "amount": 0, "perAmountG": 100 },
+        { "code": "omega3", "amount": 0.07, "perAmountG": 100 }
+      ]
+    },
+    {
+      "externalId": "chicken-liver-raw",
+      "name": "Chicken liver, raw",
+      "preparationState": "RAW",
+      "biologicalCategory": "organ_meat",
+      "foodCategories": ["organ_meat"],
+      "allergens": [],
+      "nutrients": [
+        { "code": "protein", "amount": 16.9, "perAmountG": 100 },
+        { "code": "iron", "amount": 9.0, "perAmountG": 100 },
+        { "code": "zinc", "amount": 2.7, "perAmountG": 100 },
+        { "code": "vitamin_a", "amount": 11000, "perAmountG": 100 },
+        { "code": "vitamin_c", "amount": 18, "perAmountG": 100 },
+        { "code": "omega3", "amount": 0.2, "perAmountG": 100 }
+      ]
+    },
+    {
+      "externalId": "sardines-canned",
+      "name": "Sardines, canned in oil",
+      "preparationState": "CANNED",
+      "biologicalCategory": "small_fish",
+      "foodCategories": ["seafood"],
+      "allergens": ["fish"],
+      "nutrients": [
+        { "code": "protein", "amount": 24.6, "perAmountG": 100 },
+        { "code": "iron", "amount": 2.9, "perAmountG": 100 },
+        { "code": "zinc", "amount": 1.3, "perAmountG": 100 },
+        { "code": "vitamin_a", "amount": 32, "perAmountG": 100 },
+        { "code": "vitamin_c", "amount": 0, "perAmountG": 100 },
+        { "code": "omega3", "amount": 1.5, "perAmountG": 100 }
+      ]
+    },
+    {
+      "externalId": "mussels-cooked",
+      "name": "Mussels, cooked",
+      "preparationState": "COOKED",
+      "biologicalCategory": "bivalves",
+      "foodCategories": ["seafood"],
+      "allergens": ["molluscs"],
+      "nutrients": [
+        { "code": "protein", "amount": 18.0, "perAmountG": 100 },
+        { "code": "iron", "amount": 4.0, "perAmountG": 100 },
+        { "code": "zinc", "amount": 1.6, "perAmountG": 100 },
+        { "code": "vitamin_a", "amount": 60, "perAmountG": 100 },
+        { "code": "vitamin_c", "amount": 8, "perAmountG": 100 },
+        { "code": "omega3", "amount": 0.5, "perAmountG": 100 }
+      ]
+    },
+    {
+      "externalId": "beef-mince-lean",
+      "name": "Beef mince, lean, raw",
+      "preparationState": "RAW",
+      "biologicalCategory": "muscle_meat",
+      "foodCategories": ["red_meat"],
+      "allergens": [],
+      "nutrients": [
+        { "code": "protein", "amount": 20.0, "perAmountG": 100 },
+        { "code": "iron", "amount": 2.4, "perAmountG": 100 },
+        { "code": "zinc", "amount": 4.8, "perAmountG": 100 },
+        { "code": "vitamin_a", "amount": 0, "perAmountG": 100 },
+        { "code": "vitamin_c", "amount": 0, "perAmountG": 100 },
+        { "code": "omega3", "amount": 0.05, "perAmountG": 100 }
+      ]
+    },
+    {
+      "externalId": "potato-boiled",
+      "name": "Potato, boiled",
+      "preparationState": "BOILED",
+      "biologicalCategory": "tubers",
+      "foodCategories": ["starch"],
+      "allergens": [],
+      "nutrients": [
+        { "code": "protein", "amount": 1.7, "perAmountG": 100 },
+        { "code": "iron", "amount": 0.3, "perAmountG": 100 },
+        { "code": "zinc", "amount": 0.2, "perAmountG": 100 },
+        { "code": "vitamin_a", "amount": 0, "perAmountG": 100 },
+        { "code": "vitamin_c", "amount": 13, "perAmountG": 100 },
+        { "code": "omega3", "amount": 0.01, "perAmountG": 100 }
+      ]
+    }
+  ],
+  "substitutions": [
+    {
+      "fromExternalId": "chicken-liver-raw",
+      "toExternalId": "mussels-cooked",
+      "rank": 0,
+      "reasonTags": ["iron", "vitamin_a"]
+    },
+    {
+      "fromExternalId": "chicken-liver-raw",
+      "toExternalId": "sardines-canned",
+      "rank": 1,
+      "reasonTags": ["iron", "omega3"]
+    }
+  ],
+  "requirementSet": {
+    "version": "fixture-v1",
+    "devOnly": true,
+    "reviewer": null,
+    "requirements": [
+      { "nutrientCode": "protein", "ageMin": 19, "ageMax": 50, "sex": "female", "referenceType": "PRI", "value": 45, "unit": "g" },
+      { "nutrientCode": "protein", "ageMin": 19, "ageMax": 50, "sex": "male", "referenceType": "PRI", "value": 56, "unit": "g" },
+      { "nutrientCode": "iron", "ageMin": 19, "ageMax": 50, "sex": "female", "referenceType": "PRI", "value": 15, "unit": "mg" },
+      { "nutrientCode": "iron", "ageMin": 19, "ageMax": 50, "sex": "male", "referenceType": "PRI", "value": 8, "unit": "mg" },
+      { "nutrientCode": "zinc", "ageMin": 19, "ageMax": 50, "sex": null, "referenceType": "PRI", "value": 8, "unit": "mg" },
+      { "nutrientCode": "vitamin_a", "ageMin": 19, "ageMax": 50, "sex": null, "referenceType": "PRI", "value": 700, "unit": "mcg" },
+      { "nutrientCode": "vitamin_c", "ageMin": 19, "ageMax": 50, "sex": null, "referenceType": "PRI", "value": 80, "unit": "mg" },
+      { "nutrientCode": "omega3", "ageMin": 19, "ageMax": 50, "sex": null, "referenceType": "AI", "value": 1.1, "unit": "g" }
+    ]
+  }
+}
