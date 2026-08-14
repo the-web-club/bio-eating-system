@@ -1,11 +1,14 @@
 import type { NutrientDefRecord } from "../../schema";
+import { FLAVONOID_NUTRIENT_DEFINITIONS } from "./flavonoid-nutrients";
 
-/** USDA FoodData Central nutrient.id -> internal nutrient definition. */
-export const USDA_NUTRIENT_CATALOG: NutrientDefRecord[] = [
+const FOUNDATION_NUTRIENT_CATALOG: NutrientDefRecord[] = [
   { code: "energy_kcal", name: "Energy", unit: "kcal", nutrientClass: "ENERGY" },
   { code: "protein", name: "Protein", unit: "g", nutrientClass: "MACRONUTRIENT" },
   { code: "fat", name: "Total fat", unit: "g", nutrientClass: "MACRONUTRIENT" },
+  { code: "saturated_fat", name: "Saturated fat", unit: "g", nutrientClass: "FATTY_ACID" },
   { code: "carbohydrate", name: "Carbohydrate", unit: "g", nutrientClass: "MACRONUTRIENT" },
+  { code: "sugar", name: "Total sugars", unit: "g", nutrientClass: "MACRONUTRIENT" },
+  { code: "starch", name: "Starch", unit: "g", nutrientClass: "MACRONUTRIENT" },
   { code: "fiber", name: "Dietary fiber", unit: "g", nutrientClass: "MACRONUTRIENT" },
   { code: "omega3", name: "Omega-3 fatty acids", unit: "g", nutrientClass: "FATTY_ACID" },
   { code: "calcium", name: "Calcium", unit: "mg", nutrientClass: "MINERAL" },
@@ -36,6 +39,50 @@ export const USDA_NUTRIENT_CATALOG: NutrientDefRecord[] = [
   { code: "biotin", name: "Biotin", unit: "mcg", nutrientClass: "VITAMIN" },
   { code: "pantothenic_acid", name: "Pantothenic acid", unit: "mg", nutrientClass: "VITAMIN" },
   { code: "choline", name: "Choline", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "beta_carotene", name: "Beta-carotene", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "carotene_alpha", name: "Carotene, alpha", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "carotene_gamma", name: "Carotene, gamma", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "zeaxanthin", name: "Zeaxanthin", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "cryptoxanthin_beta", name: "Cryptoxanthin, beta", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "cryptoxanthin_alpha", name: "Cryptoxanthin, alpha", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "lutein", name: "Lutein", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "lycopene", name: "Lycopene", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "lutein_zeaxanthin", name: "Lutein plus zeaxanthin", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "cis_beta_carotene", name: "cis-beta-Carotene", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "trans_beta_carotene", name: "trans-beta-Carotene", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "cis_lycopene", name: "cis-Lycopene", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "trans_lycopene", name: "trans-Lycopene", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "cis_lutein_zeaxanthin", name: "cis-Lutein/Zeaxanthin", unit: "mcg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocopherol_beta", name: "Tocopherol, beta", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocopherol_gamma", name: "Tocopherol, gamma", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocopherol_delta", name: "Tocopherol, delta", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocotrienol_alpha", name: "Tocotrienol, alpha", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocotrienol_beta", name: "Tocotrienol, beta", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocotrienol_gamma", name: "Tocotrienol, gamma", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "tocotrienol_delta", name: "Tocotrienol, delta", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "choline_free", name: "Choline, free", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "choline_phosphocholine", name: "Choline, from phosphocholine", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  {
+    code: "choline_phosphatidylcholine",
+    name: "Choline, from phosphotidyl choline",
+    unit: "mg",
+    nutrientClass: "OTHER_NUTRIENT",
+  },
+  {
+    code: "choline_glycerophosphocholine",
+    name: "Choline, from glycerophosphocholine",
+    unit: "mg",
+    nutrientClass: "OTHER_NUTRIENT",
+  },
+  { code: "choline_sphingomyelin", name: "Choline, from sphingomyelin", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "betaine", name: "Betaine", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+  { code: "phytosterols_other", name: "Phytosterols, other", unit: "mg", nutrientClass: "OTHER_NUTRIENT" },
+];
+
+/** USDA FoodData Central nutrient.id -> internal nutrient definition. */
+export const USDA_NUTRIENT_CATALOG: NutrientDefRecord[] = [
+  ...FOUNDATION_NUTRIENT_CATALOG,
+  ...FLAVONOID_NUTRIENT_DEFINITIONS,
 ];
 
 type NutrientMapping = {
@@ -50,7 +97,10 @@ const USDA_NUTRIENT_MAPPINGS: Record<number, NutrientMapping> = {
   2048: { code: "energy_kcal" },
   1003: { code: "protein" },
   1004: { code: "fat" },
+  1258: { code: "saturated_fat" },
   1005: { code: "carbohydrate" },
+  1063: { code: "sugar" },
+  1009: { code: "starch" },
   1079: { code: "fiber" },
   1272: { code: "omega3" },
   1087: { code: "calcium" },
@@ -68,6 +118,24 @@ const USDA_NUTRIENT_MAPPINGS: Record<number, NutrientMapping> = {
   1105: { code: "fluoride" },
   1096: { code: "chromium" },
   1106: { code: "vitamin_a" },
+  1107: { code: "beta_carotene" },
+  1108: { code: "carotene_alpha" },
+  1118: { code: "carotene_gamma" },
+  1119: { code: "zeaxanthin" },
+  1120: { code: "cryptoxanthin_beta" },
+  1121: { code: "lutein" },
+  1122: { code: "lycopene" },
+  1123: { code: "lutein_zeaxanthin" },
+  1125: { code: "tocopherol_beta" },
+  1126: { code: "tocopherol_gamma" },
+  1127: { code: "tocopherol_delta" },
+  1128: { code: "tocotrienol_alpha" },
+  1129: { code: "tocotrienol_beta" },
+  1130: { code: "tocotrienol_gamma" },
+  1131: { code: "tocotrienol_delta" },
+  1159: { code: "cis_beta_carotene" },
+  1160: { code: "cis_lycopene" },
+  1161: { code: "cis_lutein_zeaxanthin" },
   1162: { code: "vitamin_c" },
   1114: { code: "vitamin_d" },
   1109: { code: "vitamin_e" },
@@ -81,6 +149,16 @@ const USDA_NUTRIENT_MAPPINGS: Record<number, NutrientMapping> = {
   1176: { code: "biotin" },
   1170: { code: "pantothenic_acid" },
   1180: { code: "choline" },
+  1194: { code: "choline_free" },
+  1195: { code: "choline_phosphocholine" },
+  1196: { code: "choline_phosphatidylcholine" },
+  1197: { code: "choline_glycerophosphocholine" },
+  1198: { code: "betaine" },
+  1199: { code: "choline_sphingomyelin" },
+  1298: { code: "phytosterols_other" },
+  2028: { code: "trans_beta_carotene" },
+  2029: { code: "trans_lycopene" },
+  2032: { code: "cryptoxanthin_alpha" },
 };
 
 export const USDA_NUTRIENT_ID_TO_CODE: Record<number, string> = Object.fromEntries(
@@ -103,3 +181,43 @@ export function mapUsdaNutrientAmount(
   const scaledAmount = amount * (mapping.scale ?? 1);
   return { code: mapping.code, amount: scaledAmount };
 }
+
+export const FOUNDATION_PHYTONUTRIENT_CODES = [
+  "beta_carotene",
+  "carotene_alpha",
+  "carotene_gamma",
+  "zeaxanthin",
+  "cryptoxanthin_beta",
+  "cryptoxanthin_alpha",
+  "lutein",
+  "lycopene",
+  "lutein_zeaxanthin",
+  "cis_beta_carotene",
+  "trans_beta_carotene",
+  "cis_lycopene",
+  "trans_lycopene",
+  "cis_lutein_zeaxanthin",
+  "tocopherol_beta",
+  "tocopherol_gamma",
+  "tocopherol_delta",
+  "tocotrienol_alpha",
+  "tocotrienol_beta",
+  "tocotrienol_gamma",
+  "tocotrienol_delta",
+  "choline_free",
+  "choline_phosphocholine",
+  "choline_phosphatidylcholine",
+  "choline_glycerophosphocholine",
+  "choline_sphingomyelin",
+  "betaine",
+  "phytosterols_other",
+] as const;
+
+export const FLAVONOID_PHYTONUTRIENT_CODES = FLAVONOID_NUTRIENT_DEFINITIONS.map(
+  (row) => row.code,
+) as readonly string[];
+
+export const ALL_PHYTONUTRIENT_CODES = [
+  ...FOUNDATION_PHYTONUTRIENT_CODES,
+  ...FLAVONOID_PHYTONUTRIENT_CODES,
+] as const;

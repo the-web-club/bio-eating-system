@@ -6,6 +6,7 @@ import {
   USDA_PRODUCTION_SLICE,
   USDA_SLICE_VERSION_V1,
   USDA_SLICE_VERSION_V2,
+  USDA_SLICE_VERSION_V3,
 } from "@/lib/nutrition-data/sources/usda/slice-config";
 
 const mockNutrients = [
@@ -31,7 +32,7 @@ describe("USDA adaptor", () => {
     expect(bundle.source).toBe(SOURCE_KEYS.usda);
     expect(bundle.devOnly).toBe(false);
     expect(bundle.foods).toHaveLength(USDA_PRODUCTION_SLICE.length);
-    expect(bundle.nutrients).toHaveLength(34);
+    expect(bundle.nutrients).toHaveLength(94);
     expect(bundle.requirementSet.devOnly).toBe(true);
     expect(bundle.requirementSet.requirements).toHaveLength(0);
 
@@ -39,7 +40,7 @@ describe("USDA adaptor", () => {
     expect(egg?.nutrients.some((row) => row.code === "protein")).toBe(true);
   });
 
-  it("builds a v2 bundle from the full Foundation Foods release", async () => {
+  it("builds a v2 bundle from the 2025 Foundation Foods release", async () => {
     const foundationFoods = Array.from({ length: 340 }, (_, index) => ({
       fdcId: 1000 + index,
       description: `Foundation food ${index}`,
@@ -58,11 +59,31 @@ describe("USDA adaptor", () => {
     expect(bundle.foods.every((food) => food.externalId.startsWith("fdc-"))).toBe(true);
   });
 
-  it("lists v1 and v2 slice versions", async () => {
+  it("builds a v3 bundle from the 2026 Foundation Foods release", async () => {
+    const foundationFoods = Array.from({ length: 363 }, (_, index) => ({
+      fdcId: 2000 + index,
+      description: `Foundation food ${index}`,
+      dataType: "Foundation",
+      foodCategory: { description: "Vegetables and Vegetable Products" },
+      foodNutrients: mockNutrients,
+    }));
+
+    vi.spyOn(release, "loadAllFoundationFoods").mockResolvedValue(foundationFoods);
+
+    const adaptor = createUsdaAdaptor();
+    const bundle = await adaptor.fetch(USDA_SLICE_VERSION_V3);
+
+    expect(bundle.sourceVersion).toBe(USDA_SLICE_VERSION_V3);
+    expect(bundle.foods).toHaveLength(363);
+    expect(bundle.foods.every((food) => food.externalId.startsWith("fdc-"))).toBe(true);
+  });
+
+  it("lists v1, v2, and v3 slice versions", async () => {
     const adaptor = createUsdaAdaptor();
     await expect(adaptor.listVersions()).resolves.toEqual([
       USDA_SLICE_VERSION_V1,
       USDA_SLICE_VERSION_V2,
+      USDA_SLICE_VERSION_V3,
     ]);
   });
 });

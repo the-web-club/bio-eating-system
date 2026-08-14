@@ -7,6 +7,8 @@ import {
 } from "@/lib/biological-os/persist-matrix";
 import { runBiologicalOsEnginePipeline } from "@/lib/biological-os/pipeline";
 import type {
+  EngineActivityInput,
+  EngineDailyLifeInput,
   EngineProfile,
   ProteinPreferenceInput,
   RedundancyChoiceRecord,
@@ -19,8 +21,11 @@ export type RunBiologicalOsEngineArgs = {
   excludedAllergens?: string[];
   requiredFoodIds?: string[];
   hardExcludedFoodIds?: string[];
+  favoriteFoodIds?: string[];
   proteinPreference?: ProteinPreferenceInput;
   redundancyChoices?: RedundancyChoiceRecord[];
+  dailyLife?: EngineDailyLifeInput;
+  activities?: EngineActivityInput[];
   timestampIso?: string;
 };
 
@@ -42,8 +47,11 @@ export async function runBiologicalOsEngineForUser(
     excludedAllergens: args.excludedAllergens,
     requiredFoodIds: args.requiredFoodIds,
     hardExcludedFoodIds: args.hardExcludedFoodIds,
+    favoriteFoodIds: args.favoriteFoodIds,
     proteinPreference: args.proteinPreference,
     redundancyChoices: args.redundancyChoices,
+    dailyLife: args.dailyLife,
+    activities: args.activities,
     matrixVersion,
     timestampIso: args.timestampIso,
   });

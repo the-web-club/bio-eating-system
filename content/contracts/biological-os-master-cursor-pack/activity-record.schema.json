@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"activity-record-v1",
+  "type":"object",
+  "required":["metCode","label","metValue","source","sourceVersion","reviewStatus"],
+  "properties":{
+    "metCode":{"type":"string"},
+    "label":{"type":"string"},
+    "aliases":{"type":"array","items":{"type":"string"}},
+    "category":{"type":["string","null"]},
+    "intensity":{"enum":["easy","moderate","hard","not_applicable"]},
+    "metValue":{"type":"number","exclusiveMinimum":0},
+    "source":{"type":"string"},
+    "sourceVersion":{"type":"string"},
+    "reviewStatus":{"enum":["REVIEW_REQUIRED","APPROVED","REJECTED"]}
+  }
+}

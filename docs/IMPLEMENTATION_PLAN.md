@@ -8,6 +8,21 @@ This plan sequences work so working infrastructure (auth, webhooks, mail, cron, 
 
 ---
 
+## Current status (2026-08-13)
+
+| Layer | Status |
+|-------|--------|
+| Phase 2 food + requirement foundation | **Implemented** in Prisma + import pipeline + compliance gates |
+| Phase 3 Biological OS engine spike | **Implemented** under `src/lib/biological-os/` (54+ tests), flag **off** |
+| Production food universe today | USDA Foundation v3 (363 foods, 94 nutrients) when imported |
+| Multi-source architecture | Adaptor registry, source registry, canonical identity, source priority |
+| Phytonutrients | 57-compound catalog; Foundation + FNDDS flavonoid enrichment path |
+| Customer rollout | **Not enabled** (`BIOLOGICAL_OS_ENGINE=false`) |
+
+The engine is **not** “not built.” It is built, tested, and gated. Legacy slot calculator remains the customer path until rollout criteria are met.
+
+---
+
 ## Principles
 
 1. **Audit before implement** — Read touched files; report what exists (`rules.md` §1).  

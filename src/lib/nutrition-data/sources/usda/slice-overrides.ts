@@ -18,7 +18,7 @@ export const USDA_SLICE_OVERRIDES_V1: UsdaSliceEntry[] = [
   { fdcId: 2346411, biologicalCategory: "berries", preparationState: "RAW", displayName: "Blueberries, raw", allergens: [], foodCategories: ["fruit"] },
   { fdcId: 2727581, biologicalCategory: "berries", preparationState: "RAW", displayName: "Blackberries, raw", allergens: [], foodCategories: ["fruit"] },
   { fdcId: 2346396, biologicalCategory: "olive_oil", preparationState: "DRIED", displayName: "Oats, rolled, old fashioned", allergens: ["gluten"], foodCategories: ["grains"] },
-  { fdcId: 335240, biologicalCategory: "olive_oil", preparationState: "BAKED", displayName: "Bread, whole wheat", allergens: ["gluten"], foodCategories: ["grains"] },
+  { fdcId: 790085, biologicalCategory: "olive_oil", preparationState: "DRIED", displayName: "Flour, whole wheat, unenriched", allergens: ["gluten"], foodCategories: ["grains"] },
   { fdcId: 1750339, biologicalCategory: "berries", preparationState: "RAW", displayName: "Apple, red delicious, raw", allergens: [], foodCategories: ["fruit"] },
   { fdcId: 2259793, biologicalCategory: "fermented", preparationState: "OTHER", displayName: "Yogurt, plain, whole milk", allergens: ["milk"], foodCategories: ["dairy"] },
   { fdcId: 748608, biologicalCategory: "olive_oil", preparationState: "RAW", displayName: "Olive oil, extra virgin", allergens: [], foodCategories: ["oils"] },
@@ -31,6 +31,14 @@ export const USDA_SLICE_OVERRIDES_V1: UsdaSliceEntry[] = [
   { fdcId: 2646170, biologicalCategory: "muscle_meat", preparationState: "RAW", displayName: "Chicken breast, raw", allergens: [], foodCategories: ["poultry"] },
   { fdcId: 331960, biologicalCategory: "muscle_meat", preparationState: "ROASTED", displayName: "Chicken breast, cooked", allergens: [], foodCategories: ["poultry"] },
   { fdcId: 2514747, biologicalCategory: "muscle_meat", preparationState: "RAW", displayName: "Turkey, ground, raw", allergens: [], foodCategories: ["poultry"] },
+  { fdcId: 2747666, biologicalCategory: "bivalves", preparationState: "RAW", displayName: "Scallops, bay, Patagonian, frozen, wild caught", allergens: ["molluscs"], foodCategories: ["seafood"] },
+  { fdcId: 2747667, biologicalCategory: "bivalves", preparationState: "RAW", displayName: "Scallops, sea, frozen, wild caught", allergens: ["molluscs"], foodCategories: ["seafood"] },
+  { fdcId: 2747671, biologicalCategory: "bivalves", preparationState: "RAW", displayName: "Squid (calamari), frozen, tubes only", allergens: ["molluscs"], foodCategories: ["seafood"] },
+  { fdcId: 2684443, biologicalCategory: "bivalves", preparationState: "RAW", displayName: "Shrimp, farm raised, raw", allergens: ["crustaceans"], foodCategories: ["seafood"] },
+  { fdcId: 2747657, biologicalCategory: "bivalves", preparationState: "RAW", displayName: "Lobster, tail only, frozen, wild caught", allergens: ["crustaceans"], foodCategories: ["seafood"] },
+  { fdcId: 2684444, biologicalCategory: "small_fish", preparationState: "RAW", displayName: "Cod, Atlantic, wild caught, raw", allergens: ["fish"], foodCategories: ["seafood"] },
+  { fdcId: 2747654, biologicalCategory: "small_fish", preparationState: "RAW", displayName: "Cod, Pacific or Alaskan, frozen, wild caught", allergens: ["fish"], foodCategories: ["seafood"] },
+  { fdcId: 2747652, biologicalCategory: "small_fish", preparationState: "CANNED", displayName: "Anchovies, canned in olive oil, with salt, drained", allergens: ["fish"], foodCategories: ["seafood"] },
 ];
 
 export const USDA_SLICE_OVERRIDE_BY_FDC_ID = new Map(

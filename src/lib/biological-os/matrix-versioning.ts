@@ -2,6 +2,11 @@ import {
   APPROVED_FOOD_SOURCE_VERSION,
   APPROVED_REQUIREMENT_SET_VERSION,
   BIOLOGICAL_OS_ENGINE_VERSION,
+  ENERGY_CALCULATION_VERSION,
+  MET_REFERENCE_VERSION,
+  PHYTONUTRIENT_CATALOG_VERSION,
+  OPTIMIZER_POLICY_VERSION,
+  PHYTONUTRIENT_POLICY_VERSION,
 } from "@/lib/biological-os/constants";
 import type {
   ChangeReason,
@@ -22,6 +27,11 @@ export function buildEngineDataVersions(
     foodSourceVersion: APPROVED_FOOD_SOURCE_VERSION,
     requirementSetVersion: APPROVED_REQUIREMENT_SET_VERSION,
     constraintVersion,
+    energyCalculationVersion: ENERGY_CALCULATION_VERSION,
+    metReferenceVersion: MET_REFERENCE_VERSION,
+    phytonutrientCatalogVersion: PHYTONUTRIENT_CATALOG_VERSION,
+    optimizerPolicyVersion: OPTIMIZER_POLICY_VERSION,
+    phytonutrientPolicyVersion: PHYTONUTRIENT_POLICY_VERSION,
   };
 }
 
@@ -45,7 +55,7 @@ export function createFoodMatrixSnapshot(args: {
     engineVersion: BIOLOGICAL_OS_ENGINE_VERSION,
     foodDatasetVersion: dataVersions.foodSourceVersion,
     requirementSetVersion: dataVersions.requirementSetVersion,
-    calculationVersion: dataVersions.constraintVersion,
+    calculationVersion: dataVersions.energyCalculationVersion,
     draft: args.draft,
     coverage: args.coverage,
     changeReasons: args.changeReasons,

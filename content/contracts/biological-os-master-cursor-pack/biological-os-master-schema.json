@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"biological-os-master-schema-v1",
+  "type":"object",
+  "required":["schemaVersion","foodCatalog","requirements","phytonutrients","activityReference"],
+  "properties":{
+    "schemaVersion":{"const":"biological-os-master-v1"},
+    "foodCatalog":{"type":"array","items":{"$ref":"food-record.schema.json"}},
+    "requirements":{"type":"array","items":{"$ref":"requirement-record.schema.json"}},
+    "phytonutrients":{"type":"array","items":{"$ref":"phytonutrient-record.schema.json"}},
+    "activityReference":{"type":"array","items":{"$ref":"activity-record.schema.json"}}
+  }
+}

@@ -7,8 +7,6 @@ import type {
   RequirementJurisdiction,
 } from "@/generated/prisma/client";
 import {
-  APPROVED_FOOD_SOURCE,
-  APPROVED_FOOD_SOURCE_VERSION,
   APPROVED_REQUIREMENT_SET_VERSION,
 } from "@/lib/biological-os/constants";
 import type {
@@ -17,6 +15,7 @@ import type {
   EnginePipelineInput,
 } from "@/lib/biological-os/types";
 import { assertApprovedFoodCandidate } from "@/lib/biological-os/filter-exclusions";
+import { buildExpandedFoodUniverse } from "@/lib/biological-os/food-universe";
 import { evaluateRequirementSetProductionReady } from "@/lib/nutrition-data/requirements/compliance-gate";
 import { assertProductionNutritionDataset } from "@/lib/nutrition-data/production-gate";
 import { mapDbRequirementRows } from "@/lib/nutrition/requirements";
@@ -105,24 +104,6 @@ export function mapDbFoodToEngineCandidate(food: LoadedFoodRow): EngineFoodCandi
   return candidate;
 }
 
-export function buildCategoryCandidateMap(
-  candidates: EngineFoodCandidate[],
-): CategoryCandidateMap {
-  const map = Object.fromEntries(
-    FOOD_SLOTS.map((slot) => [slot, [] as EngineFoodCandidate[]]),
-  ) as CategoryCandidateMap;
-
-  for (const candidate of candidates) {
-    map[candidate.biologicalCategory].push(candidate);
-  }
-
-  for (const slot of FOOD_SLOTS) {
-    map[slot].sort((a, b) => a.foodId.localeCompare(b.foodId));
-  }
-
-  return map;
-}
-
 export function buildProductionEngineDataset(args: {
   foods: LoadedFoodRow[];
   requirementSet: {
@@ -206,6 +187,8 @@ export function buildProductionEngineDataset(args: {
     })),
   );
 
+  const universe = buildExpandedFoodUniverse({ candidates });
+
   return {
     requirementSetVersion: args.requirementSet.version,
     requirementRows: storedRows.map((row) => ({
@@ -219,8 +202,8 @@ export function buildProductionEngineDataset(args: {
       valueMax: row.valueMax,
       unit: row.unit,
     })),
-    candidates,
-    categoryCandidates: buildCategoryCandidateMap(candidates),
+    candidates: universe.candidates,
+    categoryCandidates: universe.categoryCandidates,
   };
 }
 
@@ -232,10 +215,12 @@ export async function loadProductionEngineDataset(
   const [foods, requirementSet] = await Promise.all([
     db.food.findMany({
       where: {
-        source: APPROVED_FOOD_SOURCE,
-        sourceVersion: APPROVED_FOOD_SOURCE_VERSION,
         devOnly: false,
         active: true,
+        foodDataSource: {
+          status: "APPROVED",
+          devOnly: false,
+        },
       },
       include: {
         biologicalCategory: true,

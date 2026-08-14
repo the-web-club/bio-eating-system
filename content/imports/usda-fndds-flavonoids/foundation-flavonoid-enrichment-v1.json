@@ -1,0 +1,516 @@
+{
+  "version": "foundation-flavonoid-enrichment-v1",
+  "source": "usda-fndds-flavonoid",
+  "sourceVersion": "fndds-flavonoid-2017-2018",
+  "reviewStatus": "APPROVED",
+  "notes": "Approved 2026-08-14. Source: USDA Expanded Flavonoid Database for Dietary Intakes (FDB-EXP Release 1.1), FLAV_DAT exported from FDB-EXP_R01-1.accdb, crosswalked to Foundation Foods via NDB number. 75 foods, 357 nutrient rows.",
+  "records": {
+    "321611": {
+      "flavonoid_daidzein": 0.01,
+      "flavonoid_genistein": 0.02,
+      "flavonoid_kaempferol": 0.02,
+      "flavonoid_quercetin": 1.49
+    },
+    "323121": {
+      "flavonoid_daidzein": 1,
+      "flavonoid_genistein": 0.8,
+      "flavonoid_glycitein": 0.1
+    },
+    "323294": {
+      "flavonoid_genistein": 0.01,
+      "flavonoid_cyanidin": 2.52,
+      "flavonoid_catechin": 1.31,
+      "flavonoid_epigallocatechin": 2.65,
+      "flavonoid_epicatechin": 0.61,
+      "flavonoid_isorhamnetin": 2.7,
+      "flavonoid_kaempferol": 0.4,
+      "flavonoid_quercetin": 0.37
+    },
+    "324653": {
+      "flavonoid_kaempferol": 0.13,
+      "flavonoid_quercetin": 0.04
+    },
+    "325287": {
+      "flavonoid_eriodictyol": 0.16,
+      "flavonoid_hesperetin": 0.81,
+      "flavonoid_naringenin": 18.01,
+      "flavonoid_quercetin": 0.36
+    },
+    "325430": {
+      "flavonoid_cyanidin": 1.92,
+      "flavonoid_catechin": 4.92,
+      "flavonoid_epigallocatechin": 1.04,
+      "flavonoid_epicatechin": 2.34,
+      "flavonoid_epigallocatechin_gallate": 0.3,
+      "flavonoid_kaempferol": 0.22,
+      "flavonoid_quercetin": 0.66
+    },
+    "326196": {
+      "flavonoid_isorhamnetin": 12.26,
+      "flavonoid_kaempferol": 24.32,
+      "flavonoid_quercetin": 11.73
+    },
+    "327046": {
+      "flavonoid_epicatechin": 0.27,
+      "flavonoid_epicatechin_gallate": 0.01,
+      "flavonoid_epigallocatechin_gallate": 0.09,
+      "flavonoid_luteolin": 0.74,
+      "flavonoid_kaempferol": 1.03,
+      "flavonoid_quercetin": 0.04
+    },
+    "327357": {
+      "flavonoid_cyanidin": 2.13,
+      "flavonoid_catechin": 2.98,
+      "flavonoid_epicatechin": 2.54,
+      "flavonoid_kaempferol": 0.24,
+      "flavonoid_quercetin": 0.69
+    },
+    "329490": {
+      "flavonoid_daidzein": 0.08,
+      "flavonoid_genistein": 0.08
+    },
+    "329596": {
+      "flavonoid_daidzein": 0.02,
+      "flavonoid_genistein": 0.01
+    },
+    "329716": {
+      "flavonoid_daidzein": 0.04,
+      "flavonoid_genistein": 0.02
+    },
+    "332282": {
+      "flavonoid_naringenin": 0.28,
+      "flavonoid_apigenin": 0.02,
+      "flavonoid_luteolin": 0.04,
+      "flavonoid_kaempferol": 0.01,
+      "flavonoid_myricetin": 0.11,
+      "flavonoid_quercetin": 0.91
+    },
+    "746764": {
+      "flavonoid_luteolin": 0.1,
+      "flavonoid_kaempferol": 0.21,
+      "flavonoid_myricetin": 0.04,
+      "flavonoid_quercetin": 0.18
+    },
+    "746768": {
+      "flavonoid_cyanidin": 1.67,
+      "flavonoid_pelargonidin": 0.03,
+      "flavonoid_catechin": 5.31,
+      "flavonoid_epicatechin": 1.66,
+      "flavonoid_quercetin": 18.3
+    },
+    "746769": {
+      "flavonoid_luteolin": 0.05,
+      "flavonoid_kaempferol": 0.02,
+      "flavonoid_quercetin": 2.2
+    },
+    "746770": {
+      "flavonoid_luteolin": 0.64,
+      "flavonoid_kaempferol": 0.07,
+      "flavonoid_quercetin": 0.01
+    },
+    "746777": {
+      "flavonoid_apigenin": 0.01,
+      "flavonoid_luteolin": 0.64,
+      "flavonoid_isorhamnetin": 0.51,
+      "flavonoid_kaempferol": 0.12,
+      "flavonoid_myricetin": 0.03,
+      "flavonoid_quercetin": 4.75
+    },
+    "746779": {
+      "flavonoid_daidzein": 0.25,
+      "flavonoid_genistein": 0.4
+    },
+    "747447": {
+      "flavonoid_luteolin": 0.8,
+      "flavonoid_isorhamnetin": 0.38,
+      "flavonoid_kaempferol": 7.84,
+      "flavonoid_myricetin": 0.06,
+      "flavonoid_quercetin": 3.26
+    },
+    "748236": {
+      "flavonoid_daidzein": 0.02,
+      "flavonoid_genistein": 0.01
+    },
+    "748967": {
+      "flavonoid_daidzein": 0.02,
+      "flavonoid_genistein": 0.02
+    },
+    "790085": {
+      "flavonoid_genistein": 0.01
+    },
+    "1104647": {
+      "flavonoid_daidzein": 0.01,
+      "flavonoid_genistein": 0.02,
+      "flavonoid_kaempferol": 0.26,
+      "flavonoid_myricetin": 1.61,
+      "flavonoid_quercetin": 1.74
+    },
+    "1104705": {
+      "flavonoid_daidzein": 64.55,
+      "flavonoid_genistein": 87.31,
+      "flavonoid_glycitein": 15.08
+    },
+    "1104766": {
+      "flavonoid_daidzein": 59.41,
+      "flavonoid_genistein": 72.45,
+      "flavonoid_glycitein": 12.74
+    },
+    "1105314": {
+      "flavonoid_catechin": 6.1,
+      "flavonoid_epicatechin": 0.02,
+      "flavonoid_kaempferol": 0.11,
+      "flavonoid_myricetin": 0.01,
+      "flavonoid_quercetin": 0.06
+    },
+    "1999633": {
+      "flavonoid_catechin": 0.53,
+      "flavonoid_luteolin": 0.74,
+      "flavonoid_kaempferol": 6.38,
+      "flavonoid_myricetin": 0.35,
+      "flavonoid_quercetin": 3.97
+    },
+    "2003590": {
+      "flavonoid_cyanidin": 0.02,
+      "flavonoid_catechin": 1.25,
+      "flavonoid_epicatechin": 4.71,
+      "flavonoid_myricetin": 0.01,
+      "flavonoid_quercetin": 0.58
+    },
+    "2003591": {
+      "flavonoid_eriodictyol": 0.05,
+      "flavonoid_hesperetin": 16.38,
+      "flavonoid_naringenin": 2.56,
+      "flavonoid_myricetin": 0.05,
+      "flavonoid_quercetin": 0.4
+    },
+    "2003592": {
+      "flavonoid_cyanidin": 0.89,
+      "flavonoid_petunidin": 1.02,
+      "flavonoid_delphinidin": 1.92,
+      "flavonoid_malvidin": 11.17,
+      "flavonoid_pelargonidin": 0.02,
+      "flavonoid_peonidin": 1.06,
+      "flavonoid_catechin": 0.82,
+      "flavonoid_epicatechin": 0.56,
+      "flavonoid_apigenin": 0.01,
+      "flavonoid_luteolin": 0.01,
+      "flavonoid_kaempferol": 0.01,
+      "flavonoid_myricetin": 0.7,
+      "flavonoid_quercetin": 0.72
+    },
+    "2003594": {
+      "flavonoid_cyanidin": 24.07,
+      "flavonoid_delphinidin": 3.98,
+      "flavonoid_malvidin": 0.23,
+      "flavonoid_pelargonidin": 0.16,
+      "flavonoid_peonidin": 25.49,
+      "flavonoid_catechin": 0.2,
+      "flavonoid_epigallocatechin": 0.38,
+      "flavonoid_epicatechin": 2.27,
+      "flavonoid_epigallocatechin_gallate": 0.5,
+      "flavonoid_kaempferol": 0.06,
+      "flavonoid_myricetin": 3.44,
+      "flavonoid_quercetin": 7.7
+    },
+    "2003596": {
+      "flavonoid_kaempferol": 0.06,
+      "flavonoid_myricetin": 0.05,
+      "flavonoid_quercetin": 1.19
+    },
+    "2003597": {
+      "flavonoid_eriodictyol": 0.17,
+      "flavonoid_hesperetin": 11.95,
+      "flavonoid_naringenin": 2.14,
+      "flavonoid_myricetin": 0.05,
+      "flavonoid_quercetin": 0.25
+    },
+    "2258586": {
+      "flavonoid_luteolin": 0.11,
+      "flavonoid_kaempferol": 0.24,
+      "flavonoid_myricetin": 0.04,
+      "flavonoid_quercetin": 0.21
+    },
+    "2258588": {
+      "flavonoid_luteolin": 4.71,
+      "flavonoid_kaempferol": 0.06,
+      "flavonoid_quercetin": 2.21
+    },
+    "2258590": {
+      "flavonoid_luteolin": 0.61,
+      "flavonoid_kaempferol": 0.02,
+      "flavonoid_quercetin": 0.23
+    },
+    "2262072": {
+      "flavonoid_genistein": 0.01,
+      "flavonoid_epigallocatechin": 0.66
+    },
+    "2262075": {
+      "flavonoid_daidzein": 0.02,
+      "flavonoid_genistein": 0.04,
+      "flavonoid_glycitein": 0.06
+    },
+    "2346388": {
+      "flavonoid_apigenin": 0.13,
+      "flavonoid_luteolin": 0.03,
+      "flavonoid_kaempferol": 0.15,
+      "flavonoid_myricetin": 0.06,
+      "flavonoid_quercetin": 1.42
+    },
+    "2346391": {
+      "flavonoid_apigenin": 0.13,
+      "flavonoid_luteolin": 0.26,
+      "flavonoid_kaempferol": 0.01,
+      "flavonoid_myricetin": 0.07,
+      "flavonoid_quercetin": 4.16
+    },
+    "2346392": {
+      "flavonoid_daidzein": 0.01,
+      "flavonoid_epigallocatechin": 0.51
+    },
+    "2346393": {
+      "flavonoid_genistein": 0.01,
+      "flavonoid_cyanidin": 2.46,
+      "flavonoid_catechin": 1.28,
+      "flavonoid_epigallocatechin": 2.59,
+      "flavonoid_epicatechin": 0.6,
+      "flavonoid_eriodictyol": 0.25,
+      "flavonoid_naringenin": 0.43,
+      "flavonoid_isorhamnetin": 2.64,
+      "flavonoid_kaempferol": 0.39,
+      "flavonoid_quercetin": 0.36
+    },
+    "2346394": {
+      "flavonoid_daidzein": 0.02,
+      "flavonoid_genistein": 0.01,
+      "flavonoid_cyanidin": 2.71
+    },
+    "2346395": {
+      "flavonoid_cyanidin": 10.74,
+      "flavonoid_delphinidin": 7.28,
+      "flavonoid_catechin": 7.24,
+      "flavonoid_epigallocatechin": 5.63,
+      "flavonoid_epicatechin": 0.82,
+      "flavonoid_epigallocatechin_gallate": 2.3
+    },
+    "2346398": {
+      "flavonoid_luteolin": 0.01,
+      "flavonoid_myricetin": 0.01,
+      "flavonoid_quercetin": 0.14
+    },
+    "2346399": {
+      "flavonoid_cyanidin": 30.21,
+      "flavonoid_pelargonidin": 0.27,
+      "flavonoid_peonidin": 1.5,
+      "flavonoid_catechin": 4.36,
+      "flavonoid_epigallocatechin": 0.34,
+      "flavonoid_epicatechin": 5,
+      "flavonoid_epicatechin_gallate": 0.05,
+      "flavonoid_isorhamnetin": 0.05,
+      "flavonoid_kaempferol": 0.24,
+      "flavonoid_myricetin": 0.05,
+      "flavonoid_quercetin": 2.29
+    },
+    "2346400": {
+      "flavonoid_daidzein": 0.01,
+      "flavonoid_genistein": 0.01,
+      "flavonoid_luteolin": 0.13,
+      "flavonoid_kaempferol": 0.45,
+      "flavonoid_myricetin": 0.13,
+      "flavonoid_quercetin": 2.73
+    },
+    "2346405": {
+      "flavonoid_apigenin": 2.85,
+      "flavonoid_luteolin": 1.05,
+      "flavonoid_kaempferol": 0.22,
+      "flavonoid_quercetin": 0.39
+    },
+    "2346406": {
+      "flavonoid_kaempferol": 0.13,
+      "flavonoid_quercetin": 0.04
+    },
+    "2346407": {
+      "flavonoid_apigenin": 0.08,
+      "flavonoid_luteolin": 0.1,
+      "flavonoid_isorhamnetin": 0.28,
+      "flavonoid_kaempferol": 0.18,
+      "flavonoid_quercetin": 0.28
+    },
+    "2346408": {
+      "flavonoid_cyanidin": 209.83,
+      "flavonoid_delphinidin": 0.1,
+      "flavonoid_pelargonidin": 0.02,
+      "flavonoid_apigenin": 0.06,
+      "flavonoid_luteolin": 0.1,
+      "flavonoid_isorhamnetin": 0.35,
+      "flavonoid_myricetin": 0.2,
+      "flavonoid_quercetin": 0.36
+    },
+    "2346409": {
+      "flavonoid_cyanidin": 1.68,
+      "flavonoid_petunidin": 0.11,
+      "flavonoid_delphinidin": 0.31,
+      "flavonoid_malvidin": 0.01,
+      "flavonoid_pelargonidin": 24.85,
+      "flavonoid_peonidin": 0.05,
+      "flavonoid_catechin": 3.11,
+      "flavonoid_epigallocatechin": 0.78,
+      "flavonoid_epicatechin": 0.42,
+      "flavonoid_epicatechin_gallate": 0.15,
+      "flavonoid_epigallocatechin_gallate": 0.11,
+      "flavonoid_naringenin": 0.26,
+      "flavonoid_kaempferol": 0.5,
+      "flavonoid_myricetin": 0.04,
+      "flavonoid_quercetin": 1.11,
+      "flavonoid_gallocatechin": 0.03
+    },
+    "2346410": {
+      "flavonoid_cyanidin": 45.77,
+      "flavonoid_petunidin": 0.31,
+      "flavonoid_delphinidin": 1.32,
+      "flavonoid_malvidin": 0.13,
+      "flavonoid_pelargonidin": 0.98,
+      "flavonoid_peonidin": 0.12,
+      "flavonoid_catechin": 1.31,
+      "flavonoid_epigallocatechin": 0.46,
+      "flavonoid_epicatechin": 3.52,
+      "flavonoid_epigallocatechin_gallate": 0.54,
+      "flavonoid_kaempferol": 0.06,
+      "flavonoid_quercetin": 1.05
+    },
+    "2346411": {
+      "flavonoid_cyanidin": 8.46,
+      "flavonoid_petunidin": 31.53,
+      "flavonoid_delphinidin": 35.43,
+      "flavonoid_malvidin": 67.59,
+      "flavonoid_peonidin": 20.29,
+      "flavonoid_catechin": 5.29,
+      "flavonoid_epigallocatechin": 0.66,
+      "flavonoid_epicatechin": 0.62,
+      "flavonoid_luteolin": 0.2,
+      "flavonoid_kaempferol": 1.66,
+      "flavonoid_myricetin": 1.3,
+      "flavonoid_quercetin": 7.67,
+      "flavonoid_gallocatechin": 0.12
+    },
+    "2512374": {
+      "flavonoid_epicatechin": 3.02,
+      "flavonoid_epicatechin_gallate": 0.78,
+      "flavonoid_quercetin": 3.47
+    },
+    "2512376": {
+      "flavonoid_catechin": 2.32
+    },
+    "2512380": {
+      "flavonoid_daidzein": 0.03,
+      "flavonoid_genistein": 0.04
+    },
+    "2515375": {
+      "flavonoid_daidzein": 0.01,
+      "flavonoid_genistein": 0.02,
+      "flavonoid_cyanidin": 6.71,
+      "flavonoid_catechin": 1.19,
+      "flavonoid_epigallocatechin": 2.78,
+      "flavonoid_epicatechin": 0.22,
+      "flavonoid_epigallocatechin_gallate": 1.06
+    },
+    "2515376": {
+      "flavonoid_daidzein": 0.02,
+      "flavonoid_genistein": 0.24,
+      "flavonoid_epigallocatechin": 0.63
+    },
+    "2515380": {
+      "flavonoid_daidzein": 0.01
+    },
+    "2685572": {
+      "flavonoid_apigenin": 0.24,
+      "flavonoid_luteolin": 0.09,
+      "flavonoid_isorhamnetin": 0.17,
+      "flavonoid_kaempferol": 4.33,
+      "flavonoid_myricetin": 0.03,
+      "flavonoid_quercetin": 2.06
+    },
+    "2685573": {
+      "flavonoid_apigenin": 0.03,
+      "flavonoid_luteolin": 0.09,
+      "flavonoid_isorhamnetin": 0.29,
+      "flavonoid_kaempferol": 0.36,
+      "flavonoid_quercetin": 0.54
+    },
+    "2685574": {
+      "flavonoid_luteolin": 0.08,
+      "flavonoid_kaempferol": 8.74,
+      "flavonoid_quercetin": 2.57
+    },
+    "2685575": {
+      "flavonoid_naringenin": 3.29,
+      "flavonoid_luteolin": 0.33,
+      "flavonoid_isorhamnetin": 0.5,
+      "flavonoid_kaempferol": 0.86,
+      "flavonoid_quercetin": 1.92
+    },
+    "2685576": {
+      "flavonoid_luteolin": 0.37,
+      "flavonoid_quercetin": 0.13
+    },
+    "2685577": {
+      "flavonoid_delphinidin": 85.69,
+      "flavonoid_quercetin": 0.04
+    },
+    "2685580": {
+      "flavonoid_apigenin": 0.05,
+      "flavonoid_luteolin": 0.09,
+      "flavonoid_kaempferol": 0.05,
+      "flavonoid_myricetin": 0.14,
+      "flavonoid_quercetin": 9
+    },
+    "2710815": {
+      "flavonoid_catechin": 3.67,
+      "flavonoid_epicatechin": 4.74,
+      "flavonoid_kaempferol": 0.63,
+      "flavonoid_quercetin": 1.63
+    },
+    "2710816": {
+      "flavonoid_epigallocatechin": 0.04,
+      "flavonoid_epicatechin": 0.01
+    },
+    "2710817": {
+      "flavonoid_catechin": 8.44,
+      "flavonoid_epicatechin": 0.02,
+      "flavonoid_kaempferol": 0.15,
+      "flavonoid_myricetin": 0.02,
+      "flavonoid_quercetin": 0.08
+    },
+    "2710820": {
+      "flavonoid_catechin": 2.4
+    },
+    "2727581": {
+      "flavonoid_cyanidin": 99.95,
+      "flavonoid_pelargonidin": 0.45,
+      "flavonoid_peonidin": 0.21,
+      "flavonoid_catechin": 37.06,
+      "flavonoid_epigallocatechin": 0.1,
+      "flavonoid_epicatechin": 4.66,
+      "flavonoid_epigallocatechin_gallate": 0.68,
+      "flavonoid_kaempferol": 0.27,
+      "flavonoid_myricetin": 0.67,
+      "flavonoid_quercetin": 3.58
+    },
+    "2747653": {
+      "flavonoid_catechin": 1.84,
+      "flavonoid_luteolin": 0.66,
+      "flavonoid_isorhamnetin": 0.05,
+      "flavonoid_kaempferol": 7.1,
+      "flavonoid_myricetin": 3.79,
+      "flavonoid_quercetin": 2.69
+    },
+    "2747664": {
+      "flavonoid_cyanidin": 126.99,
+      "flavonoid_delphinidin": 7.68,
+      "flavonoid_apigenin": 0.66,
+      "flavonoid_luteolin": 37.98,
+      "flavonoid_isorhamnetin": 0.04,
+      "flavonoid_kaempferol": 2.1,
+      "flavonoid_quercetin": 31.51
+    }
+  }
+}

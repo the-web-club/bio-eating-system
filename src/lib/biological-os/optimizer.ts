@@ -1,8 +1,8 @@
 import type { BiologicalCategorySlug, PreferenceKind } from "@/generated/prisma/client";
 import {
   BIOLOGICAL_OS_ENGINE_VERSION,
-  DEFAULT_PORTION_GRAMS,
 } from "@/lib/biological-os/constants";
+import { optimizerPolicy } from "@/lib/biological-os/optimizer-policy";
 import {
   buildNutrientProfileMap,
   coverageForDraft,
@@ -13,6 +13,7 @@ import {
 } from "@/lib/biological-os/coverage-engine";
 import { missingCategories } from "@/lib/biological-os/candidate-set";
 import { applyRedundancyDecisionsToDraft } from "@/lib/biological-os/redundancy";
+import { phytonutrientBoostForCandidate, loadPhytonutrientCatalog } from "@/lib/biological-os/phytonutrient-diversity";
 import type {
   CategoryCandidateMap,
   ChangeReason,
@@ -51,16 +52,61 @@ function pickBestCandidate(args: {
   candidates: EngineFoodCandidate[];
   requirements: DailyRequirement[];
   portionGrams: number;
+  presentPhytoClasses?: Set<string>;
 }): EngineFoodCandidate | null {
   if (args.candidates.length === 0) return null;
 
   return [...args.candidates].sort((a, b) => {
+    const nutrientScoreA = scoreCandidate({
+      candidate: a,
+      requirements: args.requirements,
+      portionGrams: args.portionGrams,
+    });
+    const nutrientScoreB = scoreCandidate({
+      candidate: b,
+      requirements: args.requirements,
+      portionGrams: args.portionGrams,
+    });
+    const phytoA = phytonutrientBoostForCandidate({
+      candidate: a,
+      presentClasses: args.presentPhytoClasses ?? new Set<string>(),
+      portionGrams: args.portionGrams,
+    });
+    const phytoB = phytonutrientBoostForCandidate({
+      candidate: b,
+      presentClasses: args.presentPhytoClasses ?? new Set<string>(),
+      portionGrams: args.portionGrams,
+    });
     const scoreDiff =
-      scoreCandidate({ candidate: b, requirements: args.requirements, portionGrams: args.portionGrams }) -
-      scoreCandidate({ candidate: a, requirements: args.requirements, portionGrams: args.portionGrams });
+      nutrientScoreB +
+      phytoB * optimizerPolicy.phytonutrientBoostWeight -
+      (nutrientScoreA + phytoA * optimizerPolicy.phytonutrientBoostWeight);
     if (scoreDiff !== 0) return scoreDiff;
     return a.foodId.localeCompare(b.foodId);
   })[0];
+}
+
+function presentPhytoClassesForDraft(args: {
+  draft: FoodMatrixDraft;
+  candidatesById: Map<string, EngineFoodCandidate>;
+}): Set<string> {
+  const catalog = loadPhytonutrientCatalog();
+  const classes = new Set<string>();
+
+  for (const item of args.draft.items) {
+    const candidate = args.candidatesById.get(item.foodId);
+    if (!candidate) continue;
+    for (const compound of catalog.compounds) {
+      const nutrientCode = compound.nutrientCode ?? compound.compoundId;
+      const row = candidate.nutrients.find((nutrient) => nutrient.nutrientCode === nutrientCode);
+      if (!row) continue;
+      if (nutrientAmountForPortion(row, item.portionGrams) > 0) {
+        classes.add(compound.class);
+      }
+    }
+  }
+
+  return classes;
 }
 
 function seedDraftItems(args: {
@@ -68,6 +114,7 @@ function seedDraftItems(args: {
   requirements: DailyRequirement[];
   requiredFoodIds: Set<string>;
   portionGrams: number;
+  candidatesById: Map<string, EngineFoodCandidate>;
 }): { items: FoodMatrixDraftItem[]; changeReasons: ChangeReason[] } {
   const items: FoodMatrixDraftItem[] = [];
   const changeReasons: ChangeReason[] = [];
@@ -96,10 +143,16 @@ function seedDraftItems(args: {
       continue;
     }
 
+    const presentPhytoClasses = presentPhytoClassesForDraft({
+      draft: { items },
+      candidatesById: args.candidatesById,
+    });
+
     const chosen = pickBestCandidate({
       candidates: args.categoryCandidates[slot],
       requirements: args.requirements,
       portionGrams: args.portionGrams,
+      presentPhytoClasses,
     });
 
     if (!chosen) continue;
@@ -278,7 +331,7 @@ export function optimizeMinimalFoodSet(args: {
   portionGrams?: number;
   extraItems?: FoodMatrixDraftItem[];
 }): OptimizerResult {
-  const portionGrams = args.portionGrams ?? DEFAULT_PORTION_GRAMS;
+  const portionGrams = args.portionGrams ?? optimizerPolicy.defaultPortionGrams;
   const requiredFoodIds = new Set(args.requiredFoodIds ?? []);
   const redundancyChoices = args.redundancyChoices ?? [];
   const supportedRequirements = filterRequirementsWithFoodData({
@@ -306,11 +359,14 @@ export function optimizeMinimalFoodSet(args: {
     };
   }
 
+  const candidatesById = new Map(args.candidates.map((candidate) => [candidate.foodId, candidate]));
+
   const seeded = seedDraftItems({
     categoryCandidates: args.categoryCandidates,
     requirements: supportedRequirements,
     requiredFoodIds,
     portionGrams,
+    candidatesById,
   });
 
   let draft: FoodMatrixDraft = {

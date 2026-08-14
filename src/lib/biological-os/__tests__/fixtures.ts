@@ -222,8 +222,8 @@ export const FOOD_OATS = makeFood({
 
 export const FOOD_BREAD = makeFood({
   foodId: "food-bread",
-  externalId: "fdc-335240",
-  name: "Bread, whole wheat",
+  externalId: "fdc-790085",
+  name: "Flour, whole wheat, unenriched",
   biologicalCategory: "olive_oil",
   allergens: ["gluten"],
   nutrients: [

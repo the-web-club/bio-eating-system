@@ -1,0 +1,196 @@
+{
+  "version": "biological-os-rules-v2",
+  "engine": {
+    "flag": "BIOLOGICAL_OS_ENGINE",
+    "defaultEnabled": false,
+    "deterministic": true
+  },
+  "requirements": {
+    "productionSet": "efsa-drv-eu-2017-v2",
+    "regressionSet": "efsa-drv-eu-2017-v1",
+    "rejectUnapprovedSources": true,
+    "rejectDevOnly": true,
+    "resolveByAgeSexAndReferencePriority": true,
+    "neverAverageConflictingRequirements": true
+  },
+  "energy": {
+    "bmrFormula": "Mifflin-St Jeor",
+    "exerciseFormula": "MET * weightKg * (minutesPerSession / 60) * sessionsPerWeek",
+    "dailyExerciseFormula": "sum(exerciseKcalWeek) / 7",
+    "tdeeFormula": "BMR * baselineOccupationPAL + dailyExerciseKcal",
+    "calculationVersion": "energy-mifflin-met-v1",
+    "metReferenceVersion": "met-reference-v1"
+  },
+  "activity": {
+    "freeTextLabelIsDisplayOnly": true,
+    "engineUsesResolvedMetCode": true,
+    "unknownActivityMustNotBeAiGuessed": true,
+    "unknownResolution": "closest_category_plus_intensity",
+    "unknownStatus": "unresolved_pending",
+    "optionalFallbackMet": 5,
+    "fallbackMustBeExplicitToUser": true
+  },
+  "foodOptimization": {
+    "hardConstraints": [
+      "allergen_exclusion",
+      "hard_food_exclusion",
+      "approved_source_only",
+      "dev_only_excluded",
+      "required_foods_preserved"
+    ],
+    "objectivePriority": [
+      "feasibility",
+      "requirement_coverage",
+      "avoid_excess_above_ul",
+      "nutrient_diversity",
+      "phytonutrient_diversity",
+      "minimize_unnecessary_redundancy",
+      "respect_user_preferences",
+      "respect_favorite_foods"
+    ],
+    "redundancyRule": "Minimize unnecessary redundancy; do not ban useful overlap.",
+    "favoriteFoodRule": "After adequacy, retain user-added foods when feasible; recalculate rather than silently removing them.",
+    "noSilentRemoval": true,
+    "noSilentSubstitution": true
+  },
+  "coverage": {
+    "macros": [
+      "energy_kcal",
+      "protein",
+      "carbohydrate",
+      "fat",
+      "saturated_fat",
+      "sugar",
+      "starch",
+      "fiber",
+      "omega3"
+    ],
+    "micros": [
+      "vitamin_a",
+      "vitamin_c",
+      "vitamin_d",
+      "vitamin_e",
+      "vitamin_k",
+      "thiamin",
+      "riboflavin",
+      "niacin",
+      "vitamin_b6",
+      "folate",
+      "vitamin_b12",
+      "biotin",
+      "pantothenic_acid",
+      "choline",
+      "calcium",
+      "iron",
+      "magnesium",
+      "potassium",
+      "zinc",
+      "phosphorus",
+      "copper",
+      "manganese",
+      "selenium",
+      "iodine",
+      "molybdenum",
+      "fluoride",
+      "sodium",
+      "chromium"
+    ],
+    "phytonutrients": {
+      "trackedWhenDataExists": true,
+      "catalogVersion": "phytonutrient-catalog-v2",
+      "codes": [
+        "beta_carotene",
+        "carotene_alpha",
+        "carotene_gamma",
+        "zeaxanthin",
+        "cryptoxanthin_beta",
+        "cryptoxanthin_alpha",
+        "lutein",
+        "lycopene",
+        "lutein_zeaxanthin",
+        "cis_beta_carotene",
+        "trans_beta_carotene",
+        "cis_lycopene",
+        "trans_lycopene",
+        "cis_lutein_zeaxanthin",
+        "tocopherol_beta",
+        "tocopherol_gamma",
+        "tocopherol_delta",
+        "tocotrienol_alpha",
+        "tocotrienol_beta",
+        "tocotrienol_gamma",
+        "tocotrienol_delta",
+        "choline_free",
+        "choline_phosphocholine",
+        "choline_phosphatidylcholine",
+        "choline_glycerophosphocholine",
+        "choline_sphingomyelin",
+        "betaine",
+        "phytosterols_other",
+        "flavonoid_daidzein",
+        "flavonoid_genistein",
+        "flavonoid_glycitein",
+        "flavonoid_cyanidin",
+        "flavonoid_petunidin",
+        "flavonoid_delphinidin",
+        "flavonoid_malvidin",
+        "flavonoid_pelargonidin",
+        "flavonoid_peonidin",
+        "flavonoid_catechin",
+        "flavonoid_epigallocatechin",
+        "flavonoid_epicatechin",
+        "flavonoid_epicatechin_gallate",
+        "flavonoid_epigallocatechin_gallate",
+        "flavonoid_theaflavin",
+        "flavonoid_thearubigins",
+        "flavonoid_eriodictyol",
+        "flavonoid_hesperetin",
+        "flavonoid_naringenin",
+        "flavonoid_apigenin",
+        "flavonoid_luteolin",
+        "flavonoid_isorhamnetin",
+        "flavonoid_kaempferol",
+        "flavonoid_myricetin",
+        "flavonoid_quercetin",
+        "flavonoid_theaflavin_3_3_digallate",
+        "flavonoid_theaflavin_3_gallate",
+        "flavonoid_theaflavin_3_prime_gallate",
+        "flavonoid_gallocatechin"
+      ],
+      "mustNotInventDailyRequirement": true,
+      "role": "diversity_and_food_pattern_objective",
+      "healthClaimsRequireSeparateEvidence": true,
+      "missingDataRule": "UNKNOWN, never zero and never silently satisfied"
+    }
+  },
+  "mealPlan": {
+    "dailyPlanMustEvaluate": [
+      "energy",
+      "protein",
+      "tracked_macronutrients",
+      "tracked_micronutrients",
+      "fiber",
+      "phytonutrient_diversity"
+    ],
+    "missingDataRule": "UNKNOWN, never zero and never silently satisfied.",
+    "adequacyRule": "Do not claim complete biological adequacy unless every required tracked nutrient is resolved and covered."
+  },
+  "provenance": {
+    "everyImportedValueRequires": [
+      "source",
+      "sourceVersion",
+      "sourceRecordId_or_null",
+      "reviewStatus"
+    ],
+    "neverFabricateMissingValues": true
+  },
+  "matrix": {
+    "snapshotRequired": true,
+    "versioned": true,
+    "changeReasonsRequired": true
+  },
+  "foodData": {
+    "productionFoodSource": "usda-fdc",
+    "productionFoodSourceVersion": "2026-04-30-production-slice-v3"
+  }
+}

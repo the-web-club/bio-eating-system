@@ -1,0 +1,45 @@
+{
+  "version": "phytonutrient-catalog-v1",
+  "source": "usda-fdc",
+  "sourceVersion": "2026-04-30-production-slice-v3",
+  "reviewStatus": "APPROVED",
+  "notes": "Carotenoids mapped from USDA Foundation Foods nutrient fields. Composition only. No daily requirement invented.",
+  "compounds": [
+    {
+      "compoundId": "beta_carotene",
+      "name": "Beta-carotene",
+      "class": "carotenoid",
+      "subclass": "carotene",
+      "nutrientCode": "beta_carotene",
+      "unit": "mcg",
+      "source": "usda-fdc",
+      "sourceVersion": "2026-04-30-production-slice-v3",
+      "evidenceStatus": "COMPOSITION_ONLY",
+      "healthEffectClaimsAllowed": false
+    },
+    {
+      "compoundId": "lycopene",
+      "name": "Lycopene",
+      "class": "carotenoid",
+      "subclass": "carotene",
+      "nutrientCode": "lycopene",
+      "unit": "mcg",
+      "source": "usda-fdc",
+      "sourceVersion": "2026-04-30-production-slice-v3",
+      "evidenceStatus": "COMPOSITION_ONLY",
+      "healthEffectClaimsAllowed": false
+    },
+    {
+      "compoundId": "lutein_zeaxanthin",
+      "name": "Lutein plus zeaxanthin",
+      "class": "carotenoid",
+      "subclass": "xanthophyll",
+      "nutrientCode": "lutein_zeaxanthin",
+      "unit": "mcg",
+      "source": "usda-fdc",
+      "sourceVersion": "2026-04-30-production-slice-v3",
+      "evidenceStatus": "COMPOSITION_ONLY",
+      "healthEffectClaimsAllowed": false
+    }
+  ]
+}

@@ -1,10 +1,17 @@
-import { loadAllFoundationFoods } from "./release";
+import {
+  loadAllFoundationFoods,
+  type FoundationReleaseVersion,
+  DEFAULT_FOUNDATION_RELEASE_VERSION,
+} from "./release";
 import { USDA_SLICE_OVERRIDE_BY_FDC_ID } from "./slice-overrides";
 import { inferUsdaSliceEntry } from "./slice-inference";
 import type { UsdaSliceEntry } from "./slice-config";
 
-export async function buildFoundationSliceV2(): Promise<UsdaSliceEntry[]> {
-  const records = await loadAllFoundationFoods();
+export async function buildFoundationSlice(args?: {
+  releaseVersion?: FoundationReleaseVersion;
+}): Promise<UsdaSliceEntry[]> {
+  const releaseVersion = args?.releaseVersion ?? DEFAULT_FOUNDATION_RELEASE_VERSION;
+  const records = await loadAllFoundationFoods(releaseVersion);
   const entries = records.map((record) => {
     const override = USDA_SLICE_OVERRIDE_BY_FDC_ID.get(record.fdcId);
     if (override) return override;
@@ -12,6 +19,11 @@ export async function buildFoundationSliceV2(): Promise<UsdaSliceEntry[]> {
   });
 
   return entries.sort((a, b) => a.fdcId - b.fdcId);
+}
+
+/** @deprecated Use buildFoundationSlice({ releaseVersion: "2025-04-24" }). */
+export async function buildFoundationSliceV2(): Promise<UsdaSliceEntry[]> {
+  return buildFoundationSlice({ releaseVersion: "2025-04-24" });
 }
 
 export function mergeSliceEntries(args: {

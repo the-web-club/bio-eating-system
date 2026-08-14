@@ -1,0 +1,65 @@
+{
+  "version": "met-reference-v1",
+  "source": "biological-os-master-cursor-pack",
+  "sourceVersion": "example-engine-input-v1",
+  "reviewStatus": "REVIEW_REQUIRED",
+  "notes": "Structured MET codes from the master cursor pack example input. Full Compendium of Physical Activities alignment pending dietitian review.",
+  "occupationPal": {
+    "mostly_sitting": 1.2,
+    "sedentary": 1.2,
+    "light": 1.375,
+    "moderate": 1.55,
+    "active": 1.725
+  },
+  "activities": [
+    {
+      "metCode": "RACKET_GENERIC_MODERATE",
+      "label": "Racket sports, moderate intensity",
+      "aliases": ["padel", "tennis moderate", "squash moderate"],
+      "category": "racket_sports",
+      "intensity": "moderate",
+      "metValue": 7.0,
+      "source": "biological-os-master-cursor-pack",
+      "sourceVersion": "example-engine-input-v1",
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "metCode": "STRENGTH_GENERIC_MODERATE",
+      "label": "Strength training, moderate intensity",
+      "aliases": ["strength training", "weights", "resistance training"],
+      "category": "strength",
+      "intensity": "moderate",
+      "metValue": 5.0,
+      "source": "biological-os-master-cursor-pack",
+      "sourceVersion": "example-engine-input-v1",
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "metCode": "WALKING_GENERIC_MODERATE",
+      "label": "Walking, moderate pace",
+      "aliases": ["walking", "brisk walk"],
+      "category": "walking",
+      "intensity": "moderate",
+      "metValue": 3.5,
+      "source": "biological-os-master-cursor-pack",
+      "sourceVersion": "example-engine-input-v1",
+      "reviewStatus": "REVIEW_REQUIRED"
+    },
+    {
+      "metCode": "CYCLING_GENERIC_MODERATE",
+      "label": "Cycling, moderate intensity",
+      "aliases": ["cycling", "bike moderate"],
+      "category": "cycling",
+      "intensity": "moderate",
+      "metValue": 6.8,
+      "source": "biological-os-master-cursor-pack",
+      "sourceVersion": "example-engine-input-v1",
+      "reviewStatus": "REVIEW_REQUIRED"
+    }
+  ],
+  "fallbackMet": {
+    "metCode": "UNRESOLVED_FALLBACK",
+    "metValue": 5.0,
+    "mustBeExplicitToUser": true
+  }
+}

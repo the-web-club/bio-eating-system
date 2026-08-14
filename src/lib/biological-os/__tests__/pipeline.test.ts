@@ -56,4 +56,17 @@ describe("biological os engine pipeline", () => {
     expect(result.optimizer.status).toBe("infeasible");
     expect(result.optimizer.infeasibleReason).toBe("no_candidate_for_category");
   });
+
+  it("computes energy and adequacy metadata when daily life is provided", () => {
+    const result = runDeterministicEnginePipeline({
+      ...baseInput,
+      profile: { ...TEST_PROFILE_FEMALE, heightCm: 170 },
+      dailyLife: { occupationMovement: "mostly_sitting" },
+      activities: [{ label: "padel", minutesPerSession: 90, sessionsPerWeek: 2 }],
+    });
+
+    expect(result.energyEstimate?.calculationVersion).toBe("energy-mifflin-met-v1");
+    expect(result.activityProfile?.weeklyExerciseKcal).toBeGreaterThan(0);
+    expect(result.adequacyReport.rows.length).toBeGreaterThan(0);
+  });
 });

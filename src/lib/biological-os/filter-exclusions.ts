@@ -1,7 +1,7 @@
 import {
-  APPROVED_FOOD_SOURCE,
-  APPROVED_FOOD_SOURCE_VERSION,
-} from "@/lib/biological-os/constants";
+  assertApprovedProductionFood,
+  isApprovedProductionFood,
+} from "@/lib/nutrition-data/approved-sources";
 import type { EngineFoodCandidate } from "@/lib/biological-os/types";
 
 export class ApprovedDataError extends Error {
@@ -12,21 +12,15 @@ export class ApprovedDataError extends Error {
 }
 
 export function assertApprovedFoodCandidate(candidate: EngineFoodCandidate): void {
-  if (candidate.devOnly) {
+  try {
+    assertApprovedProductionFood({
+      source: candidate.source,
+      sourceVersion: candidate.sourceVersion,
+      devOnly: candidate.devOnly,
+    });
+  } catch (error) {
     throw new ApprovedDataError(
-      `Food ${candidate.foodId} is devOnly and cannot be used in the Biological OS engine.`,
-    );
-  }
-
-  if (candidate.source !== APPROVED_FOOD_SOURCE) {
-    throw new ApprovedDataError(
-      `Food ${candidate.foodId} source ${candidate.source} is not approved.`,
-    );
-  }
-
-  if (candidate.sourceVersion !== APPROVED_FOOD_SOURCE_VERSION) {
-    throw new ApprovedDataError(
-      `Food ${candidate.foodId} sourceVersion ${candidate.sourceVersion} is not approved.`,
+      error instanceof Error ? error.message : "Food is not approved for production.",
     );
   }
 }
@@ -51,12 +45,11 @@ export function filterExcludedCandidates(args: {
 export function filterApprovedCandidates(
   candidates: EngineFoodCandidate[],
 ): EngineFoodCandidate[] {
-  return candidates.filter((candidate) => {
-    try {
-      assertApprovedFoodCandidate(candidate);
-      return true;
-    } catch {
-      return false;
-    }
-  });
+  return candidates.filter((candidate) =>
+    isApprovedProductionFood({
+      source: candidate.source,
+      sourceVersion: candidate.sourceVersion,
+      devOnly: candidate.devOnly,
+    }),
+  );
 }

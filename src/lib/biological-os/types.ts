@@ -1,10 +1,15 @@
+import type { EngineActivityRowContract } from "@/lib/biological-os/contracts";
+import type { EnergyEstimate } from "@/lib/biological-os/energy";
+import type { BiologicalAdequacyReport } from "@/lib/biological-os/adequacy";
+import type { PhytonutrientDiversityResult } from "@/lib/biological-os/phytonutrient-diversity";
+import type { ResolvedActivityRow } from "@/lib/biological-os/activity-profile";
 import type {
   BiologicalCategorySlug,
   PreferenceKind,
-  RedundancyDecision,
   ProteinPreferenceType,
+  RedundancyDecision,
+  NutrientUnit,
 } from "@/generated/prisma/client";
-import type { NutrientUnit } from "@/generated/prisma/client";
 import type { CoverageRow, DailyRequirement, NutrientContributionRow } from "@/lib/nutrition-data/types";
 import type { FoodSlot } from "@/lib/nutrition/plan-engine";
 
@@ -12,7 +17,15 @@ export type EngineProfile = {
   age: number;
   sex: "female" | "male";
   bodyWeightKg: number;
+  heightCm?: number;
 };
+
+export type EngineDailyLifeInput = {
+  occupationMovement: string;
+  baselineOccupationPal?: number;
+};
+
+export type EngineActivityInput = EngineActivityRowContract;
 
 export type ProteinPreferenceInput = {
   preference: ProteinPreferenceType;
@@ -24,6 +37,11 @@ export type EngineDataVersions = {
   foodSourceVersion: string;
   requirementSetVersion: string;
   constraintVersion: string;
+  energyCalculationVersion: string;
+  metReferenceVersion: string;
+  phytonutrientCatalogVersion: string;
+  optimizerPolicyVersion: string;
+  phytonutrientPolicyVersion: string;
 };
 
 export type EngineFoodCandidate = {
@@ -63,6 +81,7 @@ export type ChangeReasonCode =
   | "coverage_fill"
   | "optimizer_prune"
   | "user_required"
+  | "user_favorite"
   | "redundancy_keep_both"
   | "replacement_ranked"
   | "user_removed";
@@ -90,6 +109,7 @@ export type OptimizerResult = {
   changeReasons: ChangeReason[];
   engineVersion: string;
   dataVersions: EngineDataVersions;
+  phytonutrientDiversity?: PhytonutrientDiversityResult;
 };
 
 export type RedundancyAssessmentRecord = {
@@ -157,6 +177,16 @@ export type EnginePipelineInput = {
   redundancyChoices?: RedundancyChoiceRecord[];
   matrixVersion?: number;
   timestampIso?: string;
+  dailyLife?: EngineDailyLifeInput;
+  activities?: EngineActivityInput[];
+  favoriteFoodIds?: string[];
+};
+
+export type EngineActivityProfile = {
+  baselineOccupationPal: number;
+  resolvedActivities: ResolvedActivityRow[];
+  weeklyExerciseKcal: number;
+  unresolvedActivityLabels: string[];
 };
 
 export type EnginePipelineResult = {
@@ -164,4 +194,7 @@ export type EnginePipelineResult = {
   optimizer: OptimizerResult;
   redundancyProposals: RedundancyProposal[];
   snapshot: FoodMatrixSnapshot;
+  energyEstimate: EnergyEstimate | null;
+  activityProfile: EngineActivityProfile | null;
+  adequacyReport: BiologicalAdequacyReport;
 };

@@ -15,9 +15,17 @@ export const MACRONUTRIENT_SCOPE = [
   "protein",
   "carbohydrate",
   "fat",
+  "saturated_fat",
+  "sugar",
+  "starch",
   "fiber",
   "omega3",
 ] as const;
+
+import { ALL_PHYTONUTRIENT_CODES } from "../sources/usda/nutrient-map";
+
+/** Foundation and FNDDS phytonutrients tracked when composition exists. Monitor-only until DRV rows exist. */
+export const PHYTONUTRIENT_SCOPE = ALL_PHYTONUTRIENT_CODES;
 
 /** Thirteen EFSA vitamins with scalar DRV rows in the 2017 summary report slice. */
 export const VITAMIN_MICRONUTRIENT_SCOPE = [
@@ -65,12 +73,16 @@ export const BIOLOGICAL_OS_NUTRIENT_SCOPE = [
   ...OTHER_MICRONUTRIENT_SCOPE,
   ...MINERAL_MICRONUTRIENT_SCOPE,
   ...MONITOR_ONLY_NUTRIENT_SCOPE,
+  ...PHYTONUTRIENT_SCOPE,
 ] as const;
 
 export type BiologicalOsNutrientCode = (typeof BIOLOGICAL_OS_NUTRIENT_SCOPE)[number];
 
 /** Nutrients with food-composition rows but no imported EFSA requirement row yet. */
-export const PARTIALLY_SUPPORTED_NUTRIENTS = [...MONITOR_ONLY_NUTRIENT_SCOPE] as const;
+export const PARTIALLY_SUPPORTED_NUTRIENTS = [
+  ...MONITOR_ONLY_NUTRIENT_SCOPE,
+  ...PHYTONUTRIENT_SCOPE,
+] as const;
 
 /** @deprecated Use empty list; USDA catalog now imports the full micronutrient set. */
 export const UNSUPPORTED_IN_USDA_SLICE = [] as const;

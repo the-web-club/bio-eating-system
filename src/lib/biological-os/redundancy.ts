@@ -1,5 +1,6 @@
 import type { RedundancyDecision } from "@/generated/prisma/client";
 import { GRAIN_OVERLAP_NUTRIENTS } from "@/lib/biological-os/constants";
+import { optimizerPolicy } from "@/lib/biological-os/optimizer-policy";
 import { nutrientAmountForPortion } from "@/lib/nutrition/contribution";
 import type {
   ChangeReason,
@@ -10,7 +11,7 @@ import type {
   RedundancyProposal,
 } from "@/lib/biological-os/types";
 
-const OVERLAP_THRESHOLD = 0.1;
+const OVERLAP_THRESHOLD = optimizerPolicy.overlapThreshold;
 
 function pairKey(foodAId: string, foodBId: string): string {
   return foodAId < foodBId ? `${foodAId}|${foodBId}` : `${foodBId}|${foodAId}`;

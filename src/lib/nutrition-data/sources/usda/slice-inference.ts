@@ -131,7 +131,11 @@ export function inferBiologicalCategory(args: {
   const text = normalizeDescription(args.description);
   const category = args.usdaCategory.toLowerCase();
 
-  if (/\b(liver|kidney|heart|tongue|organ meat|offal)\b/.test(text)) {
+  if (/\b(liver|heart|tongue|giblets?|offal|sweetbread|tripe|brain)\b/.test(text)) {
+    return "organ_meat";
+  }
+
+  if (/\b(beef|chicken|pork|lamb|veal|turkey|duck|bison)\s+kidney\b/.test(text)) {
     return "organ_meat";
   }
 
@@ -143,7 +147,11 @@ export function inferBiologicalCategory(args: {
     return "mushrooms";
   }
 
-  if (/\b(shrimp|prawn|crab|lobster|mussel|clam|scallop|oyster|squid|octopus)\b/.test(text)) {
+  if (/\b(shrimp|prawn|crab|lobster|mussel|clam|scallop|squid|octopus)\b/.test(text)) {
+    return "bivalves";
+  }
+
+  if (/\boyster\b/.test(text) && !/\bmushroom/i.test(text)) {
     return "bivalves";
   }
 

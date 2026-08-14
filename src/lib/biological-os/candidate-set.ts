@@ -1,4 +1,4 @@
-import { FOOD_SLOTS } from "@/lib/nutrition/plan-engine";
+import { FOOD_SLOTS, SWAP_TARGET } from "@/lib/nutrition/plan-engine";
 import {
   assertApprovedFoodCandidate,
   filterApprovedCandidates,
@@ -56,4 +56,25 @@ export function missingCategories(
   categoryCandidates: CategoryCandidateMap,
 ): Array<(typeof FOOD_SLOTS)[number]> {
   return FOOD_SLOTS.filter((slot) => categoryCandidates[slot].length === 0);
+}
+
+/**
+ * Foundation Foods omits some slots (notably organ meats). Borrow candidates from
+ * the plan-engine swap target so the optimizer can still run on approved data only.
+ */
+export function applyFoundationSlotProxies(
+  categoryCandidates: CategoryCandidateMap,
+): CategoryCandidateMap {
+  const next = Object.fromEntries(
+    FOOD_SLOTS.map((slot) => [slot, [...categoryCandidates[slot]]]),
+  ) as CategoryCandidateMap;
+
+  for (const slot of FOOD_SLOTS) {
+    if (next[slot].length > 0) continue;
+    const proxySlot = SWAP_TARGET[slot];
+    if (!proxySlot || next[proxySlot].length === 0) continue;
+    next[slot] = [...next[proxySlot]];
+  }
+
+  return next;
 }

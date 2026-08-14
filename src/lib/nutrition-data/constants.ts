@@ -13,6 +13,11 @@ export const SOURCE_KEYS = {
   eurofir: "eurofir-foodexplorer",
   nnr2023: "nnr2023",
   efsaDrv: "efsa-drv",
+  foodhub: "phytohub",
+  foodb: "foodb",
+  afcd: "afcd",
+  cnf: "cnf",
+  ciqual: "ciqual",
 } as const;
 
 export const BIOLOGICAL_CATEGORY_LABELS: Record<(typeof FOOD_SLOTS)[number], string> = {

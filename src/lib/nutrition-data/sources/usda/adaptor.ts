@@ -2,15 +2,22 @@ import { SOURCE_KEYS } from "../../constants";
 import type { FoodSourceBundle } from "../../schema";
 import type { FoodSourceAdaptor } from "../types";
 import { APPROVED_USDA_DATA_TYPE } from "./client";
+import { flavonoidAmountsForFdcId } from "./flavonoid-enrichment";
 import { mapUsdaNutrientAmount, USDA_NUTRIENT_CATALOG } from "./nutrient-map";
-import { loadAllFoundationFoods, loadFoundationFoodsByIds, FOUNDATION_RELEASE_VERSION } from "./release";
-import { buildFoundationSliceV2 } from "./slice-builder";
+import {
+  loadAllFoundationFoods,
+  loadFoundationFoodsByIds,
+  sliceVersionToReleaseVersion,
+  type FoundationReleaseVersion,
+} from "./release";
+import { buildFoundationSlice } from "./slice-builder";
 import {
   USDA_ATTRIBUTION,
   USDA_PRODUCTION_SLICE,
   USDA_SLICE_VERSION,
   USDA_SLICE_VERSION_V1,
   USDA_SLICE_VERSION_V2,
+  USDA_SLICE_VERSION_V3,
   type UsdaSliceEntry,
 } from "./slice-config";
 
@@ -45,6 +52,13 @@ function buildFoodRecord(
     }
   }
 
+  for (const [code, amount] of Object.entries(flavonoidAmountsForFdcId(record.fdcId))) {
+    if (!Number.isFinite(amount) || amount <= 0) continue;
+    if (!nutrientMap.has(code)) {
+      nutrientMap.set(code, amount);
+    }
+  }
+
   const nutrients = USDA_NUTRIENT_CATALOG.map((def) => ({
     code: def.code,
     amount: nutrientMap.get(def.code) ?? 0,
@@ -68,49 +82,61 @@ function buildFoodRecord(
   };
 }
 
-async function resolveSliceEntries(version: string): Promise<UsdaSliceEntry[]> {
+function isFullFoundationSlice(version: string): boolean {
+  return version === USDA_SLICE_VERSION_V2 || version === USDA_SLICE_VERSION_V3;
+}
+
+async function resolveSliceEntries(
+  version: string,
+  releaseVersion: FoundationReleaseVersion,
+): Promise<UsdaSliceEntry[]> {
   if (version === USDA_SLICE_VERSION_V1) {
     return USDA_PRODUCTION_SLICE;
   }
-  if (version === USDA_SLICE_VERSION_V2) {
-    return buildFoundationSliceV2();
+  if (isFullFoundationSlice(version)) {
+    return buildFoundationSlice({ releaseVersion });
   }
   throw new Error(`Unknown USDA slice version: ${version}`);
 }
 
-async function loadFoundationRecords(version: string, entries: UsdaSliceEntry[]) {
-  if (version === USDA_SLICE_VERSION_V2) {
-    const records = await loadAllFoundationFoods();
+async function loadFoundationRecords(
+  version: string,
+  releaseVersion: FoundationReleaseVersion,
+  entries: UsdaSliceEntry[],
+) {
+  if (isFullFoundationSlice(version)) {
+    const records = await loadAllFoundationFoods(releaseVersion);
     const entryIds = new Set(entries.map((entry) => entry.fdcId));
     const recordIds = new Set(records.map((record) => record.fdcId));
     if (records.length !== entries.length || [...entryIds].some((fdcId) => !recordIds.has(fdcId))) {
       throw new Error(
-        `USDA Foundation Foods release ${FOUNDATION_RELEASE_VERSION} slice mismatch: expected ${entries.length} foods, release has ${records.length}.`,
+        `USDA Foundation Foods release ${releaseVersion} slice mismatch: expected ${entries.length} foods, release has ${records.length}.`,
       );
     }
     return records;
   }
 
   const fdcIds = entries.map((entry) => entry.fdcId);
-  return loadFoundationFoodsByIds(fdcIds);
+  return loadFoundationFoodsByIds(fdcIds, releaseVersion);
 }
 
 export function createUsdaAdaptor(): FoodSourceAdaptor {
   return {
     sourceKey: SOURCE_KEYS.usda,
     async listVersions() {
-      return [USDA_SLICE_VERSION_V1, USDA_SLICE_VERSION_V2];
+      return [USDA_SLICE_VERSION_V1, USDA_SLICE_VERSION_V2, USDA_SLICE_VERSION_V3];
     },
     async fetch(version: string) {
-      const entries = await resolveSliceEntries(version);
-      const records = await loadFoundationRecords(version, entries);
+      const releaseVersion = sliceVersionToReleaseVersion(version);
+      const entries = await resolveSliceEntries(version, releaseVersion);
+      const records = await loadFoundationRecords(version, releaseVersion, entries);
       const recordById = new Map(records.map((row) => [row.fdcId, row]));
 
       const foods = entries.map((entry) => {
         const record = recordById.get(entry.fdcId);
         if (!record) {
           throw new Error(
-            `USDA Foundation Foods release ${FOUNDATION_RELEASE_VERSION} missing fdcId ${entry.fdcId}`,
+            `USDA Foundation Foods release ${releaseVersion} missing fdcId ${entry.fdcId}`,
           );
         }
         assertFoundationFoodRecord(record, entry.fdcId);
@@ -143,4 +169,5 @@ export {
   USDA_SLICE_VERSION,
   USDA_SLICE_VERSION_V1,
   USDA_SLICE_VERSION_V2,
+  USDA_SLICE_VERSION_V3,
 };

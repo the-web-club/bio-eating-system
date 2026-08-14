@@ -15,7 +15,8 @@
     "import:requirements": "tsx scripts/import-requirement-set.ts",
     "import:efsa-requirements": "tsx scripts/import-efsa-requirements.ts",
     "validate:requirements": "tsx scripts/validate-requirement-coverage.ts",
-    "run:biological-os-engine": "tsx scripts/run-biological-os-engine.ts"
+    "validate:food-foundation": "tsx scripts/validate-food-data-foundation.ts",
+    "build:fndds-flavonoids": "tsx scripts/build-fndds-flavonoid-enrichment.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

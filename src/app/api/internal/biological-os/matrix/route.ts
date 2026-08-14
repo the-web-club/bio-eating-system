@@ -52,12 +52,16 @@ export async function POST(request: Request) {
         age: input.age,
         sex: input.sex,
         bodyWeightKg: input.bodyWeightKg,
+        heightCm: input.heightCm,
       },
       excludedAllergens: input.excludedAllergens,
       requiredFoodIds: input.requiredFoodIds,
       hardExcludedFoodIds: input.hardExcludedFoodIds,
+      favoriteFoodIds: input.favoriteFoodIds,
       proteinPreference: input.proteinPreference,
       redundancyChoices: input.redundancyChoices,
+      dailyLife: input.dailyLife,
+      activities: input.activities,
     });
 
     return NextResponse.json({
@@ -69,6 +73,17 @@ export async function POST(request: Request) {
       uncoveredNutrients: result.pipeline.optimizer.uncoveredNutrients ?? [],
       itemCount: result.pipeline.optimizer.draft.items.length,
       redundancyProposalCount: result.pipeline.redundancyProposals.length,
+      isBiologicallyComplete: result.pipeline.adequacyReport.isBiologicallyComplete,
+      unresolvedNutrients: result.pipeline.adequacyReport.unresolvedNutrients,
+      phytonutrientDiversity: result.pipeline.optimizer.phytonutrientDiversity ?? null,
+      energyEstimate: result.pipeline.energyEstimate,
+      activityProfile: result.pipeline.activityProfile
+        ? {
+            baselineOccupationPal: result.pipeline.activityProfile.baselineOccupationPal,
+            weeklyExerciseKcal: result.pipeline.activityProfile.weeklyExerciseKcal,
+            unresolvedActivityLabels: result.pipeline.activityProfile.unresolvedActivityLabels,
+          }
+        : null,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "engine_run_failed";

@@ -1,56 +1,32 @@
 import { describe, expect, it } from "vitest";
 import {
+  ALL_PHYTONUTRIENT_CODES,
+  FLAVONOID_PHYTONUTRIENT_CODES,
+  FOUNDATION_PHYTONUTRIENT_CODES,
   mapUsdaNutrientAmount,
   USDA_NUTRIENT_CATALOG,
   USDA_NUTRIENT_ID_TO_CODE,
 } from "@/lib/nutrition-data/sources/usda/nutrient-map";
 
 describe("USDA nutrient map", () => {
-  it("defines the full micronutrient catalog", () => {
-    expect(USDA_NUTRIENT_CATALOG).toHaveLength(34);
-    expect(USDA_NUTRIENT_CATALOG.map((row) => row.code)).toEqual([
-      "energy_kcal",
-      "protein",
-      "fat",
-      "carbohydrate",
-      "fiber",
-      "omega3",
-      "calcium",
-      "phosphorus",
-      "magnesium",
-      "sodium",
-      "potassium",
-      "iron",
-      "zinc",
-      "copper",
-      "manganese",
-      "selenium",
-      "iodine",
-      "molybdenum",
-      "fluoride",
-      "chromium",
-      "vitamin_a",
-      "vitamin_c",
-      "vitamin_d",
-      "vitamin_e",
-      "vitamin_k",
-      "thiamin",
-      "riboflavin",
-      "niacin",
-      "vitamin_b6",
-      "folate",
-      "vitamin_b12",
-      "biotin",
-      "pantothenic_acid",
-      "choline",
-    ]);
+  it("defines the full nutrient catalog", () => {
+    expect(USDA_NUTRIENT_CATALOG).toHaveLength(94);
+    expect(FOUNDATION_PHYTONUTRIENT_CODES).toHaveLength(28);
+    expect(FLAVONOID_PHYTONUTRIENT_CODES).toHaveLength(29);
+    expect(ALL_PHYTONUTRIENT_CODES).toHaveLength(57);
   });
 
   it("maps expanded Foundation nutrient ids", () => {
+    expect(USDA_NUTRIENT_ID_TO_CODE[1258]).toBe("saturated_fat");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1063]).toBe("sugar");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1009]).toBe("starch");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1107]).toBe("beta_carotene");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1108]).toBe("carotene_alpha");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1122]).toBe("lycopene");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1123]).toBe("lutein_zeaxanthin");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1198]).toBe("betaine");
+    expect(USDA_NUTRIENT_ID_TO_CODE[1298]).toBe("phytosterols_other");
     expect(USDA_NUTRIENT_ID_TO_CODE[1109]).toBe("vitamin_e");
-    expect(USDA_NUTRIENT_ID_TO_CODE[1165]).toBe("thiamin");
-    expect(USDA_NUTRIENT_ID_TO_CODE[1091]).toBe("phosphorus");
-    expect(USDA_NUTRIENT_ID_TO_CODE[1103]).toBe("selenium");
     expect(USDA_NUTRIENT_ID_TO_CODE[1180]).toBe("choline");
   });
 

@@ -5,7 +5,6 @@ import {
   APPROVED_REQUIREMENT_SET_VERSION,
 } from "@/lib/biological-os/constants";
 import {
-  buildCategoryCandidateMap,
   buildProductionEngineDataset,
   mapDbFoodToEngineCandidate,
 } from "@/lib/biological-os/production-loader";
@@ -117,6 +116,6 @@ describe("production loader", () => {
     });
 
     expect(dataset.requirementRows).toHaveLength(1);
-    expect(buildCategoryCandidateMap(dataset.candidates).eggs).toHaveLength(1);
+    expect(dataset.categoryCandidates.eggs).toHaveLength(1);
   });
 });

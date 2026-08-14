@@ -23,6 +23,15 @@ describe("USDA slice inference", () => {
     ).toBe("bivalves");
   });
 
+  it("does not map kidney beans to organ meat", () => {
+    expect(
+      inferBiologicalCategory({
+        description: "Beans, kidney, dark red, canned, sodium added, sugar added, drained and rinsed",
+        usdaCategory: "Legumes and Legume Products",
+      }),
+    ).toBe("olive_oil");
+  });
+
   it("maps mushrooms before shellfish keywords in description", () => {
     expect(
       inferBiologicalCategory({

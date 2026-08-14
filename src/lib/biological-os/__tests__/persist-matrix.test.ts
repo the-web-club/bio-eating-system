@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ENERGY_CALCULATION_VERSION } from "@/lib/biological-os/constants";
 import { buildMatrixPersistencePayload } from "@/lib/biological-os/persist-matrix";
 import type { EnginePipelineResult, FoodMatrixSnapshot } from "@/lib/biological-os/types";
 
@@ -8,9 +9,9 @@ describe("persist matrix", () => {
     version: 1,
     status: "DRAFT",
     engineVersion: "biological-os-engine-0.1.0",
-    foodDatasetVersion: "2025-04-24-production-slice-v2",
+    foodDatasetVersion: "2026-04-30-production-slice-v3",
     requirementSetVersion: "efsa-drv-eu-2017-v2",
-    calculationVersion: "biological-os-engine-0.1.0",
+    calculationVersion: ENERGY_CALCULATION_VERSION,
     draft: {
       items: [
         {
@@ -57,11 +58,25 @@ describe("persist matrix", () => {
         foodSource: "usda-fdc",
         foodSourceVersion: snapshot.foodDatasetVersion,
         requirementSetVersion: snapshot.requirementSetVersion,
-        constraintVersion: snapshot.calculationVersion,
+        constraintVersion: snapshot.engineVersion,
+        energyCalculationVersion: ENERGY_CALCULATION_VERSION,
+        metReferenceVersion: "met-reference-v1",
+        phytonutrientCatalogVersion: "phytonutrient-catalog-v2",
+        optimizerPolicyVersion: "optimizer-policy-v1",
+        phytonutrientPolicyVersion: "phytonutrient-policy-v1",
       },
     },
     redundancyProposals: [],
     snapshot,
+    energyEstimate: null,
+    activityProfile: null,
+    adequacyReport: {
+      isBiologicallyComplete: true,
+      unresolvedNutrients: [],
+      monitorOnlyNutrients: [],
+      rows: [],
+      phytonutrientDiversity: null,
+    },
   };
 
   it("normalizes redundancy pairs and stores audit detail", () => {

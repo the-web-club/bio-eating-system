@@ -5,5 +5,6 @@ export {
   USDA_SLICE_VERSION,
   USDA_SLICE_VERSION_V1,
   USDA_SLICE_VERSION_V2,
+  USDA_SLICE_VERSION_V3,
 } from "./adaptor";
 export type { FoodSourceAdaptor } from "../types";

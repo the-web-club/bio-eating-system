@@ -29,7 +29,7 @@ Confirm both datasets exist:
 
 | Dataset | Key | Expected |
 |---------|-----|----------|
-| USDA Foundation Foods | `usda-fdc` / `2025-04-24-production-slice-v2` | 340 foods, `devOnly=false` |
+| USDA Foundation Foods | `usda-fdc` / `2026-04-30-production-slice-v3` | 363 foods, `devOnly=false` |
 | EFSA DRV | `efsa-drv-eu-2017-v2` | 42 requirement rows, 29 nutrients, `APPROVED` |
 
 Commands:
@@ -189,7 +189,7 @@ After a successful run, confirm in the database:
 - `version` incremented
 - `status` = `DRAFT`
 - `engineVersion` = `biological-os-engine-0.1.0`
-- `foodDatasetVersion` = `2025-04-24-production-slice-v2`
+- `foodDatasetVersion` = `2026-04-30-production-slice-v3`
 - `requirementSetVersion` = `efsa-drv-eu-2017-v2`
 
 ### `FoodMatrixItem`

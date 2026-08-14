@@ -1,8 +1,8 @@
 # Data source decision record
 
 **Repository:** `github.com/the-web-club/bio-eating-system`  
-**Status:** Final for Phase 2 finalization (legal gate + USDA production slice)  
-**Date:** 2026-08-12  
+**Status:** Living record for Biological OS data foundation  
+**Date:** 2026-08-13 (updated)
 
 This document records authoritative sources for food composition and nutrient requirements. **Only rows marked `APPROVED` with all compliance booleans true may power production imports.** The production importer enforces this in code via `src/lib/nutrition-data/compliance-gate.ts`.
 
@@ -12,10 +12,11 @@ This document records authoritative sources for food composition and nutrient re
 
 | Area | Production decision today | Reason |
 |------|---------------------------|--------|
-| Food composition (primary) | **APPROVED + IMPORTED: USDA Foundation Foods** | Full Foundation release `2025-04-24` (340 foods) via slice `2025-04-24-production-slice-v2`; CC0 basis |
-| Food composition (regional) | **REVIEW_REQUIRED: Fineli** | CC BY 4.0 terms appear permissive with attribution, but not imported in Phase 2 slice |
+| Food composition (primary) | **APPROVED + IMPORTED: USDA Foundation Foods** | Default import `2026-04-30-production-slice-v3` (363 foods, 94 nutrients); CC0 basis |
+| Food composition (regional) | **REVIEW_REQUIRED: Fineli, AFCD, CNF, Ciqual** | Adapters reserved; production import blocked until legal audit |
+| Bioactive composition | **REVIEW_REQUIRED: PhytoHub, FooDB** | Adapters reserved; production import blocked until commercial reuse terms verified |
 | EU harmonization | **FUTURE_OPTION: EuroFIR** | Membership/redistribution rights not verified |
-| Nutrient requirements | **APPROVED + IMPORTED: EFSA DRV 2017** | 20 rows, adults 18-49, policy `efsa-drv-eu-v1` |
+| Nutrient requirements | **APPROVED + IMPORTED: EFSA DRV 2017 v2** | 42 rows, 29 nutrients, adults 18-49, policy `efsa-drv-eu-v1` |
 | Development/testing only | **REJECTED: fixture-v1** | Dev-only fixture; production gate blocks it |
 
 ---
@@ -24,7 +25,7 @@ This document records authoritative sources for food composition and nutrient re
 
 | Source | Dataset | Version | License | Commercial | Storage | Transform | Display | Redistribute | Official terms URL | Verified | Status | Reason |
 |--------|---------|---------|---------|------------|---------|-----------|---------|--------------|-------------------|----------|--------|--------|
-| **USDA FoodData Central** | Foundation Foods production slice | `2025-04-24` / slice `2025-04-24-production-slice-v2` | CC0 1.0 Universal (public domain) | yes | yes | yes | yes | yes | https://fdc.nal.usda.gov/api-guide.html | 2026-08-13 | **APPROVED — IMPORTED** | Official Foundation Foods release only; Branded/SR Legacy blocked in adaptor |
+| **USDA FoodData Central** | Foundation Foods production slice | `2026-04-30` / slice `2026-04-30-production-slice-v3` | CC0 1.0 Universal (public domain) | yes | yes | yes | yes | yes | https://fdc.nal.usda.gov/api-guide.html | 2026-08-13 | **APPROVED — IMPORTED** | Official Foundation Foods release only; Branded/SR Legacy blocked in adaptor |
 | **Fineli** | Fineli composition DB | Current release (not imported) | CC BY 4.0 | yes | yes | yes | yes | yes | https://fineli.fi/fineli/en/avoin-data | 2026-08-12 | **REVIEW_REQUIRED** | Terms appear permissive; THL endorsement clause requires product copy review; not used in Phase 2 |
 | **EuroFIR / FoodEXplorer** | FoodEXplorer | Membership-dependent | Unverified membership terms | no | no | no | no | no | https://www.eurofir.org/ | — | **FUTURE_OPTION** | Commercial redistribution not confirmed |
 | **NNR2023** | Nordic Nutrition Recommendations 2023 | 2023 | Publication copyright | no | no | no | no | no | https://nordicnutrition.org/ | — | **REVIEW_REQUIRED** | Numeric table commercial redistribution not verified |
@@ -40,8 +41,8 @@ This document records authoritative sources for food composition and nutrient re
 | Source | USDA FoodData Central |
 | Provider | USDA ARS |
 | Dataset | Foundation Foods (full release production slice) |
-| Dataset version | `2025-04-24` |
-| Slice version | `2025-04-24-production-slice-v2` (340 foods; v1 26-food slice retained for regression) |
+| Dataset version | `2026-04-30` |
+| Slice version | `2026-04-30-production-slice-v3` (363 foods; v1 34-food override slice and v2 340-food slice retained for regression) |
 | License | CC0 1.0 Universal (public domain) |
 | License URL | https://creativecommons.org/publicdomain/zero/1.0/ |
 | Terms URL | https://fdc.nal.usda.gov/api-guide.html |
@@ -54,15 +55,24 @@ This document records authoritative sources for food composition and nutrient re
 
 ---
 
-## Rejected / not imported sources
+## Review-required / not yet imported sources
 
 | Source | Status | Reason |
 |--------|--------|--------|
-| **PhytoHub** | **REJECTED** | Not legally usable for commercial storage, transformation, or display in this product |
-| **FooDB** | **REJECTED** | Same as PhytoHub; no verified commercial reuse path |
-| `fixture-v1` | REJECTED | Dev-only; cannot pass production compliance gate |
-| EuroFIR | FUTURE_OPTION | No verified commercial redistribution |
+| **PhytoHub** | **REVIEW_REQUIRED** | Adapter reserved in `src/lib/nutrition-data/sources/adaptor-registry.ts`; commercial reuse terms not verified |
+| **FooDB** | **REVIEW_REQUIRED** | Adapter reserved; commercial reuse terms not verified |
+| **Fineli** | **REVIEW_REQUIRED** | CC BY 4.0 appears permissive; THL endorsement copy needs review |
+| **AFCD (FSANZ)** | **REVIEW_REQUIRED** | Official terms require commercial reuse audit |
+| **CNF (Health Canada)** | **REVIEW_REQUIRED** | Open Government terms require commercial reuse audit |
+| **Ciqual (ANSES)** | **REVIEW_REQUIRED** | Open-data licence requires commercial reuse audit |
 | NNR2023 numeric tables | REVIEW_REQUIRED | No verified commercial numeric reuse |
+| EuroFIR | FUTURE_OPTION | No verified commercial redistribution |
+
+## Rejected sources
+
+| Source | Status | Reason |
+|--------|--------|--------|
+| `fixture-v1` | REJECTED | Dev-only; cannot pass production compliance gate |
 | Unofficial EFSA table scrape (non-summary sources) | REJECTED | Only official e15121 summary report approved for production import |
 | Blogs, MyFitnessPal, Cronometer, commercial websites | REJECTED | Not authoritative; licensing unknown |
 | LLM-generated nutrient tables | REJECTED | Prohibited by project rules |
@@ -74,7 +84,7 @@ This document records authoritative sources for food composition and nutrient re
 - Food composition and nutrient requirements remain **separate**.
 - `RequirementSet` is versioned per jurisdiction/source with provenance fields (`source`, `sourceVersion`, `sourceUrl`, `termsUrl`, `reviewStatus`, `devOnly`).
 - `RequirementSourcePolicy` registers EFSA EU (V1 candidate), NNR2023, and US DRI as separate policies.
-- **Production requirement set imported:** `efsa-drv-eu-2017-v1` (EFSA 2017 summary report, adults 18-49).
+- **Production requirement set imported:** `efsa-drv-eu-2017-v2` (EFSA 2017 summary report, adults 18-49, 29 nutrients).
 - Conflicting frameworks must never be averaged; conflicts are stored in `RequirementConflict`.
 - See `docs/REQUIREMENT_SOURCE_POLICY.md` and `docs/REQUIREMENT_DATA_VALIDATION.md`.
 

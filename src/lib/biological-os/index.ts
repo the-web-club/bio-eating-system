@@ -4,13 +4,17 @@ export {
   APPROVED_REQUIREMENT_SET_VERSION,
   BIOLOGICAL_OS_ENGINE_VERSION,
   DEFAULT_PORTION_GRAMS,
+  ENERGY_CALCULATION_VERSION,
   GRAIN_OVERLAP_NUTRIENTS,
+  MET_REFERENCE_VERSION,
+  PHYTONUTRIENT_CATALOG_VERSION,
 } from "@/lib/biological-os/constants";
 
 export {
   buildFilteredCandidateSet,
   flattenCandidates,
   missingCategories,
+  applyFoundationSlotProxies,
 } from "@/lib/biological-os/candidate-set";
 
 export {
@@ -69,10 +73,48 @@ export {
   resolveEngineRequirements,
 } from "@/lib/biological-os/requirement-resolution";
 
+export {
+  buildBiologicalAdequacyReport,
+  nutrientsWithCompositionData,
+} from "@/lib/biological-os/adequacy";
+export type {
+  BiologicalAdequacyReport,
+  NutrientAdequacyRow,
+  NutrientAdequacyStatus,
+} from "@/lib/biological-os/adequacy";
+
+export {
+  resolveActivityProfile,
+  resolveActivityRow,
+  resolveOccupationPal,
+  loadMetReference,
+} from "@/lib/biological-os/activity-profile";
+export type { ResolvedActivityRow } from "@/lib/biological-os/activity-profile";
+export type { EngineActivityProfile } from "@/lib/biological-os/types";
+
+export {
+  computeEnergyEstimate,
+  exerciseKcalPerWeek,
+  mifflinStJeorBmr,
+} from "@/lib/biological-os/energy";
+export type { EnergyEstimate } from "@/lib/biological-os/energy";
+
+export {
+  loadPhytonutrientCatalog,
+  scorePhytonutrientDiversity,
+} from "@/lib/biological-os/phytonutrient-diversity";
+export type { PhytonutrientDiversityResult } from "@/lib/biological-os/phytonutrient-diversity";
+
+export * from "@/lib/biological-os/contracts";
+
 export { isBiologicalOsEngineAllowlisted } from "@/lib/biological-os/engine-allowlist";
 
 export {
-  buildCategoryCandidateMap,
+  buildExpandedFoodUniverse,
+  buildCategoryCandidateMapFromCandidates,
+} from "@/lib/biological-os/food-universe";
+
+export {
   buildProductionEngineDataset,
   loadProductionEngineDataset,
   mapDbFoodToEngineCandidate,

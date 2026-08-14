@@ -1,0 +1,28 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"phytonutrient-record-v1",
+  "type":"object",
+  "required":["compoundId","name","class","source","sourceVersion","foodConcentrations","evidenceStatus"],
+  "properties":{
+    "compoundId":{"type":"string"},
+    "name":{"type":"string"},
+    "class":{"type":"string"},
+    "subclass":{"type":["string","null"]},
+    "source":{"type":"string"},
+    "sourceVersion":{"type":"string"},
+    "foodConcentrations":{
+      "type":"array",
+      "items":{
+        "type":"object","required":["foodId","amount","unit"],
+        "properties":{
+          "foodId":{"type":"string"},
+          "amount":{"type":"number"},
+          "unit":{"type":"string"},
+          "basis":{"type":["string","null"]}
+        }
+      }
+    },
+    "evidenceStatus":{"enum":["COMPOSITION_ONLY","REVIEWED_ASSOCIATION","REVIEWED_REFERENCE"]},
+    "healthEffectClaimsAllowed":{"type":"boolean"}
+  }
+}

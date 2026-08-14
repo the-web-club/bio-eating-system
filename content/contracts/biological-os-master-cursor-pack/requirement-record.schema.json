@@ -1,0 +1,29 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"requirement-record-v1",
+  "type":"object",
+  "required":["requirementId","setId","setVersion","nutrientCode","referenceType","unit","population","reviewStatus","devOnly"],
+  "properties":{
+    "requirementId":{"type":"string"},
+    "setId":{"type":"string"},
+    "setVersion":{"type":"string"},
+    "nutrientCode":{"type":"string"},
+    "referenceType":{"enum":["AR","PRI","AI","RI","UL","AMDR","OTHER_REVIEWED_REFERENCE"]},
+    "value":{"type":["number","null"]},
+    "valueMin":{"type":["number","null"]},
+    "valueMax":{"type":["number","null"]},
+    "unit":{"type":"string"},
+    "population":{
+      "type":"object","required":["sex","ageMinYears","ageMaxYears"],
+      "properties":{
+        "sex":{"enum":["female","male","all"]},
+        "ageMinYears":{"type":"number","minimum":0},
+        "ageMaxYears":{"type":"number","exclusiveMinimum":0}
+      }
+    },
+    "source":{"type":["string","null"]},
+    "sourceVersion":{"type":["string","null"]},
+    "reviewStatus":{"enum":["REVIEW_REQUIRED","APPROVED","REJECTED"]},
+    "devOnly":{"type":"boolean"}
+  }
+}

@@ -1,5 +1,9 @@
 import { z } from "zod";
 import { ALLERGENS } from "@/lib/nutrition/plan-engine";
+import {
+  engineActivityRowSchema,
+  engineDailyLifeSchema,
+} from "@/lib/biological-os/contracts";
 
 const proteinPreferenceSchema = z.object({
   preference: z.enum([
@@ -24,6 +28,10 @@ export const biologicalOsEngineRunBodySchema = z
     age: z.number().int().min(18).max(49),
     sex: z.enum(["female", "male"]),
     bodyWeightKg: z.number().positive().max(300),
+    heightCm: z.number().positive().max(250).optional(),
+    dailyLife: engineDailyLifeSchema.optional(),
+    activities: z.array(engineActivityRowSchema).optional(),
+    favoriteFoodIds: z.array(z.string().uuid()).optional(),
     excludedAllergens: z.array(z.enum(ALLERGENS)).optional(),
     requiredFoodIds: z.array(z.string().uuid()).optional(),
     hardExcludedFoodIds: z.array(z.string().uuid()).optional(),
@@ -36,6 +44,14 @@ export const biologicalOsEngineRunBodySchema = z
         code: z.ZodIssueCode.custom,
         message: "customValue is required when protein preference is custom.",
         path: ["proteinPreference", "customValue"],
+      });
+    }
+
+    if (value.dailyLife && !value.heightCm) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "heightCm is required when dailyLife is provided.",
+        path: ["heightCm"],
       });
     }
   });

@@ -47,8 +47,9 @@ describe("matrix versioning", () => {
 
     expect(snapshot.version).toBe(1);
     expect(snapshot.engineVersion).toMatch(/biological-os-engine/);
-    expect(snapshot.foodDatasetVersion).toBe("2025-04-24-production-slice-v2");
+    expect(snapshot.foodDatasetVersion).toBe("2026-04-30-production-slice-v3");
     expect(snapshot.requirementSetVersion).toBe("efsa-drv-eu-2017-v2");
+    expect(snapshot.calculationVersion).toBe("energy-mifflin-met-v1");
     expect(snapshot.changeReasons.length).toBeGreaterThan(0);
     expect(snapshot.createdAtIso).toBe(FIXED_TIMESTAMP);
   });

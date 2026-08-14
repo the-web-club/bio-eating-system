@@ -1,11 +1,13 @@
 # Biological OS data specification
 
 **Repository:** `github.com/the-web-club/bio-eating-system`  
-**Status:** Draft for review  
+**Status:** Draft for review, aligned with production architecture as of 2026-08-13  
 **Authority:** Final Master Cursor Specification > `rules.md` > this document > `docs/IMPLEMENTATION_PLAN.md`  
 **Companion:** `docs/DATA_PROVENANCE_AND_NUTRIENT_MODEL.md`  
 
-This document defines the **data shapes, semantics, and engine contracts** for Biological OS. It does **not** assign nutrition numbers, choose authoritative datasets, or implement the optimizer.
+This document defines the **data shapes, semantics, and engine contracts** for Biological OS.
+
+**Architecture vs current data:** The normalized food model, compliance gate, multi-source adaptor registry, and engine pipeline are production-capable. The **current approved production import** is USDA Foundation Foods slice v3 (363 foods) plus EFSA DRV v2. That slice size is a **current data limitation**, not an architecture limitation. Additional approved sources attach through the same import pipeline without engine rewrites.
 
 **Review gate:** No production nutrition path may ship until a registered dietitian and legal review sign off the companion provenance document and the approved food universe.
 
