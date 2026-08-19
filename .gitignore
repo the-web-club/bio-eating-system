@@ -46,3 +46,8 @@ next-env.d.ts
 
 # generated Prisma client
 src/generated/
+
+# USDA import temp extracts and run logs (committed inputs live under content/imports/)
+import-usda-run.log
+content/imports/usda-fndds-flavonoids/extracted-1718/
+content/imports/usda-fndds-flavonoids/extracted-1718-sas/
